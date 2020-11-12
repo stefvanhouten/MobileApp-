@@ -33,7 +33,7 @@
                 <Setter Property="TextColor" Value="White"></Setter>
             </Style>
             <Style Class="FlyoutItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
-                <Setter Property="BackgroundColor" Value="#2e3332"></Setter>
+                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -45,7 +45,7 @@
                             </VisualState>
                             <VisualState x:Name="Selected">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#2e3332" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
@@ -71,8 +71,6 @@
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
-    
-
     <FlyoutItem Title="Dashboard" Icon="ic_action_dashboard_light.png">
         <ShellContent Title="Dashboard" Icon="ic_action_dashboard.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
     </FlyoutItem>

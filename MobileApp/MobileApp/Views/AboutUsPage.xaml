@@ -22,7 +22,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackLayout BackgroundColor="#444a49">
+        <StackLayout BackgroundColor="#2AC6DB">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <ContentView Padding="0,25,0,25" HeightRequest="200" >
                     <Image Source="IOT.jpg" Aspect="AspectFill" />

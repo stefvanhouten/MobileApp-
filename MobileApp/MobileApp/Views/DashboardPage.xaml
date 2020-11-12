@@ -4,20 +4,16 @@
              x:Class="MobileApp.Views.DashboardPage"
              xmlns:vm="clr-namespace:MobileApp.ViewModels"
              Title="{Binding Title}">
-    <!--Connect viewmodel to this page-->
-    <!--<ContentPage.BindingContext>
-        <vm:DashboardViewModel />
-    </ContentPage.BindingContext>-->
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="Status" Priority="0" Order="Primary" Text="{Binding IsConnected}" />
+    </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Welcome to the dashboard!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label x:Name="StatusLabel" Text="{Binding Test}"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-
             <ListView x:Name="MQResultList" ItemsSource="{Binding MQMessage}" SelectionMode="None" HasUnevenRows="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -27,7 +23,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Text="Connect" Command="{Binding ConnectCommand}"></Button>
             <Button Text="Publish" Command="{Binding PublishCommand}"></Button>
         </StackLayout>
     </ContentPage.Content>
