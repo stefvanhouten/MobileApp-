@@ -40,7 +40,8 @@ namespace MobileApp.Services
 
         private void WriteLog(string msg)
         {
-            MQMessage.Insert(0, msg);
+            //MQMessage.Insert(0, msg);
+            MQMessage.Add(msg);
             MessageReceived?.Invoke();
         }
 
@@ -63,7 +64,7 @@ namespace MobileApp.Services
 
         private void MqttClient_MessageReceived(object sender, MQTTnet.MqttApplicationMessageReceivedEventArgs e)
         {
-            if (MQMessage.Count > 10)
+            if (MQMessage.Count > 4)
             {
                 MQMessage.Clear();
             }
