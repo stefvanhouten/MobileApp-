@@ -11,15 +11,6 @@ namespace MobileApp
         public AppShell()
         {
             InitializeComponent();
-            //App.Client.Disconnected += AlertUserDisconnected;
-        }
-
-        private async void AlertUserDisconnected()
-        {
-            Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await DisplayAlert("Alert", "Lost connection with network!", "Ok");
-            });
         }
     }
 }

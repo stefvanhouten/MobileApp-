@@ -11,7 +11,7 @@ namespace MobileApp.ViewModels
         public AboutUsViewModel()
         {
             Title = "About us";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://github.com/stefvanhouten/IOTMobileApp"));
+            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://github.com/stefvanhouten/MobileApp-"));
         }
     }
 }
