@@ -3,10 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MobileApp.Views.ConnectPage">
     <ContentPage.Content>
+        
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Connect"
+                VerticalOptions="Fill" 
+                HorizontalOptions="CenterAndExpand" 
+                   FontSize="Title"/>
+
+            <Entry x:Name="IPEntry" Text="{Binding IPInput}" Placeholder="Enter your IP Adress"></Entry>
+            <Entry x:Name="PortEntry" Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
+            
+            <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
+
+            <ActivityIndicator IsRunning="{Binding Connecting}"/>
+
+            <Label Text="Port is 1883 by default"
+                   Margin="10"
+                   VerticalOptions="Start"
+                   HorizontalOptions="Center"/>
         </StackLayout>
+        
+
     </ContentPage.Content>
 </ContentPage>
