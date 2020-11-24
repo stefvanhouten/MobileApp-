@@ -30,7 +30,7 @@ namespace MobileApp.Services
             //so that our Connect method at least takes a IP address
             MQTTnet.ClientLib.MqttService.MqttClient.Init("XamarinMobileClient", new MqttClientOptionsBuilder().WithClientId(Guid.NewGuid().ToString())
                                                                                                                   .WithCleanSession(true)
-                                                                                                                  .WithTcpServer("192.168.1.71", 1883)
+                                                                                                                  .WithTcpServer("141.252.208.152", 1883)
                                                                                                                   .Build());
             MQTTnet.ClientLib.MqttService.MqttClient.Connected += MqttClient_Connected; //Binds our MqttClient_Connected when MqttService.MqttClient.Connected event is fired
             MQTTnet.ClientLib.MqttService.MqttClient.MessageReceived += MqttClient_MessageReceived;
