@@ -2,6 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using MobileApp.Models;
+using MobileApp.Data;
+using System;
+using MobileApp.Views;
 
 namespace MobileApp.ViewModels
 {
@@ -11,7 +14,10 @@ namespace MobileApp.ViewModels
         private ObservableCollection<string> _messages;
 
         public Command<string> PublishCommand { get; }
-        public List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
+        public List<IOTButton> IOTButtons { get; set; }
+        public IOTButtonDatabase Connection { get; set; } = null;
+
+        public Command ShowNewView { get; }
 
         //This is the constructor of our class
         public DashboardViewModel()
@@ -19,6 +25,13 @@ namespace MobileApp.ViewModels
             //Set the Title property, this is inherited from BaseViewModel
             Title = "Dashboard";
             IsConnected = "Disconnected";
+
+            if (Connection == null)
+            {
+                Connection = new IOTButtonDatabase();
+            }
+
+            //IOTButtons = (List<IOTButton>)(IEnumerable<IOTButton>)Connection.GetItemsAsync();
 
             /*  App is globally accessible. It refers to the App.xaml.cs file and this is where we stored some
              *  important static properties. In this case we want to connect to our MQTT broker(server) when
@@ -35,6 +48,14 @@ namespace MobileApp.ViewModels
             App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
             //Bind the Publish method to the PublishCommand property which is called from DasBoardPage.xaml button click
             PublishCommand = new Command<string>(Publish);
+
+            ShowNewView = new Command(CreateNewButton);
+        }
+
+        public void CreateNewButton()
+        {
+            Application.Current.MainPage.Navigation.PopAsync();
+            Application.Current.MainPage.Navigation.PushAsync(new ButtonCreation(), true);
         }
 
         public string IsConnected

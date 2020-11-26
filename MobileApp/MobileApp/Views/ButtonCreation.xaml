@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobileApp.Views.ButtonCreation"
+             xmlns:vm="clr-namespace:MobileApp.ViewModels"
+             Title="{Binding Title}">
+
+    <!--CONNECTING VIEWMODEL TO BUTTONCREATION XAML-->
+    <ContentPage.BindingContext>
+        <vm:ButtonCreationViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry x:Name="name" Text="{Binding Name}" Placeholder="Naam"></Entry>
+            <Entry x:Name="topic" Text="{Binding Topic}" Placeholder="MQTT topic"></Entry>
+            <Entry x:Name="image" Text="{Binding Image}" Placeholder="Foto (voor later)"></Entry>
+            <Button 
+                    Text="Voeg toe" 
+                    Command="{Binding ClickCommand}" 
+                    CommandParameter="{Binding Source={x:Reference name}, Path=Text}">
+            </Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

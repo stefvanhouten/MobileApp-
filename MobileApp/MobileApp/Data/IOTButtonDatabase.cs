@@ -1,10 +1,11 @@
-﻿using SQLite;
+﻿using MobileApp.Models;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MobileApp.Models
+namespace MobileApp.Data
 {
     public class IOTButtonDatabase
     {

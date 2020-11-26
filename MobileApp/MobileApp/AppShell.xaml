@@ -78,7 +78,7 @@
     <FlyoutItem Title="About us" Icon="tab_about.png">
         <ShellContent Title="About us" Icon="tab_about.png" ContentTemplate="{DataTemplate local:AboutUsPage}"/>
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Privacy" Icon="ic_action_shield.png">
         <ShellContent ContentTemplate="{DataTemplate local:PrivacyPage}" />
     </FlyoutItem>

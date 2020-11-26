@@ -5,7 +5,7 @@
              xmlns:vm="clr-namespace:MobileApp.ViewModels"
              Title="{Binding Title}"
              x:Name="Dashboard">
-    
+
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="Status" Priority="0" Order="Primary" Text="{Binding IsConnected}" />
     </ContentPage.ToolbarItems>
@@ -13,12 +13,19 @@
     <ContentPage.Content>
         <FlexLayout FlexLayout.Grow="1" Wrap="Wrap" JustifyContent="SpaceEvenly" x:Name="IOTButtonContainer" Margin="10">
             <Button
-                            Text="{Binding Name}"
-                            ContentLayout="Bottom,0"
-                            Image="coffee.png"
-                            Command="{Binding Path=BindingContext.PublishCommand, Source={x:Reference Name=Dashboard}}" 
-                            CommandParameter="Test"
-                            HeightRequest="75">
+                    Text="{Binding Name}"
+                    ContentLayout="Bottom,0"
+                    Image="coffee.png"
+                    Command="{Binding Path=BindingContext.PublishCommand, Source={x:Reference Name=Dashboard}}" 
+                    CommandParameter="Test"
+                    HeightRequest="75">
+            </Button>
+            <Button
+                    Text="{Binding Name}"
+                    Command="{Binding ShowNewView}"
+                    ContentLayout="Bottom,0"
+                    Image="coffee.png"
+                    HeightRequest="75">
             </Button>
             <CollectionView ItemsSource="{Binding MQMessage}">
                 <CollectionView.ItemsLayout>
@@ -34,26 +41,6 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <!--<CollectionView ItemsSource="{Binding IOTButtons}">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout
-                        Orientation="Vertical"
-                        Span="2"
-                        HorizontalItemSpacing="10"/>
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Button
-                            Text="{Binding Name}"
-                            ContentLayout="Bottom,0"
-                            Image="coffee.png"
-                            Command="{Binding Path=BindingContext.PublishCommand, Source={x:Reference Name=Dashboard}}" 
-                            CommandParameter="Test"
-                            HeightRequest="75">
-                        </Button>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>-->
         </FlexLayout>
     </ContentPage.Content>
 </ContentPage>
