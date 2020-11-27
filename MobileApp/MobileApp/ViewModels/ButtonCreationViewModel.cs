@@ -11,25 +11,15 @@ namespace MobileApp.ViewModels
     public class ButtonCreationViewModel : BaseViewModel
     {
         public IOTButton Button { get; private set; } = null;
-
-        public IOTButtonDatabase Connection { get; private set; } = null;
         public Command ClickCommand { get; set; }
-        
         public string Name { get; set; }
-
         public string Topic { get; set; }
-
         public string Image { get; set; }
         public ButtonCreationViewModel()
         {
             Title = "Tekst voor je zooi";
 
             Button = new IOTButton();
-
-            if (Connection == null)
-            {
-                Connection = new IOTButtonDatabase();
-            }
 
             ClickCommand = new Command(Save);
         }
@@ -41,8 +31,8 @@ namespace MobileApp.ViewModels
             Button.Topic = Topic;
             // Button.Image = Image;
 
-            Connection.SaveItemAsync(Button);
-
+            App.IOTDatabase.SaveItemAsync(Button);
+            DashboardViewModel.BuildDynamicButtons();
             Application.Current.MainPage.Navigation.PopAsync();
         }
     }

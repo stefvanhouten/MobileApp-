@@ -27,7 +27,7 @@
                     Image="coffee.png"
                     HeightRequest="75">
             </Button>
-            <ListView ItemsSource="{Binding CompletedButtons}"></ListView>
+            <ListView x:Name="CompletedButtonsView" ItemsSource="{Binding Source={x:Static vm:DashboardViewModel.CompletedButtons}}"></ListView>
             <CollectionView ItemsSource="{Binding MQMessage}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout

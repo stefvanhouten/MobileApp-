@@ -6,24 +6,28 @@ using MobileApp.Data;
 using System;
 using MobileApp.Views;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace MobileApp.ViewModels
 {
-    public class DashboardViewModel : BaseViewModel
+    public class DashboardViewModel :  BaseViewModel, INotifyPropertyChanged
     {
         private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch.
         private ObservableCollection<string> _messages;
 
-        public Command<string> PublishCommand { get; }
-        public List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
-
-        public List<Button> CompletedButtons { get; private set; } = new List<Button>();
-        public IOTButtonDatabase Connection { get; set; } = null;
-
-        public Command ShowNewView { get; }
+        public Command<string> PublishCommand { get; private set; }
+        public static List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
+        public static ObservableCollection<Button> CompletedButtons { get; private set; } = new ObservableCollection<Button>();
+        public Command ShowNewView { get; private set; }
 
         //This is the constructor of our class
         public DashboardViewModel()
+        {
+            InitializeAsync();
+        }
+
+        //warning: async void! 
+        public async void InitializeAsync()
         {
             //Set the Title property, this is inherited from BaseViewModel
             Title = "Dashboard";
@@ -45,23 +49,39 @@ namespace MobileApp.ViewModels
             //Bind the Publish method to the PublishCommand property which is called from DasBoardPage.xaml button click
             PublishCommand = new Command<string>(Publish);
 
+            //a reference to redirect to the page on which buttons are generated
             ShowNewView = new Command(CreateNewButton);
-             
-            IOTButtons = App.IOTDatabase.GetItemsAsync().Wait();
 
-            //SEPERATE TO PUBLIC METHOD
+            //retrieve database rows and build buttons based on retrieved information
+            BuildDynamicButtons();
+        }
+
+        //helper method
+        //can be set to static, since it should not create a new instance for buttons
+        public static async void BuildDynamicButtons()
+        {
+            //wait until all data has been received
+            IOTButtons = await App.IOTDatabase.GetItemsAsync();
+
+            //clear the ObservableCollection before pushing new items
+            //this forces an update and prevents information from duplicating
+            CompletedButtons.Clear();
+
+            //instantiate buttion variable for the generated buttons
             Button button;
-
-            foreach(IOTButton buttonProperties in IOTButtons)
+            //             //x:Static local:
+            //loop through all button properties and read it
+            foreach (IOTButton buttonProperties in IOTButtons)
             {
+                Console.WriteLine(buttonProperties.Name);
+                //generate the button with the properties
                 button = new Button
                 {
-                    Text = $"{buttonProperties.Name}",
-                    Image = "coffee.png",
+                    Text = buttonProperties.Name,
                     CommandParameter = $"{buttonProperties.Topic}",
                     HeightRequest = 75
                 };
-
+                //add the button to an ObservableCollection of buttons
                 CompletedButtons.Add(button);
             }
         }
