@@ -5,6 +5,7 @@ using MobileApp.Models;
 using MobileApp.Data;
 using System;
 using MobileApp.Views;
+using System.Threading.Tasks;
 
 namespace MobileApp.ViewModels
 {
@@ -14,7 +15,9 @@ namespace MobileApp.ViewModels
         private ObservableCollection<string> _messages;
 
         public Command<string> PublishCommand { get; }
-        public List<IOTButton> IOTButtons { get; set; }
+        public List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
+
+        public List<Button> CompletedButtons { get; private set; } = new List<Button>();
         public IOTButtonDatabase Connection { get; set; } = null;
 
         public Command ShowNewView { get; }
@@ -25,13 +28,6 @@ namespace MobileApp.ViewModels
             //Set the Title property, this is inherited from BaseViewModel
             Title = "Dashboard";
             IsConnected = "Disconnected";
-
-            if (Connection == null)
-            {
-                Connection = new IOTButtonDatabase();
-            }
-
-            //IOTButtons = (List<IOTButton>)(IEnumerable<IOTButton>)Connection.GetItemsAsync();
 
             /*  App is globally accessible. It refers to the App.xaml.cs file and this is where we stored some
              *  important static properties. In this case we want to connect to our MQTT broker(server) when
@@ -50,6 +46,24 @@ namespace MobileApp.ViewModels
             PublishCommand = new Command<string>(Publish);
 
             ShowNewView = new Command(CreateNewButton);
+             
+            IOTButtons = App.IOTDatabase.GetItemsAsync().Wait();
+
+            //SEPERATE TO PUBLIC METHOD
+            Button button;
+
+            foreach(IOTButton buttonProperties in IOTButtons)
+            {
+                button = new Button
+                {
+                    Text = $"{buttonProperties.Name}",
+                    Image = "coffee.png",
+                    CommandParameter = $"{buttonProperties.Topic}",
+                    HeightRequest = 75
+                };
+
+                CompletedButtons.Add(button);
+            }
         }
 
         public void CreateNewButton()

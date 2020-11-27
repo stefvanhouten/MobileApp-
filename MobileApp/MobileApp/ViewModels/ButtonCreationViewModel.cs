@@ -24,7 +24,7 @@ namespace MobileApp.ViewModels
         {
             Title = "Tekst voor je zooi";
 
-            Button = new Models.IOTButton();
+            Button = new IOTButton();
 
             if (Connection == null)
             {

@@ -27,6 +27,7 @@
                     Image="coffee.png"
                     HeightRequest="75">
             </Button>
+            <ListView ItemsSource="{Binding CompletedButtons}"></ListView>
             <CollectionView ItemsSource="{Binding MQMessage}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
