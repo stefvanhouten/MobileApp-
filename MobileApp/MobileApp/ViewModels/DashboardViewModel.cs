@@ -10,13 +10,17 @@ using System.ComponentModel;
 
 namespace MobileApp.ViewModels
 {
-    public class DashboardViewModel :  BaseViewModel, INotifyPropertyChanged
+    public class DashboardViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch.
+        private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch. (I approve of this comment)
         private ObservableCollection<string> _messages;
 
         public Command<string> PublishCommand { get; private set; }
         public static List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
+
+        public static string Name { get; set; }
+
+        public static string Topic { get; set; }
         public static ObservableCollection<Button> CompletedButtons { get; private set; } = new ObservableCollection<Button>();
         public Command ShowNewView { get; private set; }
 
@@ -69,7 +73,7 @@ namespace MobileApp.ViewModels
 
             //instantiate buttion variable for the generated buttons
             Button button;
-            //             //x:Static local:
+
             //loop through all button properties and read it
             foreach (IOTButton buttonProperties in IOTButtons)
             {
@@ -77,7 +81,9 @@ namespace MobileApp.ViewModels
                 //generate the button with the properties
                 button = new Button
                 {
-                    Text = buttonProperties.Name,
+                    //RAISE ATTENTION FOR STEF VAN HOUTEN
+                    //COMMAND/CLICK EVENT DOES NOT WORK
+                    Text = $"{buttonProperties.Name}",
                     CommandParameter = $"{buttonProperties.Topic}",
                     HeightRequest = 75
                 };

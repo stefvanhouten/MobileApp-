@@ -13,7 +13,7 @@
     <ContentPage.Content>
         <FlexLayout FlexLayout.Grow="1" Wrap="Wrap" JustifyContent="SpaceEvenly" x:Name="IOTButtonContainer" Margin="10">
             <Button
-                    Text="{Binding Name}"
+                    Text="whatever"
                     ContentLayout="Bottom,0"
                     Image="coffee.png"
                     Command="{Binding Path=BindingContext.PublishCommand, Source={x:Reference Name=Dashboard}}" 
@@ -21,13 +21,21 @@
                     HeightRequest="75">
             </Button>
             <Button
-                    Text="{Binding Name}"
+                    Text="whatever"
                     Command="{Binding ShowNewView}"
                     ContentLayout="Bottom,0"
                     Image="coffee.png"
                     HeightRequest="75">
             </Button>
-            <ListView x:Name="CompletedButtonsView" ItemsSource="{Binding Source={x:Static vm:DashboardViewModel.CompletedButtons}}"></ListView>
+            <ListView ItemsSource="{Binding IOTButtons}">
+                <DataTemplate>
+                    <ItemTemplate>
+                        <ViewCell>
+                            <Button Text="{Binding Name}" CommandParameter="{Binding Topic}" HeightRequest="75" />
+                        </ViewCell>
+                    </ItemTemplate>
+                </DataTemplate>
+            </ListView>
             <CollectionView ItemsSource="{Binding MQMessage}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
