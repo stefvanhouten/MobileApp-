@@ -39,6 +39,11 @@ namespace MobileApp.Data
             return Database.Table<IOTButton>().ToListAsync();
         }
 
+        public Task<int> EmptyDatabase()
+        {
+            return Database.DeleteAllAsync<IOTButton>();
+        }
+
         public Task<IOTButton> GetItemAsync(int id)
         {
             return Database.Table<IOTButton>().Where(i => i.ID == id).FirstOrDefaultAsync();

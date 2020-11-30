@@ -21,7 +21,7 @@ namespace MobileApp.ViewModels
         public static string Name { get; set; }
 
         public static string Topic { get; set; }
-        public static ObservableCollection<Button> CompletedButtons { get; private set; } = new ObservableCollection<Button>();
+        public ObservableCollection<Button> CompletedButtons { get; set; } = new ObservableCollection<Button>();
         public Command ShowNewView { get; private set; }
 
         //This is the constructor of our class
@@ -50,6 +50,7 @@ namespace MobileApp.ViewModels
             App.Client.MessageReceived += NewMessage;
             //Same as the above, but this time when we disconnect/connect to/from the server update our page.
             App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
+            ButtonCreationViewModel.IOTButtonsDatabaseUpdated += BuildDynamicButtons;
             //Bind the Publish method to the PublishCommand property which is called from DasBoardPage.xaml button click
             PublishCommand = new Command<string>(Publish);
 
@@ -62,7 +63,7 @@ namespace MobileApp.ViewModels
 
         //helper method
         //can be set to static, since it should not create a new instance for buttons
-        public static async void BuildDynamicButtons()
+        public async void BuildDynamicButtons()
         {
             //wait until all data has been received
             IOTButtons = await App.IOTDatabase.GetItemsAsync();
@@ -77,15 +78,15 @@ namespace MobileApp.ViewModels
             //loop through all button properties and read it
             foreach (IOTButton buttonProperties in IOTButtons)
             {
-                Console.WriteLine(buttonProperties.Name);
                 //generate the button with the properties
                 button = new Button
                 {
                     //RAISE ATTENTION FOR STEF VAN HOUTEN
                     //COMMAND/CLICK EVENT DOES NOT WORK
-                    Text = $"{buttonProperties.Name}",
-                    CommandParameter = $"{buttonProperties.Topic}",
-                    HeightRequest = 75
+                    Text = buttonProperties.Name,
+                    Command = PublishCommand,
+                    CommandParameter = buttonProperties.Topic,
+                    HeightRequest = 75,
                 };
                 //add the button to an ObservableCollection of buttons
                 CompletedButtons.Add(button);
@@ -138,6 +139,7 @@ namespace MobileApp.ViewModels
              */
             this.MQMessage = App.Client.MQMessage;
         }
+
 
         private void Publish(string message)
         {

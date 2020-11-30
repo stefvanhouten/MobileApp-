@@ -27,15 +27,20 @@
                     Image="coffee.png"
                     HeightRequest="75">
             </Button>
-            <ListView ItemsSource="{Binding IOTButtons}">
-                <DataTemplate>
-                    <ItemTemplate>
-                        <ViewCell>
-                            <Button Text="{Binding Name}" CommandParameter="{Binding Topic}" HeightRequest="75" />
-                        </ViewCell>
-                    </ItemTemplate>
-                </DataTemplate>
-            </ListView>
+            <CollectionView ItemsSource="{Binding CompletedButtons}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        Orientation="Vertical"
+                        Span="2"
+                        VerticalItemSpacing="5" 
+                        HorizontalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Button Text="{Binding Text}" CommandParameter="{Binding CommandParameter}" Command="{Binding Command}" HeightRequest="75" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
             <CollectionView ItemsSource="{Binding MQMessage}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout

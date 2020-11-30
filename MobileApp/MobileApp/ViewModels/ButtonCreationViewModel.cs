@@ -15,6 +15,10 @@ namespace MobileApp.ViewModels
         public string Name { get; set; }
         public string Topic { get; set; }
         public string Image { get; set; }
+
+        public static event Action IOTButtonsDatabaseUpdated;
+
+
         public ButtonCreationViewModel()
         {
             Title = "Tekst voor je zooi";
@@ -32,7 +36,7 @@ namespace MobileApp.ViewModels
             // Button.Image = Image;
 
             App.IOTDatabase.SaveItemAsync(Button);
-            DashboardViewModel.BuildDynamicButtons();
+            IOTButtonsDatabaseUpdated?.Invoke();
             Application.Current.MainPage.Navigation.PopAsync();
         }
     }
