@@ -14,7 +14,6 @@
         <StackLayout>
             <Entry x:Name="name" Text="{Binding Name}" Placeholder="Naam"></Entry>
             <Entry x:Name="topic" Text="{Binding Topic}" Placeholder="MQTT topic"></Entry>
-            <Entry x:Name="image" Text="{Binding Image}" Placeholder="Foto (voor later)"></Entry>
             <Button 
                     Text="Voeg toe" 
                     Command="{Binding ClickCommand}" 

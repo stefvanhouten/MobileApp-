@@ -21,7 +21,7 @@ namespace MobileApp.ViewModels
 
         public ButtonCreationViewModel()
         {
-            Title = "Tekst voor je zooi";
+            Title = "New Topic";
 
             Button = new IOTButton();
 

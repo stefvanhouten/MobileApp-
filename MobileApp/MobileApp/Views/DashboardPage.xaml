@@ -13,7 +13,7 @@
     <ContentPage.Content>
         <FlexLayout FlexLayout.Grow="1" Wrap="Wrap" JustifyContent="SpaceEvenly" x:Name="IOTButtonContainer" Margin="10">
             <Button
-                    Text="whatever"
+                    Text=""
                     ContentLayout="Bottom,0"
                     Image="coffee.png"
                     Command="{Binding Path=BindingContext.PublishCommand, Source={x:Reference Name=Dashboard}}" 
@@ -21,10 +21,9 @@
                     HeightRequest="75">
             </Button>
             <Button
-                    Text="whatever"
+                    Text="+"
                     Command="{Binding ShowNewView}"
                     ContentLayout="Bottom,0"
-                    Image="coffee.png"
                     HeightRequest="75">
             </Button>
             <CollectionView ItemsSource="{Binding CompletedButtons}">
