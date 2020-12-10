@@ -21,8 +21,10 @@ namespace MobileApp.ViewModels
         public static string Name { get; set; }
 
         public static string Topic { get; set; }
-        public ObservableCollection<Button> CompletedButtons { get; set; } = new ObservableCollection<Button>();
+        public ObservableCollection<Button> CompletedPublishButtons { get; set; } = new ObservableCollection<Button>();
+        public ObservableCollection<Button> CompletedDeleteButtons { get; set; } = new ObservableCollection<Button>();
         public Command ShowNewView { get; private set; }
+        public Command DelButton { get; private set; }
 
         //This is the constructor of our class
         public DashboardViewModel()
@@ -55,7 +57,9 @@ namespace MobileApp.ViewModels
             PublishCommand = new Command<string>(Publish);
 
             //a reference to redirect to the page on which buttons are generated
-            ShowNewView = new Command(CreateNewButton);
+            ShowNewView = new Command<string>(CreateNewButton);
+
+            DelButton = new Command<IOTButton>(DeleteButton);
 
             //retrieve database rows and build buttons based on retrieved information
             BuildDynamicButtons();
@@ -70,31 +74,40 @@ namespace MobileApp.ViewModels
 
             //clear the ObservableCollection before pushing new items
             //this forces an update and prevents information from duplicating
-            CompletedButtons.Clear();
+            CompletedPublishButtons.Clear();
 
             //instantiate buttion variable for the generated buttons
             Button button;
+            Button deleteButton;
+            Button redirectButton;
 
             //loop through all button properties and read it
             foreach (IOTButton buttonProperties in IOTButtons)
             {
+
                 //generate the button with the properties
                 button = new Button
                 {
-                    //RAISE ATTENTION FOR STEF VAN HOUTEN
-                    //COMMAND/CLICK EVENT DOES NOT WORK
                     Text = buttonProperties.Name,
                     Command = PublishCommand,
                     CommandParameter = buttonProperties.Topic,
                     HeightRequest = 75,
                 };
                 //add the button to an ObservableCollection of buttons
-                CompletedButtons.Add(button);
+                CompletedPublishButtons.Add(button);
             }
         }
 
-        public void CreateNewButton()
+        public async void DeleteButton(IOTButton item)
         {
+            await App.IOTDatabase.DeleteItemAsync(item);
+        }
+
+        public void CreateNewButton(string target)
+        {
+            //RAISE ATTENTION FOR STEF VAN HOUTEN
+            Dictionary<string, Page> test = new Dictionary<string, Page>();
+            test.Add("ButtonCreation", typeof(ButtonCreation));
             Application.Current.MainPage.Navigation.PopAsync();
             Application.Current.MainPage.Navigation.PushAsync(new ButtonCreation(), true);
         }
