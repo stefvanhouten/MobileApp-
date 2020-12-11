@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace MobileApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ButtonUsage : ContentPage
+    public partial class ButtonCreationPage : ContentPage
     {
-        public ButtonUsage()
+        public ButtonCreationPage()
         {
             InitializeComponent();
         }

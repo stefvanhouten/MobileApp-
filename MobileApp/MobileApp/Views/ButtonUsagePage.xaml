@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobileApp.Views.ButtonUsagePage">
+    <ContentPage.Content>
+        <FlexLayout FlexLayout.Grow="1" Wrap="Wrap" JustifyContent="SpaceEvenly" x:Name="IOTButtonContainer" Margin="10">
+            <CollectionView ItemsSource="{Binding CompletedButtons}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        Orientation="Vertical"
+                        Span="2"
+                        VerticalItemSpacing="5" 
+                        HorizontalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+            <Button
+                Text="Verwijder Topic"
+                CommandParameter="Some object"
+                HeightRequest="75">
+            </Button>
+        </FlexLayout>
+    </ContentPage.Content>
+</ContentPage>

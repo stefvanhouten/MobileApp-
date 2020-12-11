@@ -28,15 +28,42 @@ namespace MobileApp.ViewModels
             ClickCommand = new Command(Save);
         }
 
-        //CREATE A METHOD TO CHECK WHETHER PROPERTIES ARE EMPTY???
+        //Name or Topic should not be empty and therefore we enforce a check prior to saving the data
+        private bool isEmpty()
+        {
+            if (Name == "" || Topic == "")
+            {
+                return true;
+            }
+            return false;
+        }
         public void Save()
         {
-            Button.Name = Name;
-            Button.Topic = Topic;
-            // Button.Image = Image;
+            if(!isEmpty())
+            {
+                Button.Name = Name;
+                Button.Topic = Topic;
 
-            App.IOTDatabase.SaveItemAsync(Button);
+                App.IOTDatabase.SaveItemAsync(Button);
+                InvokeUpdateEvent();
+                PopStack();
+            } else
+            {
+                //CREATE SOME POP-UP BOX LATER ON...
+            }
+        }
+
+        //helper method
+        //helper methods and properties are set as static
+        //InvokeUpdateEvent invokes the static property
+        //and thus we prevent the invoke error from being thrown
+        public static void InvokeUpdateEvent()
+        {
             IOTButtonsDatabaseUpdated?.Invoke();
+        }
+
+        public void PopStack()
+        {
             Application.Current.MainPage.Navigation.PopAsync();
         }
     }

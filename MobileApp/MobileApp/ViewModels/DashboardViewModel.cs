@@ -21,10 +21,10 @@ namespace MobileApp.ViewModels
         public static string Name { get; set; }
 
         public static string Topic { get; set; }
-        public ObservableCollection<Button> CompletedPublishButtons { get; set; } = new ObservableCollection<Button>();
-        public ObservableCollection<Button> CompletedDeleteButtons { get; set; } = new ObservableCollection<Button>();
+        public ObservableCollection<Button> CompletedButtons { get; set; } = new ObservableCollection<Button>();
+        public ObservableCollection<Button> PublishButtons { get; set; } = new ObservableCollection<Button>();
         public Command ShowNewView { get; private set; }
-        public Command DelButton { get; private set; }
+        public Command ShowCmsView { get; private set; }
 
         //This is the constructor of our class
         public DashboardViewModel()
@@ -52,17 +52,25 @@ namespace MobileApp.ViewModels
             App.Client.MessageReceived += NewMessage;
             //Same as the above, but this time when we disconnect/connect to/from the server update our page.
             App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
+
             ButtonCreationViewModel.IOTButtonsDatabaseUpdated += BuildDynamicButtons;
             //Bind the Publish method to the PublishCommand property which is called from DasBoardPage.xaml button click
             PublishCommand = new Command<string>(Publish);
 
             //a reference to redirect to the page on which buttons are generated
-            ShowNewView = new Command<string>(CreateNewButton);
-
-            DelButton = new Command<IOTButton>(DeleteButton);
+            ShowNewView = new Command(NavigateToButtonCreationPage);
+            ShowCmsView = new Command(NavigateToButtonActivator);
 
             //retrieve database rows and build buttons based on retrieved information
             BuildDynamicButtons();
+        }
+
+        private void ResetButtonCache()
+        {
+            //clear the ObservableCollection before pushing new items
+            //this forces an update and prevents information from duplicating within the property
+            CompletedButtons.Clear();
+            PublishButtons.Clear();
         }
 
         //helper method
@@ -72,44 +80,47 @@ namespace MobileApp.ViewModels
             //wait until all data has been received
             IOTButtons = await App.IOTDatabase.GetItemsAsync();
 
-            //clear the ObservableCollection before pushing new items
-            //this forces an update and prevents information from duplicating
-            CompletedPublishButtons.Clear();
-
+            ResetButtonCache();
             //instantiate buttion variable for the generated buttons
             Button button;
-            Button deleteButton;
             Button redirectButton;
 
             //loop through all button properties and read it
             foreach (IOTButton buttonProperties in IOTButtons)
             {
-
+                redirectButton = new Button
+                {
+                    Text = buttonProperties.Name,
+                    Command = ShowCmsView,
+                    CommandParameter = buttonProperties,
+                    HeightRequest = 75,
+                };
                 //generate the button with the properties
                 button = new Button
                 {
-                    Text = buttonProperties.Name,
+                    Text = $"Activeer {buttonProperties.Name}",
                     Command = PublishCommand,
                     CommandParameter = buttonProperties.Topic,
                     HeightRequest = 75,
                 };
                 //add the button to an ObservableCollection of buttons
-                CompletedPublishButtons.Add(button);
+                CompletedButtons.Add(redirectButton);
+
+                //Construct the button within dashboardviewmodel, for easy accessability
+                PublishButtons.Add(button);
             }
         }
 
-        public async void DeleteButton(IOTButton item)
+        public void NavigateToButtonCreationPage()
         {
-            await App.IOTDatabase.DeleteItemAsync(item);
+            Application.Current.MainPage.Navigation.PopAsync();
+            Application.Current.MainPage.Navigation.PushAsync(new ButtonCreationPage(), true);
         }
 
-        public void CreateNewButton(string target)
+        public void NavigateToButtonActivator()
         {
-            //RAISE ATTENTION FOR STEF VAN HOUTEN
-            Dictionary<string, Page> test = new Dictionary<string, Page>();
-            test.Add("ButtonCreation", typeof(ButtonCreation));
             Application.Current.MainPage.Navigation.PopAsync();
-            Application.Current.MainPage.Navigation.PushAsync(new ButtonCreation(), true);
+            Application.Current.MainPage.Navigation.PushAsync(new ButtonUsagePage(), true);
         }
 
         public string IsConnected

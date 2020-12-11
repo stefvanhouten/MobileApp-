@@ -16,13 +16,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ButtonCreationPage.xaml.cs">
+      <DependentUpon>ButtonCreationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ButtonUsagePage.xaml.cs">
+      <DependentUpon>ButtonUsagePage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Views\AboutUsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ButtonCreation.xaml">
+    <EmbeddedResource Update="Views\ButtonCreationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ButtonUsage.xaml">
+    <EmbeddedResource Update="Views\ButtonUsagePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\DashboardPage.xaml">

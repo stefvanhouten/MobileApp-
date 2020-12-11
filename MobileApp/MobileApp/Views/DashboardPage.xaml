@@ -23,7 +23,6 @@
             <Button
                     Text="+"
                     Command="{Binding ShowNewView}"
-                    CommandParameter = "ButtonCreation"
                     ContentLayout="Bottom,0"
                     HeightRequest="75">
             </Button>
