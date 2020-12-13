@@ -4,7 +4,7 @@
              x:Class="MobileApp.Views.ButtonUsagePage">
     <ContentPage.Content>
         <FlexLayout FlexLayout.Grow="1" Wrap="Wrap" JustifyContent="SpaceEvenly" x:Name="IOTButtonContainer" Margin="10">
-            <CollectionView ItemsSource="{Binding CompletedButtons}">
+            <CollectionView ItemsSource="{Binding ResponseButton}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
                         Orientation="Vertical"
@@ -15,6 +15,7 @@
             </CollectionView>
             <Button
                 Text="Verwijder Topic"
+                Command="{Binding DeleteBtn}"
                 CommandParameter="Some object"
                 HeightRequest="75">
             </Button>

@@ -56,7 +56,7 @@ namespace MobileApp.ViewModels
         //helper method
         //helper methods and properties are set as static
         //InvokeUpdateEvent invokes the static property
-        //and thus we prevent the invoke error from being thrown
+        //and thus we prevent the invoke error from being thrown when it's called from outside the class
         public static void InvokeUpdateEvent()
         {
             IOTButtonsDatabaseUpdated?.Invoke();

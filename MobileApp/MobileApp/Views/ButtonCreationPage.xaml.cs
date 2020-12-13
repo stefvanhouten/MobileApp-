@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MobileApp.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,6 +16,7 @@ namespace MobileApp.Views
         public ButtonCreationPage()
         {
             InitializeComponent();
+            this.BindingContext = new ButtonCreationViewModel();
         }
     }
 }

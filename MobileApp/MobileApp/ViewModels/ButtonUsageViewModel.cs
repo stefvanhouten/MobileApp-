@@ -13,9 +13,11 @@ namespace MobileApp.ViewModels
     {
         public ObservableCollection<Button> PublishButtons { get; private set; } = new ObservableCollection<Button>();
         public Command DeleteBtn {get; set;}
-        public ButtonUsageViewModel()
+        public IOTButton ResponseButton { get; set; }
+        public ButtonUsageViewModel(IOTButton button)
         {
             Title = "Management Systeem";
+            ResponseButton = button;
             DeleteBtn = new Command<IOTButton>(DeleteButton);
         }
 

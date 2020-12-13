@@ -59,7 +59,7 @@ namespace MobileApp.ViewModels
 
             //a reference to redirect to the page on which buttons are generated
             ShowNewView = new Command(NavigateToButtonCreationPage);
-            ShowCmsView = new Command(NavigateToButtonActivator);
+            ShowCmsView = new Command<IOTButton>(NavigateToButtonActivator);
 
             //retrieve database rows and build buttons based on retrieved information
             BuildDynamicButtons();
@@ -88,19 +88,20 @@ namespace MobileApp.ViewModels
             //loop through all button properties and read it
             foreach (IOTButton buttonProperties in IOTButtons)
             {
-                redirectButton = new Button
-                {
-                    Text = buttonProperties.Name,
-                    Command = ShowCmsView,
-                    CommandParameter = buttonProperties,
-                    HeightRequest = 75,
-                };
                 //generate the button with the properties
                 button = new Button
                 {
                     Text = $"Activeer {buttonProperties.Name}",
                     Command = PublishCommand,
                     CommandParameter = buttonProperties.Topic,
+                    HeightRequest = 75,
+                };
+
+                redirectButton = new Button
+                {
+                    Text = buttonProperties.Name,
+                    Command = ShowCmsView,
+                    CommandParameter = button,
                     HeightRequest = 75,
                 };
                 //add the button to an ObservableCollection of buttons
@@ -117,10 +118,11 @@ namespace MobileApp.ViewModels
             Application.Current.MainPage.Navigation.PushAsync(new ButtonCreationPage(), true);
         }
 
-        public void NavigateToButtonActivator()
+        public void NavigateToButtonActivator(IOTButton button)
         {
+            Console.WriteLine("Fired");
             Application.Current.MainPage.Navigation.PopAsync();
-            Application.Current.MainPage.Navigation.PushAsync(new ButtonUsagePage(), true);
+            Application.Current.MainPage.Navigation.PushAsync(new ButtonUsagePage(button), true);
         }
 
         public string IsConnected
