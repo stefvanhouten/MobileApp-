@@ -1,22 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MobileApp.Views.ButtonUsagePage">
+             x:Class="MobileApp.Views.ButtonUsagePage"
+             Title="{Binding Title}">
     <ContentPage.Content>
         <FlexLayout FlexLayout.Grow="1" Wrap="Wrap" JustifyContent="SpaceEvenly" x:Name="IOTButtonContainer" Margin="10">
-            <CollectionView ItemsSource="{Binding ResponseButton}">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout
-                        Orientation="Vertical"
-                        Span="2"
-                        VerticalItemSpacing="5" 
-                        HorizontalItemSpacing="5"/>
-                </CollectionView.ItemsLayout>
-            </CollectionView>
+            <ContentView Content="{Binding ResponseButton}"/>
             <Button
                 Text="Verwijder Topic"
                 Command="{Binding DeleteBtn}"
-                CommandParameter="Some object"
                 HeightRequest="75">
             </Button>
         </FlexLayout>

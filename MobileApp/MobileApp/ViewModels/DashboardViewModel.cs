@@ -7,6 +7,7 @@ using System;
 using MobileApp.Views;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using MobileApp.CustomElement;
 
 namespace MobileApp.ViewModels
 {
@@ -14,15 +15,9 @@ namespace MobileApp.ViewModels
     {
         private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch. (I approve of this comment)
         private ObservableCollection<string> _messages;
-
         public Command<string> PublishCommand { get; private set; }
         public static List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
-
-        public static string Name { get; set; }
-
-        public static string Topic { get; set; }
         public ObservableCollection<Button> CompletedButtons { get; set; } = new ObservableCollection<Button>();
-        public ObservableCollection<Button> PublishButtons { get; set; } = new ObservableCollection<Button>();
         public Command ShowNewView { get; private set; }
         public Command ShowCmsView { get; private set; }
 
@@ -59,18 +54,10 @@ namespace MobileApp.ViewModels
 
             //a reference to redirect to the page on which buttons are generated
             ShowNewView = new Command(NavigateToButtonCreationPage);
-            ShowCmsView = new Command<IOTButton>(NavigateToButtonActivator);
+            ShowCmsView = new Command<CustomButton>(NavigateToButtonActivator);
 
             //retrieve database rows and build buttons based on retrieved information
             BuildDynamicButtons();
-        }
-
-        private void ResetButtonCache()
-        {
-            //clear the ObservableCollection before pushing new items
-            //this forces an update and prevents information from duplicating within the property
-            CompletedButtons.Clear();
-            PublishButtons.Clear();
         }
 
         //helper method
@@ -80,22 +67,22 @@ namespace MobileApp.ViewModels
             //wait until all data has been received
             IOTButtons = await App.IOTDatabase.GetItemsAsync();
 
-            ResetButtonCache();
+            CompletedButtons.Clear();
+
             //instantiate buttion variable for the generated buttons
-            Button button;
+            CustomButton button;
             Button redirectButton;
 
             //loop through all button properties and read it
             foreach (IOTButton buttonProperties in IOTButtons)
             {
                 //generate the button with the properties
-                button = new Button
-                {
-                    Text = $"Activeer {buttonProperties.Name}",
-                    Command = PublishCommand,
-                    CommandParameter = buttonProperties.Topic,
-                    HeightRequest = 75,
-                };
+                button = new CustomButton();
+                button.CustomID = buttonProperties.ID;
+                button.Text = $"{buttonProperties.Name}";
+                button.Command = PublishCommand;
+                button.CommandParameter = buttonProperties.Topic;
+                button.HeightRequest = 75;
 
                 redirectButton = new Button
                 {
@@ -106,9 +93,6 @@ namespace MobileApp.ViewModels
                 };
                 //add the button to an ObservableCollection of buttons
                 CompletedButtons.Add(redirectButton);
-
-                //Construct the button within dashboardviewmodel, for easy accessability
-                PublishButtons.Add(button);
             }
         }
 
@@ -118,9 +102,8 @@ namespace MobileApp.ViewModels
             Application.Current.MainPage.Navigation.PushAsync(new ButtonCreationPage(), true);
         }
 
-        public void NavigateToButtonActivator(IOTButton button)
+        public void NavigateToButtonActivator(CustomButton button)
         {
-            Console.WriteLine("Fired");
             Application.Current.MainPage.Navigation.PopAsync();
             Application.Current.MainPage.Navigation.PushAsync(new ButtonUsagePage(button), true);
         }

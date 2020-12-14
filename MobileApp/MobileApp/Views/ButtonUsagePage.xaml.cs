@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MobileApp.CustomElement;
 using MobileApp.Models;
 using MobileApp.ViewModels;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace MobileApp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ButtonUsagePage : ContentPage
     {
-        public ButtonUsagePage(IOTButton button)
+        public ButtonUsagePage(CustomButton button)
         {
             InitializeComponent();
             this.BindingContext = new ButtonUsageViewModel(button);

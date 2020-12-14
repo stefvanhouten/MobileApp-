@@ -6,30 +6,27 @@ using System.Text;
 using Xamarin.Forms;
 using MobileApp.Views;
 using System.Collections.ObjectModel;
+using MobileApp.CustomElement;
 
 namespace MobileApp.ViewModels
 {
     class ButtonUsageViewModel : BaseViewModel
     {
-        public ObservableCollection<Button> PublishButtons { get; private set; } = new ObservableCollection<Button>();
         public Command DeleteBtn {get; set;}
-        public IOTButton ResponseButton { get; set; }
-        public ButtonUsageViewModel(IOTButton button)
+        public CustomButton ResponseButton { get; set; }
+        public ButtonUsageViewModel(CustomButton button)
         {
             Title = "Management Systeem";
             ResponseButton = button;
-            DeleteBtn = new Command<IOTButton>(DeleteButton);
+            DeleteBtn = new Command(DeleteButton);
         }
-
-        //SET ASYNC, TO CALL ASYNC METHODS FROM WITHIN CONSTRUCTOR IF REQUIRED
-        public async void InitializeAsync()
+        public async void DeleteButton()
         {
-            ButtonCreationViewModel.InvokeUpdateEvent();
-        }
-
-        public async void DeleteButton(IOTButton item)
-        {
-            await App.IOTDatabase.DeleteItemAsync(item);
+            int PK = ResponseButton.CustomID;
+            IOTButton toDelete = await App.IOTDatabase.GetItemAsync(PK);
+            await App.IOTDatabase.DeleteItemAsync(toDelete);
+            ButtonCreationViewModel.InvokeUpdate();
+            Application.Current.MainPage.Navigation.PopAsync();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace MobileApp.ViewModels
                 Button.Topic = Topic;
 
                 App.IOTDatabase.SaveItemAsync(Button);
-                InvokeUpdateEvent();
+                InvokeUpdate();
                 PopStack();
             } else
             {
@@ -53,11 +53,11 @@ namespace MobileApp.ViewModels
             }
         }
 
-        //helper method
-        //helper methods and properties are set as static
-        //InvokeUpdateEvent invokes the static property
-        //and thus we prevent the invoke error from being thrown when it's called from outside the class
-        public static void InvokeUpdateEvent()
+        //HELPER METHOD
+        //helper methods should be static, to help the class in which it resides
+        //the InvokeUpdate has been created, to prevent cluttering from one method that should not handle multiple actions
+        //Most importantly, invoking the body of InvokeUpdate, is NOT possible from within other classes.
+        public static void InvokeUpdate()
         {
             IOTButtonsDatabaseUpdated?.Invoke();
         }
