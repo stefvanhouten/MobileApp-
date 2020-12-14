@@ -14,7 +14,9 @@
             <Entry x:Name="PortEntry" Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
             
             <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
-
+            
+            <Label x:Name="ErrorLabel" Text="{Binding ErrorMsg}" HorizontalTextAlignment="Center" TextColor="White" BackgroundColor="{Binding BgColor}" FontSize="Medium" />
+         
             <ActivityIndicator IsRunning="{Binding Connecting}"/>
 
             <Label Text="Port is 1883 by default"
