@@ -3,9 +3,6 @@ using System.Text;
 using Xamarin.Forms;
 using MQTTnet.Client.Options;
 using System.Collections.ObjectModel;
-using System.Reactive.Linq;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using MQTTnet;
 
 
@@ -18,20 +15,23 @@ namespace MobileApp.Services
 
         public event Action MessageReceived; //Fired when a message is recieved
         public event Action ConnectionStatusChanged; //Fired when connectionstatus is changed, DashBoardViewModel listens to these events
-
-        public MQTTClient()
-        {
-            MQMessage = new ObservableCollection<string>();
-        }
+        public bool HasBeenConnected { get; set; } = false;
 
         public async void Connect()
         {
+            MQMessage = new ObservableCollection<string>();
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
             //so that our Connect method at least takes a IP address
             MQTTnet.ClientLib.MqttService.MqttClient.Init("XamarinMobileClient", new MqttClientOptionsBuilder().WithClientId(Guid.NewGuid().ToString())
                                                                                                                   .WithCleanSession(true)
                                                                                                                   .WithTcpServer(App.ServerIP, App.ServerPort)
                                                                                                                   .Build());
+            if (HasBeenConnected)
+            {
+                MQTTnet.ClientLib.MqttService.MqttClient.Connected -= MqttClient_Connected;
+                MQTTnet.ClientLib.MqttService.MqttClient.MessageReceived -= MqttClient_MessageReceived;
+                MQTTnet.ClientLib.MqttService.MqttClient.Disconnected -= MqttClient_Disconnected;
+            }
             MQTTnet.ClientLib.MqttService.MqttClient.Connected += MqttClient_Connected; //Binds our MqttClient_Connected when MqttService.MqttClient.Connected event is fired
             MQTTnet.ClientLib.MqttService.MqttClient.MessageReceived += MqttClient_MessageReceived;
             MQTTnet.ClientLib.MqttService.MqttClient.Disconnected += MqttClient_Disconnected;
@@ -53,20 +53,28 @@ namespace MobileApp.Services
              *  Sometimes you don't want to wait because what the method is doing is not important for now, 
              *  in this case we want to wait though.
              */
-            await MQTTnet.ClientLib.MqttService.MqttClient.Connect(); 
+            await MQTTnet.ClientLib.MqttService.MqttClient.Connect();
+            this.HasBeenConnected = true;
         }
 
 
         private void WriteLog(string msg)
         {
-            MQMessage.Add(msg);
-            /*  We only add to this list when we receive a message. For that reason we can invoke the MessageReceived
-             *  event so that our listeners(DashBoardViewModel) can act. 
-             *  
-             *  The ? in this method is an Elvis operator. 
-             *  Basicly what it does is checking if MessageReceived is null, if not then invoke.
-             */
-            MessageReceived?.Invoke(); 
+            if (!MQMessage.Contains(msg))
+            {
+                MQMessage.Add(msg);
+                while(MQMessage.Count >= 5)
+                {
+                    MQMessage.RemoveAt(0);
+                }
+                /*  We only add to this list when we receive a message. For that reason we can invoke the MessageReceived
+                 *  event so that our listeners(DashBoardViewModel) can act. 
+                 *  
+                 *  The ? in this method is an Elvis operator. 
+                 *  Basicly what it does is checking if MessageReceived is null, if not then invoke.
+                 */
+                MessageReceived?.Invoke();
+            }
         }
 
         private async void MqttClient_Disconnected(object sender, MQTTnet.Client.Disconnecting.MqttClientDisconnectedEventArgs e)
