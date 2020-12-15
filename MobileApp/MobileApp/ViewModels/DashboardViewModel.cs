@@ -81,7 +81,7 @@ namespace MobileApp.ViewModels
         private void Publish(string message)
         {
             //Publish a message to the switches channel. This shouldn't be hardcoded and both should take a variable.
-            App.Client.Publish("switches", message);
+            App.Client.Publish("wateringSystem", message);
         }
     }
 }
