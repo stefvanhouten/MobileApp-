@@ -11,9 +11,6 @@ namespace MobileApp.CustomElement
     public class CustomButton : Button
     {
         public int CustomID { get; set; }
-
-        public CustomButton()
-        {
-        }
+        public string CustomTopic { get; set; }
     }
 }

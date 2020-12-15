@@ -4,7 +4,7 @@
              x:Class="MobileApp.Views.ButtonUsagePage"
              Title="{Binding Title}">
     <ContentPage.Content>
-        <StackLayout Orientation="Horizontal">
+        <StackLayout>
             <ContentView Content="{Binding ResponseButton}"/>
             <Button
                 Text="Verwijder Topic"

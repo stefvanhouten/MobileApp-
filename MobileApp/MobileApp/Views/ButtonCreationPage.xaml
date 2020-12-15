@@ -9,9 +9,10 @@
     <ContentPage.BindingContext>
         <vm:ButtonCreationViewModel />
     </ContentPage.BindingContext>
-    
+
     <ContentPage.Content>
         <StackLayout>
+            <Label x:Name="ErrorLabel" Text="{Binding ErrorMsg}" HorizontalTextAlignment="Center" TextColor="White" BackgroundColor="{Binding BgColor}" FontSize="Medium" />
             <Entry x:Name="name" Text="{Binding Name}" Placeholder="Naam"></Entry>
             <Entry x:Name="topic" Text="{Binding Topic}" Placeholder="MQTT topic"></Entry>
             <Button 

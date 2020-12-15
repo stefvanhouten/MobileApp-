@@ -10,11 +10,15 @@ namespace MobileApp.ViewModels
 {
     public class ButtonCreationViewModel : BaseViewModel
     {
+        //ATTENTION: KEEP VARIABLES FOR GENERIC THINGS SUCH AS ERRORS AS CLOSE TO EACH OTHER
+        //FOR EASIER MAINTAINABILITY
+        private string _errormsg;
+
+        private string _bgcolor;
         public IOTButton Button { get; private set; } = null;
         public Command ClickCommand { get; set; }
         public string Name { get; set; }
         public string Topic { get; set; }
-        public string Image { get; set; }
 
         public static event Action IOTButtonsDatabaseUpdated;
 
@@ -22,34 +26,56 @@ namespace MobileApp.ViewModels
         public ButtonCreationViewModel()
         {
             Title = "New Topic";
-
             Button = new IOTButton();
-
             ClickCommand = new Command(Save);
         }
 
-        //Name or Topic should not be empty and therefore we enforce a check prior to saving the data
-        private bool isEmpty()
+        public void InputTextChanged()
         {
-            if (Name == "" || Topic == "")
-            {
-                return true;
-            }
-            return false;
+            ErrorMsg = "";
+            BgColor = "White";
         }
-        public void Save()
+
+
+        public string ErrorMsg
         {
-            if(!isEmpty())
+            get 
+            { 
+                return _errormsg; 
+            }
+            set
+            {
+                _errormsg = value;
+                OnPropertyChanged();
+            }
+        }
+        public string BgColor
+        {
+            get 
+            { 
+                return _bgcolor; 
+            }
+            set
+            {
+                _bgcolor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public async void Save()
+        {
+            if(!String.IsNullOrEmpty(Name) && !String.IsNullOrEmpty(Topic))
             {
                 Button.Name = Name;
                 Button.Topic = Topic;
 
-                App.IOTDatabase.SaveItemAsync(Button);
+                await App.IOTDatabase.SaveItemAsync(Button);
                 InvokeUpdate();
                 PopStack();
             } else
             {
-                //CREATE SOME POP-UP BOX LATER ON...
+                ErrorMsg = "Vergeet niet beide velden in te vullen!";
+                BgColor = "red";
             }
         }
 

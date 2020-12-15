@@ -8,6 +8,7 @@ using MobileApp.Views;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using MobileApp.CustomElement;
+using MobileApp.Services;
 
 namespace MobileApp.ViewModels
 {
@@ -15,7 +16,7 @@ namespace MobileApp.ViewModels
     {
         private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch. (I approve of this comment)
         private ObservableCollection<string> _messages;
-        public Command<string> PublishCommand { get; private set; }
+        public Command<CustomButton> PublishCommand { get; private set; }
         public static List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
         public ObservableCollection<Button> CompletedButtons { get; set; } = new ObservableCollection<Button>();
         public Command ShowNewView { get; private set; }
@@ -50,7 +51,7 @@ namespace MobileApp.ViewModels
 
             ButtonCreationViewModel.IOTButtonsDatabaseUpdated += BuildDynamicButtons;
             //Bind the Publish method to the PublishCommand property which is called from DasBoardPage.xaml button click
-            PublishCommand = new Command<string>(Publish);
+            PublishCommand = new Command<CustomButton>(Publish);
 
             //a reference to redirect to the page on which buttons are generated
             ShowNewView = new Command(NavigateToButtonCreationPage);
@@ -79,10 +80,11 @@ namespace MobileApp.ViewModels
                 //generate the button with the properties
                 button = new CustomButton();
                 button.CustomID = buttonProperties.ID;
-                button.Text = $"{buttonProperties.Name}";
+                button.CustomTopic = buttonProperties.Topic;
+                button.Text = $"Activeer {buttonProperties.Name}";
                 button.Command = PublishCommand;
-                button.CommandParameter = buttonProperties.Topic;
                 button.HeightRequest = 75;
+                button.CommandParameter = button;
 
                 redirectButton = new Button
                 {
@@ -110,7 +112,10 @@ namespace MobileApp.ViewModels
 
         public string IsConnected
         {
-            get { return _isConnected; }
+            get 
+            { 
+                return _isConnected; 
+            }
             private set
             {
                 _isConnected = value;
@@ -120,7 +125,10 @@ namespace MobileApp.ViewModels
 
         public ObservableCollection<string> MQMessage
         {
-            get { return _messages; }
+            get 
+            { 
+                return _messages; 
+            }
             private set
             {
                 _messages = value;
@@ -150,10 +158,9 @@ namespace MobileApp.ViewModels
         }
 
 
-        private void Publish(string message)
+        private void Publish(CustomButton sender)
         {
-            //Publish a message to the switches channel. This shouldn't be hardcoded and both should take a variable.
-            App.Client.Publish("switches", message);
+            App.Client.Publish(sender.CustomTopic, "Toggle");
         }
     }
 }
