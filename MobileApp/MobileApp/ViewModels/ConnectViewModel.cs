@@ -12,36 +12,36 @@ namespace MobileApp.ViewModels
 {
     public class ConnectViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private string _errormsg;
-        private string _errorlabelisvisible = "false";
-        private string _ipinput; 
+        private string _errorMsg;
+        private string _errorLabelIsVisible = "false";
+        private string _ipInput; 
         public Command ConnectClickCommand { get; set; } 
         public int PortInput { get; set; } = 1883; //Default port
         
         public string ErrorLabelIsVisible {
-                    get { return _errorlabelisvisible; }
+                    get { return _errorLabelIsVisible; }
                     set
                     {
-                        _errorlabelisvisible = value;
+                        _errorLabelIsVisible = value;
                         OnPropertyChanged();
                     }
                 }
 
         public string IPInput {
-                    get { return _ipinput; }
+                    get { return _ipInput; }
                     set
                     {
-                        _ipinput = value;
+                        _ipInput = value;
                          IpInput_TextChanged();
                     }
         
                 }
 
         public string ErrorMsg {
-                    get { return _errormsg; }
+                    get { return _errorMsg; }
                     set
                     {
-                        _errormsg = value;
+                        _errorMsg = value;
                         OnPropertyChanged();
                     }
                 }
@@ -81,8 +81,7 @@ namespace MobileApp.ViewModels
 
         public void IpInput_TextChanged()
         {
-            ErrorMsg = "";
-            ErrorLabelIsVisible = "false";
+                ErrorLabelIsVisible = "false";
         }
 
     }
