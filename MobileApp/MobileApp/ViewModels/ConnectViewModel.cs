@@ -19,43 +19,32 @@ namespace MobileApp.ViewModels
         public int PortInput { get; set; } = 1883; //Default port
 
         public string IPInput {
-            get
-            {
-                return _ipinput;
-            }
-            set
-            {
-                _ipinput = value;
-                IpInput_TextChanged();
-            }
+                    get { return _ipinput; }
+                    set
+                    {
+                        _ipinput = value;
+                         IpInput_TextChanged();
+                    }
         
-        }
+                 }
 
-        public string ErrorMsg
-        {
-            get 
-            {
-                return _errormsg; 
-            }
-            set
-            {
-                _errormsg = value;
-                OnPropertyChanged();
-            }
-        }
+        public string ErrorMsg {
+                    get { return _errormsg; }
+                    set
+                    {
+                        _errormsg = value;
+                        OnPropertyChanged();
+                    }
+                }
 
-        public string BgColor
-        {
-            get 
-            { 
-                return _bgcolor;
-            }
-            set
-            {
-                _bgcolor = value;
-                OnPropertyChanged();
-            }
-        }
+        public string BgColor {
+                    get { return _bgcolor; }
+                    set
+                    {
+                        _bgcolor = value;
+                        OnPropertyChanged();
+                    }
+                }
         
         public ConnectViewModel()
         {
