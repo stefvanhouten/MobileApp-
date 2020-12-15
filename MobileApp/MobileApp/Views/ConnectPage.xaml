@@ -14,8 +14,8 @@
             <Entry x:Name="PortEntry" Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
             
             <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
-            
-            <Label x:Name="ErrorLabel" Text="{Binding ErrorMsg}" HorizontalTextAlignment="Center" TextColor="White" BackgroundColor="{Binding BgColor}" FontSize="Medium" />
+
+            <Label x:Name="ErrorLabel" Text="{Binding ErrorMsg}" HorizontalTextAlignment="Center" TextColor="White" IsVisible="{Binding ErrorLabelIsVisible}" BackgroundColor="Red" FontSize="Medium" />
          
             <ActivityIndicator IsRunning="{Binding Connecting}"/>
 

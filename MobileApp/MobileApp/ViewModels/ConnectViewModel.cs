@@ -12,11 +12,20 @@ namespace MobileApp.ViewModels
 {
     public class ConnectViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private string _errormsg; 
-        private string _bgcolor; 
+        private string _errormsg;
+        private string _errorlabelisvisible = "false";
         private string _ipinput; 
         public Command ConnectClickCommand { get; set; } 
         public int PortInput { get; set; } = 1883; //Default port
+        
+        public string ErrorLabelIsVisible {
+                    get { return _errorlabelisvisible; }
+                    set
+                    {
+                        _errorlabelisvisible = value;
+                        OnPropertyChanged();
+                    }
+                }
 
         public string IPInput {
                     get { return _ipinput; }
@@ -26,7 +35,7 @@ namespace MobileApp.ViewModels
                          IpInput_TextChanged();
                     }
         
-                 }
+                }
 
         public string ErrorMsg {
                     get { return _errormsg; }
@@ -37,14 +46,8 @@ namespace MobileApp.ViewModels
                     }
                 }
 
-        public string BgColor {
-                    get { return _bgcolor; }
-                    set
-                    {
-                        _bgcolor = value;
-                        OnPropertyChanged();
-                    }
-                }
+         
+
         
         public ConnectViewModel()
         {
@@ -72,14 +75,14 @@ namespace MobileApp.ViewModels
             }else
             {
                 ErrorMsg = "Error IP is not Valid";
-                BgColor = "red";
+                ErrorLabelIsVisible = "true";
             }
         }
 
         public void IpInput_TextChanged()
         {
             ErrorMsg = "";
-            BgColor = "White";
+            ErrorLabelIsVisible = "false";
         }
 
     }
