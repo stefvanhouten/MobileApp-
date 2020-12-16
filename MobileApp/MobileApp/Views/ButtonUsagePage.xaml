@@ -7,9 +7,11 @@
         <StackLayout>
             <ContentView Content="{Binding ResponseButton}"/>
             <Button
-                Text="Verwijder Topic"
-                Command="{Binding DeleteBtn}"
-                HeightRequest="75">
+                    Margin="3"
+                    Text="Verwijder Topic"
+                    Command="{Binding DeleteBtn}"
+                    HeightRequest="75"
+                    VerticalOptions="EndAndExpand">
             </Button>
         </StackLayout>
     </ContentPage.Content>

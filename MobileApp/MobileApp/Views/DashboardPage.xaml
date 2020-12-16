@@ -11,21 +11,7 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <FlexLayout FlexLayout.Grow="1" Wrap="Wrap" JustifyContent="SpaceEvenly" x:Name="IOTButtonContainer" Margin="10">
-            <Button
-                    Text=""
-                    ContentLayout="Bottom,0"
-                    Image="coffee.png"
-                    Command="{Binding Path=BindingContext.PublishCommand, Source={x:Reference Name=Dashboard}}" 
-                    CommandParameter="Test"
-                    HeightRequest="75">
-            </Button>
-            <Button
-                    Text="+"
-                    Command="{Binding ShowNewView}"
-                    ContentLayout="Bottom,0"
-                    HeightRequest="75">
-            </Button>
+        <StackLayout FlexLayout.Grow="1" x:Name="IOTButtonContainer" Margin="10">
             <CollectionView ItemsSource="{Binding CompletedButtons}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
@@ -54,6 +40,13 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </FlexLayout>
+            <Button
+                Text="+"
+                Command="{Binding ShowNewView}"
+                HeightRequest="50" 
+                VerticalOptions="End"
+                HorizontalOptions="End">
+            </Button>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

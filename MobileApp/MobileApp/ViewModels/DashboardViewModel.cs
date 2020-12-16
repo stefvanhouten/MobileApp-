@@ -91,7 +91,10 @@ namespace MobileApp.ViewModels
                     Text = buttonProperties.Name,
                     Command = ShowCmsView,
                     CommandParameter = button,
+                    MinimumHeightRequest = 75,
                     HeightRequest = 75,
+                    MinimumWidthRequest = 75,
+                    WidthRequest = 75,
                 };
                 //add the button to an ObservableCollection of buttons
                 CompletedButtons.Add(redirectButton);
