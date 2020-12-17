@@ -10,13 +10,7 @@ namespace MobileApp
     {
         public AppShell()
         {
-            this.AsyncInit(); 
-        }
-
-        public async void AsyncInit()
-        {
             InitializeComponent();
-            await Navigation.PushModalAsync(new ConnectPage());
         }
     }
 }
