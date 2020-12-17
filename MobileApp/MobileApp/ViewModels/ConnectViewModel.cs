@@ -46,9 +46,6 @@ namespace MobileApp.ViewModels
                     }
                 }
 
-         
-
-        
         public ConnectViewModel()
         {
             Title = "ConnectPage";

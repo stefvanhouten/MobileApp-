@@ -129,13 +129,11 @@ namespace MobileApp.ViewModels
 
         public void NavigateToButtonCreationPage()
         {
-            Application.Current.MainPage.Navigation.PopAsync();
             Application.Current.MainPage.Navigation.PushAsync(new ButtonCreationPage(), true);
         }
 
         public void NavigateToButtonActivator(CustomButton button)
         {
-            Application.Current.MainPage.Navigation.PopAsync();
             Application.Current.MainPage.Navigation.PushAsync(new ButtonUsagePage(button), true);
         }
 
