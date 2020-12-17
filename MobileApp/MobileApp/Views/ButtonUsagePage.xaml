@@ -5,10 +5,32 @@
              Title="{Binding Title}">
     <ContentPage.Content>
         <StackLayout>
-            <ContentView Content="{Binding ResponseButton}"/>
+
+            <CollectionView ItemsSource="{Binding CompletedButtons}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        Orientation="Vertical"
+                        />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Button Text="{Binding Text}"
+                                    CommandParameter="{Binding CommandParameter}" 
+                                    Command="{Binding Command}"
+                                    Image="{Binding ImageSource}"
+                                    ContentLayout="Bottom,0"
+                                    Margin="5"
+                                    HeightRequest="75"
+                                    />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
             <Button
-                    Margin="3"
-                    Text="Verwijder Topic"
+                    Margin="5"
+                    Text="Remove button"
                     Command="{Binding DeleteBtn}"
                     HeightRequest="75"
                     VerticalOptions="EndAndExpand">

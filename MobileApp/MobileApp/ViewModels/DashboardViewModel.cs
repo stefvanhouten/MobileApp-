@@ -107,8 +107,9 @@ namespace MobileApp.ViewModels
                 {
                     CustomID = buttonProperties.ID,
                     CustomTopic = buttonProperties.Topic,
-                    Text = $"Activeer {buttonProperties.Name}",
+                    Text = buttonProperties.Name,
                     Command = PublishCommand,
+                    ImageSource = buttonProperties.ImageName,
                     HeightRequest = 75,
                 };
                 button.CommandParameter = button;
