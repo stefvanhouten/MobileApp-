@@ -2,6 +2,9 @@
 using MobileApp.Data;
 using MobileApp.Services;
 using Xamarin.Forms;
+using MobileApp.ViewModels;
+using MobileApp.Views;
+using System;
 
 namespace MobileApp
 {
@@ -43,6 +46,7 @@ namespace MobileApp
                 return _iotDatabase;
             }
         }
+
 
         protected override void OnStart()
         {

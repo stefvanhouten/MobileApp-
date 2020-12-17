@@ -17,14 +17,16 @@ namespace MobileApp.Services
         public event Action ConnectionStatusChanged; //Fired when connectionstatus is changed, DashBoardViewModel listens to these events
         public bool HasBeenConnected { get; set; } = false;
 
-        public async void Connect()
+        public bool ForceDisconnect { get; set; } = false;
+
+        public async void Connect(string IP, int port)
         {
             MQMessage = new ObservableCollection<string>();
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
             //so that our Connect method at least takes a IP address
             MqttService.MqttClient.Init("XamarinMobileClient", new MqttClientOptionsBuilder().WithClientId(Guid.NewGuid().ToString())
                                                                                                                   .WithCleanSession(true)
-                                                                                                                  .WithTcpServer(App.ServerIP, App.ServerPort)
+                                                                                                                  .WithTcpServer(IP, port)
                                                                                                                   .Build());
             this.AttachEventListeners();
     
@@ -93,11 +95,21 @@ namespace MobileApp.Services
             }
         }
 
+        public void Disconnect()
+        {
+            this.ForceDisconnect = true;
+            MqttService.MqttClient.Disconnect();
+        }
+
         private async void MqttClient_Disconnected(object sender, MQTTnet.Client.Disconnecting.MqttClientDisconnectedEventArgs e)
         {
             UpdateConnectionStatus();
-            _ = await MqttService.MqttClient.Reconnect();
-            UpdateConnectionStatus();
+            if (!this.ForceDisconnect)
+            {
+                _ = await MqttService.MqttClient.Reconnect();
+                UpdateConnectionStatus();
+            }
+            this.ForceDisconnect = false;
         }
 
         private void UpdateConnectionStatus()

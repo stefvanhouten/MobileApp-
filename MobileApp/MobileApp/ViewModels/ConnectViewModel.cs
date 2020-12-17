@@ -14,7 +14,10 @@ namespace MobileApp.ViewModels
     {
         private string _errorMsg;
         private string _errorLabelIsVisible = "false";
-        private string _ipInput; 
+        private string _ipInput;
+
+        public static event Action UpdateConnection;
+
         public Command ConnectClickCommand { get; set; } 
         public int PortInput { get; set; } = 1883; //Default port
         
@@ -56,20 +59,23 @@ namespace MobileApp.ViewModels
         private bool IsValidInput()
         { 
             IPAddress ip;
-
             return IPAddress.TryParse(IPInput, out ip);
         }
  
-        public void ConnectClick()
+        public async void ConnectClick()
         {
            
             if (IsValidInput())
             {
-                App.ServerIP = this.IPInput;
-                App.ServerPort = this.PortInput;
-                Application.Current.MainPage.Navigation.PushAsync(new DashboardPage(), false);
-                Console.WriteLine(PortInput);
-            }else
+                if (App.Client.IsClientConnected)
+                {
+                    App.Client.Disconnect();
+                }
+                App.Client.Connect(this.IPInput, this.PortInput);
+                UpdateConnection?.Invoke();
+                await Shell.Current.GoToAsync("//dashboard");
+            }
+            else
             {
                 ErrorMsg = "Error IP is not Valid";
                 ErrorLabelIsVisible = "true";

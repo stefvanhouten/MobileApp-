@@ -62,11 +62,6 @@ namespace MobileApp.ViewModels
             Title = "Dashboard";
             IsConnected = "Disconnected";
 
-            /*  App is globally accessible. It refers to the App.xaml.cs file and this is where we stored some
-             *  important static properties. In this case we want to connect to our MQTT broker(server) when
-             *  DashboardViewModel is instantiated.
-            */
-            App.Client.Connect();
             /* The Client(Services/MQTTClient) triggers a few Events when something important happens,
              * one of these events is MessageReceived. When this event is triggered we want to call 
              * our method from this class and handle what will happen. In this case we display the message
@@ -87,6 +82,7 @@ namespace MobileApp.ViewModels
             //retrieve database rows and build buttons based on retrieved information
             BuildDynamicButtons();
         }
+
 
         //helper method
         //can be set to static, since it should not create a new instance for buttons
