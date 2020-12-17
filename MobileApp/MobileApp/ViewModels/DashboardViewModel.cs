@@ -118,7 +118,9 @@ namespace MobileApp.ViewModels
                     Text = buttonProperties.Name,
                     Command = ShowCmsView,
                     CommandParameter = button,
+                    ImageSource = buttonProperties.ImageName,
                 };
+              
                 //add the button to an ObservableCollection of buttons
                 CompletedButtons.Add(redirectButton);
             }

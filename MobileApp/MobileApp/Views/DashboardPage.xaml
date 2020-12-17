@@ -27,8 +27,8 @@
                             <Button Text="{Binding Text}"
                                     CommandParameter="{Binding CommandParameter}" 
                                     Command="{Binding Command}"
+                                    Image="{Binding ImageSource}"
                                     ContentLayout="Bottom,0"
-                                    Image="coffee.png"
                                     HeightRequest="75"
                                     />
                         </StackLayout>
@@ -53,7 +53,9 @@
             <Button
                 Text="+"
                 Command="{Binding ShowNewView}"
-                HeightRequest="50" 
+                HeightRequest="50"
+                WidthRequest="50"
+                BorderRadius="50"
                 VerticalOptions="End"
                 HorizontalOptions="End">
             </Button>

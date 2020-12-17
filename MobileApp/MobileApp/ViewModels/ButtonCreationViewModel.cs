@@ -1,10 +1,6 @@
-﻿using System;
-using MobileApp.Models;
-using MobileApp.Data;
-using System.Collections.Generic;
-using System.Text;
+﻿using MobileApp.Models;
+using System;
 using Xamarin.Forms;
-using MobileApp.Views;
 
 namespace MobileApp.ViewModels
 {
@@ -12,16 +8,54 @@ namespace MobileApp.ViewModels
     {
         //ATTENTION: KEEP VARIABLES FOR GENERIC THINGS SUCH AS ERRORS AS CLOSE TO EACH OTHER
         //FOR EASIER MAINTAINABILITY
-        private string _errormsg;
-
-        private string _bgcolor;
-        public IOTButton Button { get; private set; } = null;
-        public Command ClickCommand { get; set; }
-        public string Name { get; set; }
-        public string Topic { get; set; }
+        private string _name;
+        private string _errorLabelIsVisible = "false";
+        private string _topic;
 
         public static event Action IOTButtonsDatabaseUpdated;
 
+        public IOTButton Button { get; private set; } = null;
+        public Command ClickCommand { get; set; }
+
+        public string ImageName { get; set; }
+
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                ErrorLabelIsVisible = "false";
+                OnPropertyChanged();
+            }
+        }
+
+        public string Topic
+        {
+            get
+            {
+                return _topic;
+            }
+            set
+            {
+                _topic = value;
+                ErrorLabelIsVisible = "false";
+                OnPropertyChanged();
+            }
+        }
+
+        public string ErrorLabelIsVisible
+        {
+            get { return _errorLabelIsVisible; }
+            set
+            {
+                _errorLabelIsVisible = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ButtonCreationViewModel()
         {
@@ -30,52 +64,21 @@ namespace MobileApp.ViewModels
             ClickCommand = new Command(Save);
         }
 
-        public void InputTextChanged()
-        {
-            ErrorMsg = "";
-            BgColor = "White";
-        }
-
-
-        public string ErrorMsg
-        {
-            get 
-            { 
-                return _errormsg; 
-            }
-            set
-            {
-                _errormsg = value;
-                OnPropertyChanged();
-            }
-        }
-        public string BgColor
-        {
-            get 
-            { 
-                return _bgcolor; 
-            }
-            set
-            {
-                _bgcolor = value;
-                OnPropertyChanged();
-            }
-        }
-
         public async void Save()
         {
-            if(!String.IsNullOrEmpty(Name) && !String.IsNullOrEmpty(Topic))
+            if (!String.IsNullOrEmpty(Name) && !String.IsNullOrEmpty(Topic) && !String.IsNullOrEmpty(ImageName))
             {
                 Button.Name = Name;
                 Button.Topic = Topic;
+                Button.ImageName = $"{ImageName.ToLower()}.png";
 
                 await App.IOTDatabase.SaveItemAsync(Button);
                 InvokeUpdate();
                 PopStack();
-            } else
+            }
+            else
             {
-                ErrorMsg = "Vergeet niet beide velden in te vullen!";
-                BgColor = "red";
+                ErrorLabelIsVisible = "true";
             }
         }
 
