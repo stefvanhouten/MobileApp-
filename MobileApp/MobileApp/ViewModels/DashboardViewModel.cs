@@ -16,6 +16,7 @@ namespace MobileApp.ViewModels
     {
         private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch. (I approve of this comment)
         private ObservableCollection<string> _messages;
+
         public Command<CustomButton> PublishCommand { get; private set; }
         public static List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
         public ObservableCollection<Button> CompletedButtons { get; set; } = new ObservableCollection<Button>();
@@ -26,6 +27,32 @@ namespace MobileApp.ViewModels
         public DashboardViewModel()
         {
             InitializeAsync();
+        }
+
+        public string IsConnected
+        {
+            get 
+            { 
+                return _isConnected; 
+            }
+            private set
+            {
+                _isConnected = value;
+                OnPropertyChanged(); //This is very important, without XAMARIN doesn't know to refresh the UI and old values will not be updated
+            }
+        }
+
+        public ObservableCollection<string> MQMessage
+        {
+            get 
+            { 
+                return _messages; 
+            }
+            private set
+            {
+                _messages = value;
+                OnPropertyChanged(); //This is very important, without XAMARIN doesn't know to refresh the UI and old values will not be updated
+            }
         }
 
         //warning: async void! 
@@ -67,23 +94,23 @@ namespace MobileApp.ViewModels
         {
             //wait until all data has been received
             IOTButtons = await App.IOTDatabase.GetItemsAsync();
-
             CompletedButtons.Clear();
 
             //instantiate buttion variable for the generated buttons
-            CustomButton button;
             Button redirectButton;
 
             //loop through all button properties and read it
             foreach (IOTButton buttonProperties in IOTButtons)
             {
                 //generate the button with the properties
-                button = new CustomButton();
-                button.CustomID = buttonProperties.ID;
-                button.CustomTopic = buttonProperties.Topic;
-                button.Text = $"Activeer {buttonProperties.Name}";
-                button.Command = PublishCommand;
-                button.HeightRequest = 75;
+                CustomButton button = new CustomButton()
+                {
+                    CustomID = buttonProperties.ID,
+                    CustomTopic = buttonProperties.Topic,
+                    Text = $"Activeer {buttonProperties.Name}",
+                    Command = PublishCommand,
+                    HeightRequest = 75,
+                };
                 button.CommandParameter = button;
 
                 redirectButton = new Button
@@ -91,10 +118,6 @@ namespace MobileApp.ViewModels
                     Text = buttonProperties.Name,
                     Command = ShowCmsView,
                     CommandParameter = button,
-                    MinimumHeightRequest = 75,
-                    HeightRequest = 75,
-                    MinimumWidthRequest = 75,
-                    WidthRequest = 75,
                 };
                 //add the button to an ObservableCollection of buttons
                 CompletedButtons.Add(redirectButton);
@@ -113,31 +136,6 @@ namespace MobileApp.ViewModels
             Application.Current.MainPage.Navigation.PushAsync(new ButtonUsagePage(button), true);
         }
 
-        public string IsConnected
-        {
-            get 
-            { 
-                return _isConnected; 
-            }
-            private set
-            {
-                _isConnected = value;
-                OnPropertyChanged(); //This is very important, without XAMARIN doesn't know to refresh the UI and old values will not be updated
-            }
-        }
-
-        public ObservableCollection<string> MQMessage
-        {
-            get 
-            { 
-                return _messages; 
-            }
-            private set
-            {
-                _messages = value;
-                OnPropertyChanged(); //This is very important, without XAMARIN doesn't know to refresh the UI and old values will not be updated
-            }
-        }
 
         private void UpdateConnectionStatus()
         {

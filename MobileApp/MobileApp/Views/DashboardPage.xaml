@@ -17,15 +17,25 @@
                     <GridItemsLayout
                         Orientation="Vertical"
                         Span="2"
-                        VerticalItemSpacing="5" 
-                        HorizontalItemSpacing="5"/>
+                        HorizontalItemSpacing="5"
+                        VerticalItemSpacing="5"
+                        />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Button Text="{Binding Text}" CommandParameter="{Binding CommandParameter}" Command="{Binding Command}" HeightRequest="75" />
+                        <StackLayout>
+                            <Button Text="{Binding Text}"
+                                    CommandParameter="{Binding CommandParameter}" 
+                                    Command="{Binding Command}"
+                                    ContentLayout="Bottom,0"
+                                    Image="coffee.png"
+                                    HeightRequest="75"
+                                    />
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
             <CollectionView ItemsSource="{Binding MQMessage}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout
