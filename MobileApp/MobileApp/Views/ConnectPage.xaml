@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobileApp.Views.ConnectPage">
+    <ContentPage.Content>
+        
+        <StackLayout>
+            <Label Text="Connect"
+                VerticalOptions="Fill" 
+                HorizontalOptions="CenterAndExpand" 
+                   FontSize="Title"/>
+
+            <Entry x:Name="IPEntry" Text="{Binding IPInput}" Placeholder="Enter your IP Adress"></Entry>
+            <Entry x:Name="PortEntry" Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
+            
+            <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
+
+            <Label x:Name="ErrorLabel" Text="{Binding ErrorMsg}" HorizontalTextAlignment="Center" TextColor="White" IsVisible="{Binding ErrorLabelIsVisible}" BackgroundColor="Red" FontSize="Medium" />
+         
+            <ActivityIndicator IsRunning="{Binding Connecting}"/>
+
+            <Label Text="Port is 1883 by default"
+                   Margin="10"
+                   VerticalOptions="Start"
+                   HorizontalOptions="Center"/>
+        </StackLayout>
+        
+
+    </ContentPage.Content>
+</ContentPage>
