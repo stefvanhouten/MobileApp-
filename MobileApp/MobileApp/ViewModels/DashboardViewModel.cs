@@ -15,7 +15,7 @@ namespace MobileApp.ViewModels
     public class DashboardViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch. (I approve of this comment)
-        private ObservableCollection<string> _messages;
+        private ObservableCollection<MQTTMessage> _messages;
 
         public Command<CustomButton> PublishCommand { get; private set; }
         public static List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
@@ -42,7 +42,7 @@ namespace MobileApp.ViewModels
             }
         }
 
-        public ObservableCollection<string> MQMessage
+        public ObservableCollection<MQTTMessage> MQMessage
         {
             get 
             { 

@@ -11,11 +11,11 @@
 
             <Entry x:Name="IPEntry" Text="{Binding IPInput}" Placeholder="Enter your IP Adress"></Entry>
             <Entry x:Name="PortEntry" Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
-            
+
             <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
 
             <Label x:Name="ErrorLabel" Text="{Binding ErrorMsg}" HorizontalTextAlignment="Center" TextColor="White" IsVisible="{Binding ErrorLabelIsVisible}" BackgroundColor="Red" FontSize="Medium" />
-         
+
             <ActivityIndicator IsRunning="{Binding Connecting}"/>
 
             <Label Text="Port is 1883 by default"
@@ -23,7 +23,5 @@
                    VerticalOptions="Start"
                    HorizontalOptions="Center"/>
         </StackLayout>
-        
-
     </ContentPage.Content>
 </ContentPage>

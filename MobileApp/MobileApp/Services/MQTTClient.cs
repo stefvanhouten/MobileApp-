@@ -10,7 +10,7 @@ namespace MobileApp.Services
 {
     public class MQTTClient
     {
-        public ObservableCollection<string> MQMessage { get; set; } //Stores all incoming messages from the MQTT broker
+        public ObservableCollection<MQTTMessage> MQMessage { get; set; } //Stores all incoming messages from the MQTT broker
         public bool IsClientConnected { get; private set; } = false;
 
         public event Action MessageReceived; //Fired when a message is recieved
@@ -21,7 +21,7 @@ namespace MobileApp.Services
 
         public async void Connect(string IP, int port)
         {
-            MQMessage = new ObservableCollection<string>();
+            MQMessage = new ObservableCollection<MQTTMessage>();
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
             //so that our Connect method at least takes a IP address
             MqttService.MqttClient.Init("XamarinMobileClient", new MqttClientOptionsBuilder().WithClientId(Guid.NewGuid().ToString())
@@ -70,21 +70,33 @@ namespace MobileApp.Services
             MqttService.MqttClient.Disconnected += MqttClient_Disconnected;
         }
 
-
-        private void WriteLog(string msg)
+        private void WriteLog(MQTTMessage message)
         {
-            if (!MQMessage.Contains(msg))
+            foreach (MQTTMessage storedMessage in this.MQMessage)
             {
-                MQMessage.Add(msg);
-                TruncateMQMessageList();
-                /*  We only add to this list when we receive a message. For that reason we can invoke the MessageReceived
-                 *  event so that our listeners(DashBoardViewModel) can act. 
-                 *  
-                 *  The ? in this method is an Elvis operator. 
-                 *  Basicly what it does is checking if MessageReceived is null, if not then invoke.
-                 */
-                MessageReceived?.Invoke();
+                if (storedMessage.Compare().Equals(message.Compare()))
+                {
+                    return;
+                }
             }
+            MQMessage.Add(message);
+            TruncateMQMessageList();
+            MessageReceived?.Invoke();
+        }
+
+        public ObservableCollection<MQTTMessage> GetAllMessagesFromTopic(string topic)
+        {
+            ObservableCollection<MQTTMessage> SortedMQTTMessagesByTopic = new ObservableCollection<MQTTMessage>();
+
+            foreach (MQTTMessage message in this.MQMessage)
+            {
+                if (message.Topic.Equals(topic))
+                {
+                    SortedMQTTMessagesByTopic.Add(message);
+                }
+            }
+
+            return SortedMQTTMessagesByTopic;
         }
 
         private void TruncateMQMessageList()
@@ -120,14 +132,10 @@ namespace MobileApp.Services
 
         private void MqttClient_MessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            //Builds the structure of our string with the incomming message details
-            StringBuilder str = new StringBuilder();
-            str.AppendLine("MQTT MessageReceived!");
-            str.AppendLine($"Content Type : {e.ApplicationMessage.ContentType}");
-            str.AppendLine($"Topic : { e.ApplicationMessage.Topic}");
-            str.AppendLine($"Time : { DateTime.Now }");
-            str.AppendLine($"Payload : {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
-            WriteLog(str.ToString());
+            MQTTMessage message = new MQTTMessage(e.ApplicationMessage.Topic, 
+                                                  Encoding.UTF8.GetString(e.ApplicationMessage.Payload), 
+                                                  DateTime.Now);
+            WriteLog(message);
         }
 
         private void MqttClient_Connected(object sender, MQTTnet.Client.Connecting.MqttClientConnectedEventArgs e)

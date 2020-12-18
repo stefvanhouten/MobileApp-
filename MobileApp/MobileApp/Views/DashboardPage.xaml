@@ -46,7 +46,7 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Label Text="{Binding .}" />
+                        <Label Text="{Binding FormattedString}" />
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
