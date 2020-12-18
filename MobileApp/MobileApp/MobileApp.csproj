@@ -22,6 +22,9 @@
     <Compile Update="Views\ButtonUsagePage.xaml.cs">
       <DependentUpon>ButtonUsagePage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\GroundMoisturePage.xaml.cs">
+      <DependentUpon>GroundMoisturePage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +41,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\DashboardPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\GroundMoisturePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\PrivacyPage.xaml">
