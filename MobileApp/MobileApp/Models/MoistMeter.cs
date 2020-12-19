@@ -7,7 +7,7 @@ namespace MobileApp.Models
     {
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
-        public string Message { get; set; }
+        public string Moisture { get; set; }
         public DateTime DateTime { get; set; }
     }
 }
