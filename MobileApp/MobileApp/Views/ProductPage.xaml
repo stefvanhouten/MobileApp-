@@ -10,7 +10,7 @@
                    FontSize="Title"/>
 
             <Button Margin="30" Text="Ground Moisture: %" Command="{Binding  GroundMoistButtonClickCommand}" CommandParameter="WateringSystemFeedback" BackgroundColor="Aqua"/>
-
+            <Button Margin="30" Text="{Binding CurrentCoffeStatus}" Command="{Binding CoffeeSwitchClickCommand}" CommandParameter="CoffeeOnOffFeedback" BackgroundColor="Chocolate"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
