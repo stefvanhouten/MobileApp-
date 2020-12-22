@@ -23,12 +23,6 @@ namespace MobileApp.ViewModels
         public Command ShowNewView { get; private set; }
         public Command ShowCmsView { get; private set; }
 
-        //This is the constructor of our class
-        public DashboardViewModel()
-        {
-            InitializeAsync();
-        }
-
         public string IsConnected
         {
             get 
@@ -55,12 +49,19 @@ namespace MobileApp.ViewModels
             }
         }
 
-        //warning: async void! 
-        public async void InitializeAsync()
+        //This is the constructor of our class
+        public DashboardViewModel()
         {
             //Set the Title property, this is inherited from BaseViewModel
             Title = "Dashboard";
             IsConnected = "Disconnected";
+
+            InitializeAsync();
+        }
+
+        //warning: async void! 
+        public async void InitializeAsync()
+        {
 
             /* The Client(Services/MQTTClient) triggers a few Events when something important happens,
              * one of these events is MessageReceived. When this event is triggered we want to call 
@@ -78,9 +79,9 @@ namespace MobileApp.ViewModels
             //a reference to redirect to the page on which buttons are generated
             ShowNewView = new Command(NavigateToButtonCreationPage);
             ShowCmsView = new Command<CustomButton>(NavigateToButtonActivator);
-
+            this.UpdateConnectionStatus();
             //retrieve database rows and build buttons based on retrieved information
-            BuildDynamicButtons();
+            this.BuildDynamicButtons();
         }
 
 

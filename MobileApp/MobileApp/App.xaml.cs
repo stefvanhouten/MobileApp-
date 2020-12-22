@@ -13,12 +13,13 @@ namespace MobileApp
         private static TodoItemDatabase _database; //This is where we attach our databases to the app. _database is a dummy todolist database 
         private static IOTButtonDatabase _iotDatabase;
 
-        public static MQTTClient Client { get; private set; } = new MQTTClient(); //Static because only one instance of the app anyway and we want it to be globally available
+        public static MQTTClient Client { get; private set; }
         public static string ServerIP { get; set; }
         public static int ServerPort { get; set; }
 
         public App()
         {
+            App.Client = new MQTTClient();
             InitializeComponent();
             MainPage = new AppShell();
         }
