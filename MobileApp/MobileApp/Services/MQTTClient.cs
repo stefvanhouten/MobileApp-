@@ -10,7 +10,8 @@ namespace MobileApp.Services
 {
     public class MQTTClient
     {
-        public ObservableCollection<MQTTMessage> MQMessage { get; set; } //Stores all incoming messages from the MQTT broker
+        //public ObservableCollection<MQTTMessage> MQMessage { get; set; } //Stores all incoming messages from the MQTT broker
+        public MQTTMessageStore MQTTMessageStore { get; set; }
         public bool IsClientConnected { get; private set; } = false;
 
         public event Action MessageReceived; //Fired when a message is recieved
@@ -21,9 +22,9 @@ namespace MobileApp.Services
 
         public async void Connect(string IP, int port)
         {
-            MQMessage = new ObservableCollection<MQTTMessage>();
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
             //so that our Connect method at least takes a IP address
+            this.MQTTMessageStore = new MQTTMessageStore();
             MqttService.MqttClient.Init("XamarinMobileClient", new MqttClientOptionsBuilder().WithClientId(Guid.NewGuid().ToString())
                                                                                                                   .WithCleanSession(true)
                                                                                                                   .WithTcpServer(IP, port)
@@ -72,38 +73,10 @@ namespace MobileApp.Services
 
         private void WriteLog(MQTTMessage message)
         {
-            foreach (MQTTMessage storedMessage in this.MQMessage)
+            //Only invoke the event when the message is added to the store
+            if (this.MQTTMessageStore.AddMessage(message))
             {
-                if (storedMessage.Compare().Equals(message.Compare()))
-                {
-                    return;
-                }
-            }
-            MQMessage.Add(message);
-            TruncateMQMessageList();
-            MessageReceived?.Invoke();
-        }
-
-        public ObservableCollection<MQTTMessage> GetAllMessagesFromTopic(string topic)
-        {
-            ObservableCollection<MQTTMessage> SortedMQTTMessagesByTopic = new ObservableCollection<MQTTMessage>();
-
-            foreach (MQTTMessage message in this.MQMessage)
-            {
-                if (message.Topic.Equals(topic))
-                {
-                    SortedMQTTMessagesByTopic.Add(message);
-                }
-            }
-
-            return SortedMQTTMessagesByTopic;
-        }
-
-        private void TruncateMQMessageList()
-        {
-            while (MQMessage.Count >= 5)
-            {
-                MQMessage.RemoveAt(0);
+                MessageReceived?.Invoke();
             }
         }
 

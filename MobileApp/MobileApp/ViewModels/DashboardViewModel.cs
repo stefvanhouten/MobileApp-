@@ -152,7 +152,7 @@ namespace MobileApp.ViewModels
              *  We do this because we might want to mutate the list here but we might want to have access
              *  to the full log in the MQTTClient class.
              */
-            this.MQMessage = App.Client.MQMessage;
+            this.MQMessage = App.Client.MQTTMessageStore.Messages;
         }
 
 
