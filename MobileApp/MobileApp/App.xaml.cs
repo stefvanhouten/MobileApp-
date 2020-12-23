@@ -53,7 +53,7 @@ namespace MobileApp
         {
             get
             {
-                if (_iotDatabase == null)
+                if (_mmDatabase == null)
                 {
                     _mmDatabase = new MoistMeterDatabase();
                 }

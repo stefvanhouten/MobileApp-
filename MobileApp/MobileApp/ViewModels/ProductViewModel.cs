@@ -23,7 +23,6 @@ namespace MobileApp.ViewModels
 
         public void GroundMoistButtonClick(string WateringSystemFeedback)
         {
-
             Application.Current.MainPage.Navigation.PushAsync(new GroundMoisturePage(WateringSystemFeedback), true);
         }
 

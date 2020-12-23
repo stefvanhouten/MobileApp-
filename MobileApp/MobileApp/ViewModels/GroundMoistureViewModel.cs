@@ -20,10 +20,15 @@ namespace MobileApp.ViewModels
             Title = "Ground Moisture";
 
             // !!called every 30 minutes -> 1800 seconds!!
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
                 // get all messages send to MQTT server
-                MQTTMessages = App.Client.GetAllMessagesFromTopic(Topic);
+                MQTTMessages = App.Client.MQTTMessageStore.GetAllMessagesFromTopic(Topic);
+
+                if (MQTTMessages == null)
+                {
+                    MQTTMessages = new ObservableCollection<MQTTMessage>();
+                }
 
                 //initialize the methods to update the database every half an hour...
                 //and retrieve from the database every half an hour
@@ -54,7 +59,6 @@ namespace MobileApp.ViewModels
         public async void DatabaseToApp()
         {
             List<MoistMeter> moistureData = await App.MoistMeterDatabase.GetItemsAsync();
-
             if (moistureData.Any())
             {
                 foreach (MoistMeter singleDataSet in moistureData)

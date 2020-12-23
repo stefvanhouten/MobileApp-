@@ -26,9 +26,9 @@ namespace MobileApp.Data
         {
             if (!initialized)
             {
-                if (!Database.TableMappings.Any(m => m.MappedType.Name == typeof(IOTButton).Name))
+                if (!Database.TableMappings.Any(m => m.MappedType.Name == typeof(MoistMeter).Name))
                 {
-                    await Database.CreateTablesAsync(CreateFlags.None, typeof(IOTButton)).ConfigureAwait(false);
+                    await Database.CreateTablesAsync(CreateFlags.None, typeof(MoistMeter)).ConfigureAwait(false);
                 }
                 initialized = true;
             }
