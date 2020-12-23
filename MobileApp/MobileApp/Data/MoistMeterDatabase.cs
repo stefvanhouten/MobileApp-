@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MobileApp.Data
 {
-    class MoistMeterDatabase
+    public class MoistMeterDatabase
     {
         static readonly Lazy<SQLiteAsyncConnection> lazyInitializer = new Lazy<SQLiteAsyncConnection>(() =>
         {

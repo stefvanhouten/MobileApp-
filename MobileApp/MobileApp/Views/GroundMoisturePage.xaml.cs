@@ -11,9 +11,9 @@ using Xamarin.Forms.Xaml;
 namespace MobileApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GroundMostuirePage : ContentPage
+    public partial class GroundMoisturePage : ContentPage
     {
-        public GroundMostuirePage(string topic)
+        public GroundMoisturePage(string topic)
         {
             InitializeComponent();
             this.BindingContext = new GroundMoistureViewModel(topic);
