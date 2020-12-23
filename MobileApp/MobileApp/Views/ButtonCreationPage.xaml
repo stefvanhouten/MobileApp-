@@ -11,7 +11,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="5">
             <Entry x:Name="name" Text="{Binding Name}" Placeholder="Name"></Entry>
             <Entry x:Name="topic" Text="{Binding Topic}" Placeholder="MQTT topic"></Entry>
             <Picker x:Name="image" SelectedItem="{Binding ImageName}" HorizontalOptions="FillAndExpand" Title="Please select an image for your button!">
@@ -27,12 +27,10 @@
                     Command="{Binding ClickCommand}" 
                     CommandParameter="{Binding Source={x:Reference name}, Path=Text}">
             </Button>
-
             <Frame
                BackgroundColor="#e0123b"
                CornerRadius="10"
-               IsVisible="{Binding ErrorLabelIsVisible}"
-               Margin="5">
+               IsVisible="{Binding ErrorLabelIsVisible}">
                 <StackLayout>
                     <Label 
                         Text="Don't forget to fill in all the fields!" 
@@ -40,7 +38,6 @@
                         HorizontalTextAlignment="Center" 
                         TextColor="White" 
                         FontSize="Medium" 
-                        HeightRequest="20"
                         VerticalTextAlignment="Center"
                         />  
                 </StackLayout>

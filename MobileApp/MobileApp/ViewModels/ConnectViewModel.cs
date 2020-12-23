@@ -12,11 +12,8 @@ namespace MobileApp.ViewModels
 {
     public class ConnectViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private string _errorMsg;
         private string _errorLabelIsVisible = "false";
         private string _ipInput;
-
-        public static event Action UpdateConnection;
 
         public Command ConnectClickCommand { get; set; } 
         public int PortInput { get; set; } = 1883; //Default port
@@ -40,20 +37,10 @@ namespace MobileApp.ViewModels
         
                 }
 
-        public string ErrorMsg {
-                    get { return _errorMsg; }
-                    set
-                    {
-                        _errorMsg = value;
-                        OnPropertyChanged();
-                    }
-                }
-
         public ConnectViewModel()
         {
             Title = "ConnectPage";
             ConnectClickCommand = new Command(ConnectClick);
-
         }
         //Compares Input to Valid IPAdresses
         private bool IsValidInput()
@@ -72,12 +59,10 @@ namespace MobileApp.ViewModels
                     App.Client.Disconnect();
                 }
                 App.Client.Connect(this.IPInput, this.PortInput);
-                UpdateConnection?.Invoke();
                 await Shell.Current.GoToAsync("//dashboard");
             }
             else
             {
-                ErrorMsg = "Error IP is not Valid";
                 ErrorLabelIsVisible = "true";
             }
         }

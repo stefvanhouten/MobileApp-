@@ -59,7 +59,7 @@ namespace MobileApp.ViewModels
 
         public ButtonCreationViewModel()
         {
-            Title = "New Topic";
+            Title = "Create button";
             Button = new IOTButton();
             ClickCommand = new Command(Save);
         }

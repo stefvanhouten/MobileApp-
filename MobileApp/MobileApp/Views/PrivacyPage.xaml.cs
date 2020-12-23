@@ -15,7 +15,6 @@ namespace MobileApp.Views
         public PrivacyPage()
         {
             InitializeComponent();
-            Title = "Privacy";
         }
     }
 }
