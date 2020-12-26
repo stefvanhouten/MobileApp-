@@ -5,12 +5,12 @@ using MQTTnet.Client.Options;
 using System.Collections.ObjectModel;
 using MQTTnet.ClientLib;
 using MQTTnet;
+using MQTTnet.Client.Connecting;
 
 namespace MobileApp.Services
 {
-    public class MQTTClient
+    public class MQTTClient : MQTTBase, IMQTT
     {
-        //public ObservableCollection<MQTTMessage> MQMessage { get; set; } //Stores all incoming messages from the MQTT broker
         public MQTTMessageStore MQTTMessageStore { get; set; }
         public bool IsClientConnected { get; private set; } = false;
 
@@ -52,7 +52,7 @@ namespace MobileApp.Services
             MqttService.MqttClient.Disconnected -= MqttClient_Disconnected;
         }
 
-        private void WriteLog(MQTTMessage message)
+        protected override void WriteLog(MQTTMessage message)
         {
             //Only invoke the event when the message is added to the store
             if (this.MQTTMessageStore.AddMessage(message))
@@ -61,26 +61,27 @@ namespace MobileApp.Services
             }
         }
 
-        private void MqttClient_Connected(object sender, MQTTnet.Client.Connecting.MqttClientConnectedEventArgs e)
+        protected override void MqttClient_Connected(object sender, MQTTnet.Client.Connecting.MqttClientConnectedEventArgs e)
         {
             //We defaulty listen to the switches channel. Will want to change this later depending on added buttons and such
-            UpdateConnectionStatus();
-            Subscribe("switches");
-            Subscribe("wateringSystemFeedback");
+            this.UpdateConnectionStatus();
+            this.Subscribe("switches");
+            this.Subscribe("coffee");
+            this.Subscribe("wateringSystemFeedback");
         }
 
-        private async void Subscribe(string channel)
+        public async void Subscribe(string channel)
         {
             _ = await MqttService.MqttClient.Subscribe(channel, MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce);
         }
 
-        private async void MqttClient_Disconnected(object sender, MQTTnet.Client.Disconnecting.MqttClientDisconnectedEventArgs e)
+        protected override async void MqttClient_Disconnected(object sender, MQTTnet.Client.Disconnecting.MqttClientDisconnectedEventArgs e)
         {
-            UpdateConnectionStatus();
+            this.UpdateConnectionStatus();
             if (!this.ForceDisconnect)
             {
                 _ = await MqttService.MqttClient.Reconnect();
-                UpdateConnectionStatus();
+                this.UpdateConnectionStatus();
             }
             this.ForceDisconnect = false;
         }
@@ -92,18 +93,18 @@ namespace MobileApp.Services
         }
 
 
-        private void UpdateConnectionStatus()
+        protected override void UpdateConnectionStatus()
         {
-            IsClientConnected = MqttService.MqttClient.IsConnected();
-            ConnectionStatusChanged?.Invoke();
+            this.IsClientConnected = MqttService.MqttClient.IsConnected();
+            this.ConnectionStatusChanged?.Invoke();
         }
 
-        private void MqttClient_MessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
+        protected override void MqttClient_MessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
             MQTTMessage message = new MQTTMessage(e.ApplicationMessage.Topic, 
                                                   Encoding.UTF8.GetString(e.ApplicationMessage.Payload), 
                                                   DateTime.Now);
-            WriteLog(message);
+            this.WriteLog(message);
         }
 
 
@@ -117,10 +118,10 @@ namespace MobileApp.Services
                 }); ;
         }
 
+
         //private async void UnsubscribeButton_Clicked(object sender, EventArgs e)
         //{
         //    await MQTTnet.ClientLib.MqttService.MqttClient.Unsubscribe(TopicEntry.Text);
-
         //}
     }
 }
