@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using MQTTnet.ClientLib;
 using MQTTnet;
 using MQTTnet.Client.Connecting;
+using System.Threading.Tasks;
 
 namespace MobileApp.Services
 {
@@ -19,7 +20,7 @@ namespace MobileApp.Services
         public bool HasBeenConnected { get; set; } = false;
         public bool ForceDisconnect { get; set; } = false;
 
-        public async void Connect(string IP, int port)
+        public async Task<bool> Connect(string IP, int port)
         {
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
             //so that our Connect method at least takes a IP address
@@ -31,6 +32,8 @@ namespace MobileApp.Services
             this.AttachEventListeners();
             _ = await MqttService.MqttClient.Connect();
             this.HasBeenConnected = true;
+
+            return MqttService.MqttClient.IsConnected();
         }
 
 
@@ -86,10 +89,12 @@ namespace MobileApp.Services
             this.ForceDisconnect = false;
         }
 
-        public void Disconnect()
+        public async Task<bool> Disconnect()
         {
             this.ForceDisconnect = true;
-            MqttService.MqttClient.Disconnect();
+            await MqttService.MqttClient.Disconnect();
+            this.UpdateConnectionStatus();
+            return MqttService.MqttClient.IsConnected();
         }
 
 

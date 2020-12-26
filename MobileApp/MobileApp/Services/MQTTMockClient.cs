@@ -17,18 +17,20 @@ namespace MobileApp.Services
         public event Action ConnectionStatusChanged; //Fired when connectionstatus is changed, DashBoardViewModel listens to these events
         public bool HasBeenConnected { get; set; } = false;
 
-        public async void Connect(string IP, int port)
+        public async Task<bool> Connect(string IP, int port)
         {
             this.MQTTMessageStore = new MQTTMessageStore();
             await Task.Delay(1000);
             this.MqttClient_Connected(this, null);
             this.HasBeenConnected = true;
+            return true;
         }
 
-        public void Disconnect()
+        public async Task<bool> Disconnect()
         {
             this.IsClientConnected = false;
             this.UpdateConnectionStatus();
+            return true;
         }
 
         public void Publish(string topic, string message)
