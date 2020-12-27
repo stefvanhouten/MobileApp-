@@ -13,7 +13,8 @@ namespace MobileApp.ViewModels
     {
         public string Topic { get; private set; }
         public ObservableCollection<MQTTMessage> MQTTMessages { get; set; }
-        public ObservableCollection<MoistMeter> MoistureData { get; private set; } = new ObservableCollection<MoistMeter>();
+
+        TableView Table = new TableView();
         public GroundMoistureViewModel(string topic)
         {
             Topic = topic;
@@ -58,30 +59,30 @@ namespace MobileApp.ViewModels
         {
             List<MoistMeter> moistureData = await App.MoistMeterDatabase.GetItemsAsync();
 
-            TableView table = new TableView();
-            table.Intent = TableIntent.Settings;
+            TableView Table = new TableView();
+            Table.Intent = TableIntent.Settings;
 
-            StackLayout layout = new StackLayout() { Orientation = StackOrientation.Vertical };
+            StackLayout Layout = new StackLayout() { Orientation = StackOrientation.Vertical };
 
             foreach (MoistMeter extractedData in moistureData)
             {
-                layout.Children.Add(new Label()
+                Layout.Children.Add(new Label()
                 {
                     Text = extractedData.MoisturePercentage,
                 });
-                layout.Children.Add(new Label()
+                Layout.Children.Add(new Label()
                 {
                     Text = $"{extractedData.DateTime}",
                 });
             }
-            table.Root = new TableRoot()
+            Table.Root = new TableRoot()
             {
                 new TableSection("Ground moisture history")
                 {
-                    new ViewCell() {View = layout}
+                    new ViewCell() {View = Layout}
                 }
             };
-            Content = table;
+            Content = Table;
         }
     }
 }
