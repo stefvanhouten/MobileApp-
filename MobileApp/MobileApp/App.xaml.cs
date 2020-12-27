@@ -14,13 +14,15 @@ namespace MobileApp
         private static IOTButtonDatabase _iotDatabase;
         private static MoistMeterDatabase _mmDatabase;
 
-        public static MQTTClient Client { get; private set; }
+        public static IMQTT Client { get; private set; }
+
         public static string ServerIP { get; set; }
         public static int ServerPort { get; set; }
 
         public App()
         {
-            App.Client = new MQTTClient();
+            //App.Client = new MQTTClient();
+            App.Client = new MQTTMockClient();
             InitializeComponent();
             MainPage = new AppShell();
         }

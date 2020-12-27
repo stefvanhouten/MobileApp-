@@ -1,25 +1,35 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MobileApp.Services
 {
     public class MQTTMessageStore
     {
-        public ObservableCollection<MQTTMessage> Messages { get; private set; } = new ObservableCollection<MQTTMessage>();
+        public List<MQTTMessage> Messages { get; private set; }
+
+        public MQTTMessageStore()
+        {
+            this.Messages = new List<MQTTMessage>();
+        }
 
         public bool AddMessage(MQTTMessage message)
         {
             if (!this.CheckIfDuplicate(message))
             {
-                this.Messages.Add(message);
-                return true;
+                if(message != null)
+                {
+                    this.Messages.Add(message);
+                    return true;
+                }
+                return false;
             }
             return false;
         }
 
         private bool CheckIfDuplicate(MQTTMessage message)
         {
-            foreach (MQTTMessage storedMessage in this.Messages)
+            foreach (MQTTMessage storedMessage in this.Messages.ToList())
             {
                 if (storedMessage.Compare().Equals(message.Compare()))
                 {
@@ -29,9 +39,9 @@ namespace MobileApp.Services
             return false;
         }
 
-        public ObservableCollection<MQTTMessage> GetAllMessagesFromTopic(string topic)
+        public List<MQTTMessage> GetAllMessagesFromTopic(string topic)
         {
-            ObservableCollection<MQTTMessage> AllMessagesMatchingTopic = new ObservableCollection<MQTTMessage>();
+            List<MQTTMessage> AllMessagesMatchingTopic = new List<MQTTMessage>();
 
             foreach (MQTTMessage message in this.Messages)
             {

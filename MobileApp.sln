@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileApp.Android", "MobileApp\MobileApp.Android\MobileApp.Android.csproj", "{7D7D83D1-4DBB-450D-9D75-3A8B05C22602}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileApp", "MobileApp\MobileApp\MobileApp.csproj", "{C6982568-9C5F-4493-B734-C2ECAB86C715}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileApp", "MobileApp\MobileApp\MobileApp.csproj", "{C6982568-9C5F-4493-B734-C2ECAB86C715}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileAppTests", "MobileAppTests\MobileAppTests.csproj", "{C1F9B0D6-822F-457F-960B-31D541397119}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{C6982568-9C5F-4493-B734-C2ECAB86C715}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6982568-9C5F-4493-B734-C2ECAB86C715}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6982568-9C5F-4493-B734-C2ECAB86C715}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C1F9B0D6-822F-457F-960B-31D541397119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1F9B0D6-822F-457F-960B-31D541397119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1F9B0D6-822F-457F-960B-31D541397119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1F9B0D6-822F-457F-960B-31D541397119}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
