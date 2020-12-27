@@ -23,12 +23,9 @@ namespace MobileApp.ViewModels
             Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
                 // get all messages send to MQTT server
+                //do not check whether it has been set to null! This is redundant!
+                //either a filled observablecollection is send back or an empty observablecollection
                 MQTTMessages = App.Client.MQTTMessageStore.GetAllMessagesFromTopic(Topic);
-
-                if (MQTTMessages == null)
-                {
-                    MQTTMessages = new ObservableCollection<MQTTMessage>();
-                }
 
                 //initialize the methods to update the database every half an hour...
                 //and retrieve from the database every half an hour
@@ -42,7 +39,7 @@ namespace MobileApp.ViewModels
         public async void init()
         {
             MQTToDatabase();
-            DatabaseToApp();
+            CreateXamlTable();
         }
 
         public async void MQTToDatabase()
@@ -51,21 +48,40 @@ namespace MobileApp.ViewModels
             {
                 MoistMeter compressedMoistMeter = new MoistMeter();
                 compressedMoistMeter.MoisturePercentage = data.Message;
+                Console.WriteLine(compressedMoistMeter.MoisturePercentage);
                 compressedMoistMeter.DateTime = data.Date;
                 await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
             }
         }
 
-        public async void DatabaseToApp()
+        private async void CreateXamlTable()
         {
             List<MoistMeter> moistureData = await App.MoistMeterDatabase.GetItemsAsync();
-            if (moistureData.Any())
+
+            TableView table = new TableView();
+            table.Intent = TableIntent.Settings;
+
+            StackLayout layout = new StackLayout() { Orientation = StackOrientation.Vertical };
+
+            foreach (MoistMeter extractedData in moistureData)
             {
-                foreach (MoistMeter singleDataSet in moistureData)
+                layout.Children.Add(new Label()
                 {
-                    MoistureData.Add(singleDataSet);
-                }
+                    Text = extractedData.MoisturePercentage,
+                });
+                layout.Children.Add(new Label()
+                {
+                    Text = $"{extractedData.DateTime}",
+                });
             }
+            table.Root = new TableRoot()
+            {
+                new TableSection("Ground moisture history")
+                {
+                    new ViewCell() {View = layout}
+                }
+            };
+            Content = table;
         }
     }
 }
