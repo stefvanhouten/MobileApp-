@@ -12,13 +12,16 @@ namespace MobileApp.ViewModels
     class GroundMoistureViewModel : BaseViewModel
     {
         public string Topic { get; private set; }
-        public ObservableCollection<MQTTMessage> MQTTMessages { get; set; }
+        public List<MQTTMessage> MQTTMessages { get; set; }
 
         TableView Table = new TableView();
+
+        StackLayout Layout = new StackLayout() { Orientation = StackOrientation.Vertical };
         public GroundMoistureViewModel(string topic)
         {
             Topic = topic;
             Title = "Ground Moisture";
+            Table.Intent = TableIntent.Settings;
 
             // !!called every 30 minutes -> 1800 seconds!!
             Device.StartTimer(TimeSpan.FromSeconds(5), () =>
@@ -58,11 +61,6 @@ namespace MobileApp.ViewModels
         private async void CreateXamlTable()
         {
             List<MoistMeter> moistureData = await App.MoistMeterDatabase.GetItemsAsync();
-
-            TableView Table = new TableView();
-            Table.Intent = TableIntent.Settings;
-
-            StackLayout Layout = new StackLayout() { Orientation = StackOrientation.Vertical };
 
             foreach (MoistMeter extractedData in moistureData)
             {
