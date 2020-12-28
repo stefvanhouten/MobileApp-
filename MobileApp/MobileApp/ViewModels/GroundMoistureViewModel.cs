@@ -9,7 +9,7 @@ namespace MobileApp.ViewModels
         public GroundMoistureViewModel(string topic)
         {
             Title = "Ground Moisture";
-            App.Client.GetAllMessagesFromTopic(topic);
+            App.Client.MQTTMessageStore.GetAllMessagesFromTopic(topic);
         }
     }
 }
