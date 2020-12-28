@@ -17,7 +17,7 @@
                IsVisible="{Binding ErrorLabelIsVisible}">
                 <StackLayout>
                     <Label 
-                        Text="The IP you entered was invalid" 
+                        Text="{Binding ErrorLabelMessage}" 
                         IsVisible="{Binding ErrorLabelIsVisible}"
                         HorizontalTextAlignment="Center" 
                         TextColor="White" 

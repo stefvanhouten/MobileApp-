@@ -73,10 +73,10 @@
     </Shell.Resources>
 
     <FlyoutItem Title="ConnectPage" Icon="ic_action_shield.png">
-        <ShellContent ContentTemplate="{DataTemplate local:ConnectPage}" />
+        <ShellContent ContentTemplate="{DataTemplate local:ConnectPage}"/>
     </FlyoutItem>
-    
-    <FlyoutItem Title="Dashboard" Route="dashboard" Icon="ic_action_dashboard_light.png">
+
+    <FlyoutItem Title="Dashboard" Route="dashboard" Icon="ic_action_dashboard_light.png" IsVisible="{Binding Connected}">
         <ShellContent Title="Dashboard" Icon="ic_action_dashboard.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
     </FlyoutItem>
     
