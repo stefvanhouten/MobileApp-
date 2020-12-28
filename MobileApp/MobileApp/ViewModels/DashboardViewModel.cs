@@ -15,7 +15,6 @@ namespace MobileApp.ViewModels
     public class DashboardViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private string _isConnected; //Both these fields have getters/setters below. This is because XAMARIN is a bitch. (I approve of this comment)
-        private ObservableCollection<MQTTMessage> _messages;
 
         public Command<CustomButton> PublishCommand { get; private set; }
         public static List<IOTButton> IOTButtons { get; set; } = new List<IOTButton>();
@@ -23,11 +22,8 @@ namespace MobileApp.ViewModels
         public Command ShowNewView { get; private set; }
         public Command ShowCmsView { get; private set; }
 
-        //This is the constructor of our class
-        public DashboardViewModel()
-        {
-            InitializeAsync();
-        }
+        private string test = "hello world";
+        public string TestLabel { get { return test; } set { test = value; OnPropertyChanged(); } }
 
         public string IsConnected
         {
@@ -42,35 +38,21 @@ namespace MobileApp.ViewModels
             }
         }
 
-        public ObservableCollection<MQTTMessage> MQMessage
-        {
-            get 
-            { 
-                return _messages; 
-            }
-            private set
-            {
-                _messages = value;
-                OnPropertyChanged(); //This is very important, without XAMARIN doesn't know to refresh the UI and old values will not be updated
-            }
-        }
-
-        //warning: async void! 
-        public async void InitializeAsync()
+        //This is the constructor of our class
+        public DashboardViewModel()
         {
             //Set the Title property, this is inherited from BaseViewModel
             Title = "Dashboard";
             IsConnected = "Disconnected";
 
-            /* The Client(Services/MQTTClient) triggers a few Events when something important happens,
-             * one of these events is MessageReceived. When this event is triggered we want to call 
-             * our method from this class and handle what will happen. In this case we display the message
-             * but this is for development purposes only.
-             */
-            App.Client.MessageReceived += NewMessage;
-            //Same as the above, but this time when we disconnect/connect to/from the server update our page.
-            App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
+            InitializeAsync();
+        }
 
+        //warning: async void! 
+        public async void InitializeAsync()
+        {
+            App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
+            App.Client.MessageReceived += Test;
             ButtonCreationViewModel.IOTButtonsDatabaseUpdated += BuildDynamicButtons;
             //Bind the Publish method to the PublishCommand property which is called from DasBoardPage.xaml button click
             PublishCommand = new Command<CustomButton>(Publish);
@@ -78,11 +60,15 @@ namespace MobileApp.ViewModels
             //a reference to redirect to the page on which buttons are generated
             ShowNewView = new Command(NavigateToButtonCreationPage);
             ShowCmsView = new Command<CustomButton>(NavigateToButtonActivator);
-
+            this.UpdateConnectionStatus();
             //retrieve database rows and build buttons based on retrieved information
-            BuildDynamicButtons();
+            this.BuildDynamicButtons();
         }
 
+        public void Test()
+        {
+            TestLabel = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("coffee").Message;
+        }
 
         //helper method
         //can be set to static, since it should not create a new instance for buttons
@@ -145,16 +131,6 @@ namespace MobileApp.ViewModels
                 IsConnected = "Disconnected";
             }
         }
-
-        private void NewMessage()
-        {
-            /*  This sets the MQMessage list that is stored in Client to our class.
-             *  We do this because we might want to mutate the list here but we might want to have access
-             *  to the full log in the MQTTClient class.
-             */
-            this.MQMessage = App.Client.MQMessage;
-        }
-
 
         private void Publish(CustomButton sender)
         {
