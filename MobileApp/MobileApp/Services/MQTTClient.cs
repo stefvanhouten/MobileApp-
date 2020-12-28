@@ -20,6 +20,11 @@ namespace MobileApp.Services
         public bool HasBeenConnected { get; set; } = false;
         public bool ForceDisconnect { get; set; } = false;
 
+        public MQTTClient()
+        {
+            this.MQTTMessageStore = new MQTTMessageStore();
+        }
+
         public async Task<bool> Connect(string IP, int port)
         {
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
