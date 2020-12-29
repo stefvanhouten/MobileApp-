@@ -43,7 +43,7 @@ namespace MobileApp.Services
         {
             List<MQTTMessage> AllMessagesMatchingTopic = new List<MQTTMessage>();
 
-            foreach (MQTTMessage message in this.Messages)
+            foreach (MQTTMessage message in this.Messages.ToList())
             {
                 if (message.Topic.Equals(topic))
                 {

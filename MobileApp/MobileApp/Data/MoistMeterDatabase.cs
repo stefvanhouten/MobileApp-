@@ -66,7 +66,7 @@ namespace MobileApp.Data
             return Database.DeleteAsync(item);
         }
 
-        public Task<int> DeleteButtonByID(int id)
+        public Task<int> DeleteItemByID(int id)
         {
             return Database.DeleteAsync(id);
         }

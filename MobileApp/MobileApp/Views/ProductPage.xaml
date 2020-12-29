@@ -9,7 +9,7 @@
                 HorizontalOptions="CenterAndExpand" 
                    FontSize="Title"/>
 
-            <Button Margin="30" Text="Ground Moisture: %" Command="{Binding  GroundMoistButtonClickCommand}" CommandParameter="WateringSystemFeedback" BackgroundColor="Aqua"/>
+            <Button Margin="30" Text="Ground Moisture: %" Command="{Binding  GroundMoistButtonClickCommand}" CommandParameter="wateringSystemFeedback" BackgroundColor="Aqua"/>
 
         </StackLayout>
     </ContentPage.Content>
