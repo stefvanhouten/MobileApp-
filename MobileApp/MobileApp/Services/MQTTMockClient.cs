@@ -69,7 +69,21 @@ namespace MobileApp.Services
                                                       DateTime.Now));
                     }, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
                 }
-                if(channel == "switches")
+                if (channel == "water")
+                {
+                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
+                    {
+                        string payload = "ON";
+                        if (rng.Next(0, 2) == 0)
+                        {
+                            payload = "OFF";
+                        }
+                        this.WriteLog(new MQTTMessage("water",
+                                                      payload,
+                                                      DateTime.Now));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
+                }
+                if (channel == "switches")
                 {
                     System.Threading.Timer timer = new System.Threading.Timer((e) =>
                     {
@@ -95,6 +109,7 @@ namespace MobileApp.Services
             this.Subscribe("switches");
             this.Subscribe("coffee");
             this.Subscribe("wateringSystemFeedback");
+            this.Subscribe("water");
         }
 
         protected override void MqttClient_Disconnected(object sender, MqttClientDisconnectedEventArgs e) => throw new NotImplementedException();

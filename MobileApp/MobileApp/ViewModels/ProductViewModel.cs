@@ -15,11 +15,14 @@ namespace MobileApp.ViewModels
     {
         private string _CurrentCoffeeStatus = "coffee";
         private string _CurrentTempStatus = "Temp";
+        private string _CurrentWaterStatus = "Water";
 
         public bool CoffeeStatusIsOff;
+        public bool WaterStatusIsOff;
         public Command<string>GroundMoistButtonClickCommand { get; set; }
         public Command<string>CoffeeSwitchClickCommand { get; set; }
-        public Command<string> WaterButtonClickCommand { get; set; }
+        public Command<string>TempButtonClickCommand { get; set; }
+        public Command<string> WaterSwitchClickCommand { get; set; } 
 
         public void GetLatestCoffee()
         {
@@ -39,6 +42,16 @@ namespace MobileApp.ViewModels
             }
         }
 
+        public void GetLatestWater()
+        {
+            MQTTMessage msg3 = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("water");
+            if (msg3 != null)
+            {
+                CurrentWaterStatus = msg3.Message;
+            }
+        }
+
+
         public string CurrentCoffeStatus {
             get { return _CurrentCoffeeStatus; }
             set
@@ -56,6 +69,15 @@ namespace MobileApp.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string CurrentWaterStatus
+        {
+            get { return _CurrentWaterStatus; }
+            set
+            {
+                _CurrentWaterStatus = value;
+                OnPropertyChanged();
+            }
+        }
 
         public void OnOfSwitch()
         {
@@ -69,12 +91,25 @@ namespace MobileApp.ViewModels
                 CoffeeStatusIsOff = false;
             }
         }
+        public void OnOfWater()
+        {
+            GetLatestWater();
+            if (CurrentWaterStatus == "OFF")
+            {
+                WaterStatusIsOff = true;
+            }
+            if (CurrentWaterStatus == "ON")
+            {
+                WaterStatusIsOff = false;
+            }
+        }
 
         public ProductViewModel()
         {
             GroundMoistButtonClickCommand = new Command<string>(GroundMoistButtonClick);
             CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
-            WaterButtonClickCommand = new Command<string>(WaterButtonClick);
+            TempButtonClickCommand = new Command<string>(TempButtonClick);
+            WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
         }
 
 
@@ -98,12 +133,23 @@ namespace MobileApp.ViewModels
                 App.Client.Publish("coffee", "OFF");
                 CurrentCoffeStatus = "OFF";
             }
-          
-
-
         }
+        public void WaterSwitchClick(string CoffeeOnOffFeedback)
+        {
+            OnOfWater();
 
-        public void WaterButtonClick(string Temp)
+            if (WaterStatusIsOff)
+            {
+                App.Client.Publish("water", "ON");
+                CurrentWaterStatus = "ON";
+            }
+            else
+            {
+                App.Client.Publish("water", "OFF");
+                CurrentWaterStatus = "OFF";
+            }
+        }
+        public void TempButtonClick(string Temp)
         {
             GetLatestTemp();
         }
