@@ -20,6 +20,11 @@ namespace MobileApp.Services
         public bool HasBeenConnected { get; set; } = false;
         public bool ForceDisconnect { get; set; } = false;
 
+        public MQTTClient()
+        {
+            this.MQTTMessageStore = new MQTTMessageStore();
+        }
+
         public async Task<bool> Connect(string IP, int port)
         {
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
@@ -68,9 +73,15 @@ namespace MobileApp.Services
         {
             //We defaulty listen to the switches channel. Will want to change this later depending on added buttons and such
             this.UpdateConnectionStatus();
-            this.Subscribe("switches");
-            this.Subscribe("coffee");
-            this.Subscribe("wateringSystemFeedback");
+            this.Subscribe("Coffee");
+
+            this.Subscribe("WateringSystem");
+            this.Subscribe("WateringSystem/Status");
+            this.Subscribe("WateringSystem/Feedback");
+
+            this.Subscribe("Plant/Temperature");
+            this.Subscribe("Plant/Moisture");
+            this.Subscribe("Plant/Humidity");
         }
 
         public async void Subscribe(string channel)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Xamarin.Forms;
 using MobileApp.Views;
-
+using MobileApp.ViewModels;
 
 namespace MobileApp
 {
@@ -11,6 +11,7 @@ namespace MobileApp
         public AppShell()
         {
             InitializeComponent();
+            this.BindingContext = new AppShellViewModel();
         }
     }
 }

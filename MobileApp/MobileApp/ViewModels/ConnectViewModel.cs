@@ -13,6 +13,7 @@ namespace MobileApp.ViewModels
     public class ConnectViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private string _errorLabelIsVisible = "false";
+        private string _errorLabelMessage;
         private string _ipInput;
 
         public Command ConnectClickCommand { get; set; } 
@@ -26,6 +27,15 @@ namespace MobileApp.ViewModels
                         OnPropertyChanged();
                     }
                 }
+        public string ErrorLabelMessage
+        {
+            get { return _errorLabelMessage;  }
+            set
+            {
+                _errorLabelMessage = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string IPInput {
                     get { return _ipInput; }
@@ -58,11 +68,24 @@ namespace MobileApp.ViewModels
                 {
                     App.Client.Disconnect();
                 }
-                App.Client.Connect(this.IPInput, this.PortInput);
-                await Shell.Current.GoToAsync("//dashboard");
+
+                const int TIMEOUT_DELAY = 2000;
+                var task = App.Client.Connect(this.IPInput, this.PortInput);
+                if (await Task.WhenAny(task, Task.Delay(TIMEOUT_DELAY)) == task)
+                {
+                    // task completed within timeout
+                    await Shell.Current.GoToAsync("//dashboard");
+                }
+                else
+                {
+                    ErrorLabelMessage = "Could not connect to the server. Please try again";
+                    ErrorLabelIsVisible = "true";
+
+                }
             }
             else
             {
+                ErrorLabelMessage = "The IP you entered was invalid";
                 ErrorLabelIsVisible = "true";
             }
         }
