@@ -13,9 +13,10 @@ namespace MobileApp.ViewModels
 {
     class ProductViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private string _CurrentCoffeeStatus = "coffee";
-        private string _CurrentTempStatus = "Temp";
-        private string _CurrentWaterStatus = "Water";
+        private string _CurrentCoffeeStatus = "Coffee";
+        private string _CurrentTempStatus = "Plant/Temperature";
+        private string _CurrentWaterStatus = "WateringSystem";
+        private int _TheTimePicked;
 
         public bool CoffeeStatusIsOff;
         public bool WaterStatusIsOff;
@@ -24,9 +25,10 @@ namespace MobileApp.ViewModels
         public Command<string>TempButtonClickCommand { get; set; }
         public Command<string> WaterSwitchClickCommand { get; set; } 
 
+
         public void GetLatestCoffee()
         {
-           MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("coffee");
+           MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee");
             if (msg != null)
             {
                 CurrentCoffeStatus = msg.Message;
@@ -35,7 +37,7 @@ namespace MobileApp.ViewModels
 
         public void GetLatestTemp()
         {
-            MQTTMessage msg2 = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("wateringSystemFeedback");
+            MQTTMessage msg2 = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Plant/Temperature");
             if (msg2 != null)
             {
                 CurrentTempStatus = msg2.Message;
@@ -44,7 +46,7 @@ namespace MobileApp.ViewModels
 
         public void GetLatestWater()
         {
-            MQTTMessage msg3 = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("water");
+            MQTTMessage msg3 = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("WateringSystem/Status");
             if (msg3 != null)
             {
                 CurrentWaterStatus = msg3.Message;
@@ -75,6 +77,16 @@ namespace MobileApp.ViewModels
             set
             {
                 _CurrentWaterStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int TheTimePicked
+        {
+            get { return _TheTimePicked; }
+            set
+            {
+                _TheTimePicked = value;
                 OnPropertyChanged();
             }
         }
@@ -125,27 +137,27 @@ namespace MobileApp.ViewModels
 
             if (CoffeeStatusIsOff)
             {
-                App.Client.Publish("coffee", "ON");
+                App.Client.Publish("Coffee", "ON");
                 CurrentCoffeStatus = "ON";
             }
             else
             {
-                App.Client.Publish("coffee", "OFF");
+                App.Client.Publish("Coffee", "OFF");
                 CurrentCoffeStatus = "OFF";
             }
         }
-        public void WaterSwitchClick(string CoffeeOnOffFeedback)
+        public void WaterSwitchClick(string WaterSystemOnOffFeedback)
         {
             OnOfWater();
 
             if (WaterStatusIsOff)
             {
-                App.Client.Publish("water", "ON");
+                App.Client.Publish("WateringSystem/Status", "ON");
                 CurrentWaterStatus = "ON";
             }
             else
             {
-                App.Client.Publish("water", "OFF");
+                App.Client.Publish("WateringSystem/Status", "OFF");
                 CurrentWaterStatus = "OFF";
             }
         }
@@ -153,6 +165,23 @@ namespace MobileApp.ViewModels
         {
             GetLatestTemp();
         }
+
+        DatePicker datePicker = new DatePicker
+        {
+            MinimumDate = new DateTime(2020, 12, 30),
+            MaximumDate = new DateTime(2050, 12, 31),
+            Date = new DateTime(2020, 12, 30)
+        };
+
+        TimePicker timepicker = new TimePicker
+        {
+            Time = new TimeSpan(4, 15, 26)
+            
+        };
+
+        
+
+
 
     }
 }
