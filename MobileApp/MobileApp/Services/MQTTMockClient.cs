@@ -48,19 +48,18 @@ namespace MobileApp.Services
 
         public void Subscribe(string channel)
         {
+            const string COFFEE = "Coffee";
+            const string WATERING_SYSTEM_STATUS = "WateringSystem/Status";
+            const string WATERING_SYSTEM_FEEDBACK = "WateringSystem/Feedback";
+            const string PLANT_TEMPERATURE = "Plant/Temperature";
+            const string PLANT_HUMIDITY = "Plant/Humidity";
+            const string PLANT_MOISTURE = "Plant/Moisture";
+
+
             Random rng = new Random();
             if (!HasBeenConnected)
             {
-                if (channel == "wateringSystemFeedback")
-                {
-                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
-                    {
-                        this.WriteLog(new MQTTMessage("wateringSystemFeedback",
-                                                      rng.Next(1, 100).ToString(),
-                                                      DateTime.Now));
-                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
-                }
-                if(channel == "coffee")
+                if(channel == COFFEE)
                 {
                     System.Threading.Timer timer = new System.Threading.Timer((e) =>
                     {
@@ -69,12 +68,26 @@ namespace MobileApp.Services
                         {
                             payload = "OFF";
                         }
-                        this.WriteLog(new MQTTMessage("coffee",
+                        this.WriteLog(new MQTTMessage(COFFEE,
                                                       payload,
                                                       DateTime.Now));
                     }, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
                 }
-                if(channel == "switches")
+                if (channel == WATERING_SYSTEM_STATUS)
+                {
+                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
+                    {
+                        string payload = "ON";
+                        if (rng.Next(0, 2) == 0)
+                        {
+                            payload = "OFF";
+                        }
+                        this.WriteLog(new MQTTMessage(WATERING_SYSTEM_STATUS,
+                                                      payload,
+                                                      DateTime.Now));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
+                }
+                if (channel == WATERING_SYSTEM_FEEDBACK)
                 {
                     System.Threading.Timer timer = new System.Threading.Timer((e) =>
                     {
@@ -82,6 +95,33 @@ namespace MobileApp.Services
                                                       "somerandommessage",
                                                       DateTime.Now));
                     }, null, TimeSpan.Zero, TimeSpan.FromSeconds(20));
+                }
+                if (channel == PLANT_TEMPERATURE)
+                {
+                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
+                    {
+                        this.WriteLog(new MQTTMessage(PLANT_TEMPERATURE,
+                                                      rng.Next(1, 100).ToString(),
+                                                      DateTime.Now));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+                }
+                if (channel == PLANT_HUMIDITY)
+                {
+                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
+                    {
+                        this.WriteLog(new MQTTMessage(PLANT_HUMIDITY,
+                                                      rng.Next(1, 100).ToString(),
+                                                      DateTime.Now));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+                }
+                if (channel == PLANT_MOISTURE)
+                {
+                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
+                    {
+                        this.WriteLog(new MQTTMessage(PLANT_MOISTURE,
+                                                      rng.Next(1, 100).ToString(),
+                                                      DateTime.Now));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
                 }
             }
         }
@@ -97,9 +137,19 @@ namespace MobileApp.Services
         protected override void MqttClient_Connected(object sender, MqttClientConnectedEventArgs e)
         {
             this.UpdateConnectionStatus();
-            this.Subscribe("switches");
-            this.Subscribe("coffee");
-            this.Subscribe("wateringSystemFeedback");
+            //this.Subscribe("switches");
+            //this.Subscribe("coffee");
+            //this.Subscribe("wateringSystemFeedback");
+
+            this.Subscribe("Coffee");
+
+            this.Subscribe("WateringSystem");
+            this.Subscribe("WateringSystem/Status");
+            this.Subscribe("WateringSystem/Feedback");
+
+            this.Subscribe("Plant/Temperature");
+            this.Subscribe("Plant/Moisture");
+            this.Subscribe("Plant/Humidity");
         }
 
         protected override void MqttClient_Disconnected(object sender, MqttClientDisconnectedEventArgs e) => throw new NotImplementedException();

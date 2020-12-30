@@ -67,7 +67,7 @@ namespace MobileApp.ViewModels
 
         public void Test()
         {
-            MQTTMessage mqttMessage = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("coffee");
+            MQTTMessage mqttMessage = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee");
             if(mqttMessage != null)
             {
                 TestLabel = mqttMessage.Message;

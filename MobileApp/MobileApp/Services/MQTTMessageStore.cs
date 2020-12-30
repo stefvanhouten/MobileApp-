@@ -20,6 +20,7 @@ namespace MobileApp.Services
                 if(message != null)
                 {
                     this.Messages.Add(message);
+                    this.Truncate();
                     return true;
                 }
                 return false;
@@ -27,14 +28,30 @@ namespace MobileApp.Services
             return false;
         }
 
+        private void Truncate()
+        {
+            while (this.Messages.Count >= 15)
+            {
+                this.Messages.RemoveAt(0);
+            }
+        }
+
         private bool CheckIfDuplicate(MQTTMessage message)
         {
-            foreach (MQTTMessage storedMessage in this.Messages.ToList())
+            List<MQTTMessage> clone = new List<MQTTMessage>(this.Messages);
+            if(clone != null)
             {
-                if (storedMessage.Compare().Equals(message.Compare()))
+                foreach (MQTTMessage storedMessage in clone)
                 {
-                    return true;
+                    if(storedMessage != null)
+                    {
+                        if (storedMessage.Compare().Equals(message.Compare()))
+                        {
+                            return true;
+                        }
+                    }
                 }
+
             }
             return false;
         }

@@ -73,6 +73,8 @@ namespace MobileApp.Services
         {
             //We defaulty listen to the switches channel. Will want to change this later depending on added buttons and such
             this.UpdateConnectionStatus();
+            this.Subscribe("Coffee");
+
             this.Subscribe("WateringSystem");
             this.Subscribe("WateringSystem/Status");
             this.Subscribe("WateringSystem/Feedback");
