@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MobileApp.Models;
 
 namespace MobileApp.Services
 {
@@ -19,7 +20,10 @@ namespace MobileApp.Services
             {
                 if(message != null)
                 {
-                    this.Messages.Add(message);
+                    lock (this.Messages)
+                    {
+                        this.Messages.Add(message);
+                    }
                     this.Truncate();
                     return true;
                 }
@@ -38,10 +42,9 @@ namespace MobileApp.Services
 
         private bool CheckIfDuplicate(MQTTMessage message)
         {
-            List<MQTTMessage> clone = new List<MQTTMessage>(this.Messages);
-            if(clone != null)
+            lock (this.Messages)
             {
-                foreach (MQTTMessage storedMessage in clone)
+                foreach (MQTTMessage storedMessage in this.Messages)
                 {
                     if(storedMessage != null)
                     {
@@ -51,7 +54,6 @@ namespace MobileApp.Services
                         }
                     }
                 }
-
             }
             return false;
         }

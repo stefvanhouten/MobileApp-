@@ -28,5 +28,10 @@ namespace MobileApp.Services
         {
             return $"{this.Topic} {this.Message} {this.Date}";
         }
+
+        public MQTTMessage DeepCopy()
+        {
+            return new MQTTMessage(this.Topic, this.Message, this.Date);
+        }
     }
 }

@@ -103,7 +103,7 @@ namespace MobileApp.Services
                         this.WriteLog(new MQTTMessage(PLANT_TEMPERATURE,
                                                       rng.Next(1, 100).ToString(),
                                                       DateTime.Now));
-                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
                 }
                 if (channel == PLANT_HUMIDITY)
                 {
@@ -112,7 +112,7 @@ namespace MobileApp.Services
                         this.WriteLog(new MQTTMessage(PLANT_HUMIDITY,
                                                       rng.Next(1, 100).ToString(),
                                                       DateTime.Now));
-                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
                 }
                 if (channel == PLANT_MOISTURE)
                 {
@@ -121,7 +121,7 @@ namespace MobileApp.Services
                         this.WriteLog(new MQTTMessage(PLANT_MOISTURE,
                                                       rng.Next(1, 100).ToString(),
                                                       DateTime.Now));
-                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
                 }
             }
         }
