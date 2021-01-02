@@ -4,10 +4,12 @@
              x:Class="MobileApp.Views.ConnectPage">
     <ContentPage.Content>
         <StackLayout Margin="5">
-            <Label Text="Connect"
+            <Label Text="{Binding ConnectPageLabelMessage}"
                 VerticalOptions="Fill" 
-                HorizontalOptions="CenterAndExpand" 
+                HorizontalOptions="Center" 
+                   HorizontalTextAlignment="End"
                    FontSize="Title"/>
+            <ActivityIndicator IsRunning="{Binding Connecting}" Color="{StaticResource Primary}"/>
             <Entry x:Name="IPEntry" Text="{Binding IPInput}" Placeholder="Enter your IP Adress"></Entry>
             <Entry x:Name="PortEntry" Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
             <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
@@ -26,7 +28,6 @@
                         />
                 </StackLayout>
             </Frame>
-            <ActivityIndicator IsRunning="{Binding Connecting}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

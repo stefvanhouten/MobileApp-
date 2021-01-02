@@ -23,8 +23,8 @@ namespace MobileApp.Services
                     lock (this.Messages)
                     {
                         this.Messages.Add(message);
+                        this.Truncate();
                     }
-                    this.Truncate();
                     return true;
                 }
                 return false;
