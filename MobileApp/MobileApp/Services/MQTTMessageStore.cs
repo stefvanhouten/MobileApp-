@@ -16,18 +16,45 @@ namespace MobileApp.Services
 
         public bool AddMessage(MQTTMessage message)
         {
-            if (!this.CheckIfDuplicate(message))
+
+            if (!IsValidMessage(message))
             {
-                if(message != null)
-                {
-                    lock (this.Messages)
-                    {
-                        this.Messages.Add(message);
-                        this.Truncate();
-                    }
-                    return true;
-                }
                 return false;
+            }
+
+            lock (this.Messages)
+            {
+                this.Messages.Add(message);
+                this.Truncate();
+            }
+
+            return true;
+        }
+
+        private bool IsValidMessage(MQTTMessage message)
+        {
+            if (this.IsDuplicate(message) || Messages == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsDuplicate(MQTTMessage message)
+        {
+            lock (this.Messages)
+            {
+                foreach (MQTTMessage storedMessage in this.Messages)
+                {
+                    if (storedMessage != null)
+                    {
+                        if (storedMessage.Compare().Equals(message.Compare()))
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
             return false;
         }
@@ -40,23 +67,6 @@ namespace MobileApp.Services
             }
         }
 
-        private bool CheckIfDuplicate(MQTTMessage message)
-        {
-            lock (this.Messages)
-            {
-                foreach (MQTTMessage storedMessage in this.Messages)
-                {
-                    if(storedMessage != null)
-                    {
-                        if (storedMessage.Compare().Equals(message.Compare()))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
 
         public List<MQTTMessage> GetAllMessagesFromTopic(string topic)
         {
