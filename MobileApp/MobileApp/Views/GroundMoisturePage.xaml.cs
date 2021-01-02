@@ -1,4 +1,5 @@
-﻿using MobileApp.ViewModels;
+﻿using Microcharts;
+using MobileApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace MobileApp.Views
         public GroundMoisturePage(string topic)
         {
             InitializeComponent();
-            this.BindingContext = new GroundMoistureViewModel(topic);
+            this.BindingContext = new GroundMoistureViewModel(topic, MoistureChart);
         }
     }
 }

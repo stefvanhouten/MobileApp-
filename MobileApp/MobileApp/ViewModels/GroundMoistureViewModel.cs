@@ -5,65 +5,75 @@ using System.Collections.ObjectModel;
 using System.Text;
 using MobileApp.Services;
 using Xamarin.Forms;
+using Entry = Microcharts.Entry;
 using System.Linq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using SkiaSharp;
+using Microcharts.Forms;
+using Microcharts;
 
 namespace MobileApp.ViewModels
 {
-    class GroundMoistureViewModel : BaseViewModel
+    class GroundMoistureViewModel : BaseViewModel, INotifyPropertyChanged
     {
         public string Topic { get; private set; }
         public List<MQTTMessage> MQTTMessages { get; set; }
         private List<MoistMeter> DatabaseData { get; set; }
-        public GroundMoistureViewModel(string topic)
+        public List<Entry> Entries { get; set; }
+        public Grid GridLayout { get; set; }
+        public ChartView ChartName { get; set; }
+        public GroundMoistureViewModel(string topic, ChartView chartName = null)
         {
+            ChartName = chartName;
             Topic = topic;
             Title = "Ground Moisture";
+            DatabaseData = new List<MoistMeter>();
+            MQTTMessages = new List<MQTTMessage>();
+            Entries = new List<Entry>();
 
-            //get all messages the first time the app starts
-            //do not check whether it has been set to null! This is redundant!
-            //either a filled observablecollection is send back or an empty observablecollection
-            MQTTMessages = App.Client.MQTTMessageStore.GetAllMessagesFromTopic(Topic);
-
-            //init the first cycle for comparison
             initCycle();
 
-            //after the first cycle, clear the List
-            //this prevents the second cycle from comparing old data and thus decreases load time
-            MQTTMessages.Clear();
-
             // !!called every 30 minutes -> 1800 seconds!!
-            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
+            Device.StartTimer(TimeSpan.FromSeconds(1800), () =>
             {
                 // get latest message send to the broker
                 MQTTMessages.Add(App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic));
 
                 //initialize second cycle to update database and view every half an hour
-                initCycle();
+                initCycle(true);
+
+                //Clear the List
+                //this prevents the cycle from comparing old data and thus decreases load time
+                MQTTMessages.Clear();
 
                 // return true to repeat counting, false to stop timer
                 return true;
             });
         }
 
-        public async void initCycle()
+        public async void initCycle(bool cycle = false)
         {
-            //instantiate the first cycle
-            GetDatabaseData();
+            List<MoistMeter> data = await App.MoistMeterDatabase.GetItemsAsync();
 
-            //compare the first cycle to the messages retrieved
-            //insert/skip data
-            CompareDatabaseToServer();
+            if (data != null)
+            {
+                DatabaseData = data;
+            }
 
-            ////prepare second cycle to create a view
-            //GetDatabaseData();
+            if (!cycle)
+            {
+                //create view
+                CreateXamlView();
+            } else if (cycle)
+            {
+                //compare the retrieved data against the database
+                //this prevents duplicates
+                CompareDatabaseToServer();
 
-            ////create view
-            //CreateXamlTable();
-        }
-
-        private async void GetDatabaseData()
-        {
-            DatabaseData = await App.MoistMeterDatabase.GetItemsAsync();
+                //create view
+                CreateXamlView();
+            }
         }
 
         //compare the retrieved data based on a combination of % and dateTime.
@@ -95,32 +105,45 @@ namespace MobileApp.ViewModels
             await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
         }
 
-        private async void CreateXamlTable()
+        private async void CreateXamlView()
         {
-            TableView table = new TableView();
-            table.Intent = TableIntent.Settings;
-
-            StackLayout layout = new StackLayout() { Orientation = StackOrientation.Vertical };
+            Grid gridLayout = new Grid();
+            int rowIndex = 0;
+            int columnIndex = 0;
 
             foreach (MoistMeter extractedData in DatabaseData)
             {
-                layout.Children.Add(new Label()
+                Entries.Add(new Entry(float.Parse(extractedData.MoisturePercentage))
                 {
-                    Text = extractedData.MoisturePercentage,
+                    Color = SKColor.Parse("#104ce3"),
+                    ValueLabel = $"{extractedData.DateTime}",
                 });
-                layout.Children.Add(new Label()
+
+                gridLayout.RowDefinitions.Add(new RowDefinition());
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition());
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition());
+
+                gridLayout.Children.Add(new Label()
+                {
+                    Text = $"{extractedData.MoisturePercentage}%",
+                    VerticalOptions = LayoutOptions.Center,
+                    HorizontalOptions = LayoutOptions.Center,
+                }, columnIndex, rowIndex);
+
+                columnIndex++;
+
+                gridLayout.Children.Add(new Label()
                 {
                     Text = $"{extractedData.DateTime}",
-                });
+                    VerticalOptions = LayoutOptions.Center,
+                    HorizontalOptions = LayoutOptions.Center,
+                }, columnIndex, rowIndex);
+
+                columnIndex++;
+                rowIndex++;
             }
-            table.Root = new TableRoot()
-            {
-                new TableSection("Ground moisture history")
-                {
-                    new ViewCell() {View = layout}
-                }
-            };
-            Content = table;
+            //GridLayout = GridLayout;
+            ChartName.Chart = new LineChart { Entries = Entries };
         }
     }
 }
