@@ -28,19 +28,23 @@ namespace MobileApp.ViewModels
             ChartName = chartName;
             Topic = topic;
             Title = "Ground Moisture";
-<<<<<<< HEAD
+
             DatabaseData = new List<MoistMeter>();
             MQTTMessages = new List<MQTTMessage>();
             Entries = new List<Entry>();
 
             initCycle();
 
-            Device.StartTimer(TimeSpan.FromSeconds(1800), () =>
+            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     // get latest message send to the broker
-                    MQTTMessages.Add(App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic));
+                    MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic);
+                    if (msg != null)
+                    {
+                        MQTTMessages.Add(msg);
+                    }
 
                     //initialize second cycle to update database and view every half an hour
                     initCycle(true);
@@ -57,7 +61,7 @@ namespace MobileApp.ViewModels
 
         public async void initCycle(bool cycle = false)
         {
-            List<MoistMeter> data = await App.MoistMeterDatabase.GetItemsAsync();
+            List<MoistMeter> data = await App.MoistMeterDatabase.GetItemByColumnAsync(Topic);
 
             if (data != null)
             {
@@ -88,7 +92,7 @@ namespace MobileApp.ViewModels
                 int exists = 0;
                 for (int i = 0; i < DatabaseData.Count; i++)
                 {
-                    if (DatabaseData[i].MoisturePercentage == serverData.Message && DatabaseData[i].DateTime == serverData.Date)
+                    if (DatabaseData[i].MoisturePercentage == Convert.ToDouble(serverData.Message) && DatabaseData[i].DateTime == serverData.Date)
                     {
                         exists += 1;
                     }
@@ -106,15 +110,23 @@ namespace MobileApp.ViewModels
             compressedMoistMeter.Target = Topic;
             switch (Topic)
             {
-                case "wateringSystemFeedback":
+                case "Plant/Moisture":
                     compressedMoistMeter.MoisturePercentage = Convert.ToDouble(data.Message);
                     compressedMoistMeter.DateTime = data.Date;
                     break;
-                case "test":
+                case "Plant/Temperature":
+                    compressedMoistMeter.Temperature = Convert.ToDouble(data.Message);
+                    compressedMoistMeter.DateTime = data.Date;
+                    break;
+                case "Plant/Humidity":
+                    compressedMoistMeter.Humidity = Convert.ToDouble(data.Message);
+                    compressedMoistMeter.DateTime = data.Date;
                     break;
             }
-
-            await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
+            if (data != null)
+            {
+                await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
+            }
         }
 
         private async void CreateXamlView()
@@ -122,13 +134,28 @@ namespace MobileApp.ViewModels
             Grid gridLayout = new Grid();
             int rowIndex = 0;
             int columnIndex = 0;
+            double valueLabel = 0;
 
             foreach (MoistMeter extractedData in DatabaseData)
             {
-                Entries.Add(new Entry(float.Parse(Convert.ToString(extractedData.MoisturePercentage)))
+                switch (Topic)
+                {
+                    case "Plant/Moisture":
+                        valueLabel = extractedData.MoisturePercentage;
+                        break;
+                    case "Plant/Temperature":
+                        valueLabel = extractedData.Temperature;
+                        break;
+                    case "Plant/Humidity":
+                        valueLabel = extractedData.Humidity;
+                        break;
+                }
+
+                Entries.Add(new Entry(float.Parse(Convert.ToString(valueLabel)))
                 {
                     Color = SKColor.Parse("#104ce3"),
-                    ValueLabel = $"{extractedData.DateTime}",
+                    ValueLabel = $"{valueLabel}",
+                    Label = $"{extractedData.DateTime}",
                 });
 
                 gridLayout.RowDefinitions.Add(new RowDefinition());
@@ -155,10 +182,12 @@ namespace MobileApp.ViewModels
                 rowIndex++;
             }
             //GridLayout = GridLayout;
-            ChartName.Chart = new LineChart { Entries = Entries };
-=======
-            App.Client.MQTTMessageStore.GetAllMessagesFromTopic(topic);
->>>>>>> origin/boris
+            ChartName.Chart = new LineChart 
+            { 
+                Entries = Entries,
+                LabelTextSize = 25,
+
+            };
         }
     }
 }

@@ -8,20 +8,14 @@
                 VerticalOptions="Fill" 
                 HorizontalOptions="CenterAndExpand" 
                    FontSize="Title"/>
-
-<<<<<<< HEAD
-            <Button Margin="30" Text="Ground Moisture: %" Command="{Binding  GroundMoistButtonClickCommand}" CommandParameter="wateringSystemFeedback" BackgroundColor="Aqua"/>
-
-=======
-            <Button Margin="30" Text="Ground Moisture: %" Command="{Binding  GroundMoistButtonClickCommand}" CommandParameter="WateringSystemFeedback" BackgroundColor="Aqua"/>
-            <Button Margin="30" Text="{Binding CurrentTempStatus}"  Command="{Binding TempButtonClickCommand}" BackgroundColor="Red"/>
+            <Button Margin="30" Text="Ground Moisture: %" Command="{Binding GraphNavigation}" CommandParameter="Plant/Moisture" BackgroundColor="Aqua"/>
+            <Button Margin="30" Text="{Binding CurrentTempStatus}"  Command="{Binding TempButtonClickCommand}" CommandParameter="Plant/Temperature" BackgroundColor="Red"/>
             <Button Margin="30" Text="{Binding CurrentCoffeStatus}" Command="{Binding CoffeeSwitchClickCommand}" CommandParameter="CoffeeOnOffFeedback" BackgroundColor="Chocolate"/>
-            <Button Margin="30" Text="{Binding CurrentWaterStatus }" Command="{Binding WaterSwitchClickCommand}"  BackgroundColor="Blue"/>
+            <Button Margin="30" Text="{Binding CurrentWaterStatus}" Command="{Binding WaterSwitchClickCommand}"  BackgroundColor="Blue"/>
             <DatePicker MinimumDate="{Binding MinimumDate}"
                         MaximumDate="{Binding MaximumDate}"
                         Date="{Binding Date}"/>
             <TimePicker Time="{Binding timepicker}"/>
->>>>>>> origin/boris
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

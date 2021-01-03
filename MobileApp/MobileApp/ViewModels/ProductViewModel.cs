@@ -20,7 +20,7 @@ namespace MobileApp.ViewModels
 
         public bool CoffeeStatusIsOff;
         public bool WaterStatusIsOff;
-        public Command<string>GroundMoistButtonClickCommand { get; set; }
+        public Command<string>GraphNavigation { get; set; }
         public Command<string>CoffeeSwitchClickCommand { get; set; }
         public Command<string>TempButtonClickCommand { get; set; }
         public Command<string> WaterSwitchClickCommand { get; set; } 
@@ -118,20 +118,16 @@ namespace MobileApp.ViewModels
 
         public ProductViewModel()
         {
-            GroundMoistButtonClickCommand = new Command<string>(GroundMoistButtonClick);
+            GraphNavigation = new Command<string>(NavigateToGraph);
             CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
             TempButtonClickCommand = new Command<string>(TempButtonClick);
             WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
         }
 
 
-        public void GroundMoistButtonClick(string WateringSystemFeedback)
+        public void NavigateToGraph(string WateringSystemFeedback)
         {
-<<<<<<< HEAD
             Application.Current.MainPage.Navigation.PushAsync(new GroundMoisturePage(WateringSystemFeedback), true);
-=======
-
-            Application.Current.MainPage.Navigation.PushAsync(new GroundMostuirePage(WateringSystemFeedback), true);
         }
 
         public void CoffeeSwitchClick(string CoffeeOnOffFeedback)
@@ -167,7 +163,7 @@ namespace MobileApp.ViewModels
         public void TempButtonClick(string Temp)
         {
             GetLatestTemp();
->>>>>>> origin/boris
+            NavigateToGraph(Temp);
         }
 
         DatePicker datePicker = new DatePicker
