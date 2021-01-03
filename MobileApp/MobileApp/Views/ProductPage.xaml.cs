@@ -18,5 +18,20 @@ namespace MobileApp.Views
             InitializeComponent();
             this.BindingContext = new ProductViewModel();
         }
+
+        private void DatePicker_DateSelected(object sender, DateChangedEventArgs e)
+        {
+
+        }
+
+        private void DatePicker_DateSelected_1(object sender, DateChangedEventArgs e)
+        {
+
+        }
+
+        private void DatePicker_DateSelected_2(object sender, DateChangedEventArgs e)
+        {
+
+        }
     }
 }
