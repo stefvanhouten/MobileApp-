@@ -34,20 +34,22 @@ namespace MobileApp.ViewModels
 
             initCycle();
 
-            // !!called every 30 minutes -> 1800 seconds!!
             Device.StartTimer(TimeSpan.FromSeconds(1800), () =>
             {
-                // get latest message send to the broker
-                MQTTMessages.Add(App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic));
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    // get latest message send to the broker
+                    MQTTMessages.Add(App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic));
 
-                //initialize second cycle to update database and view every half an hour
-                initCycle(true);
+                    //initialize second cycle to update database and view every half an hour
+                    initCycle(true);
 
-                //Clear the List
-                //this prevents the cycle from comparing old data and thus decreases load time
-                MQTTMessages.Clear();
+                    //Clear the List
+                    //this prevents the cycle from comparing old data and thus decreases load time
+                    MQTTMessages.Clear();
+                });
 
-                // return true to repeat counting, false to stop timer
+                //return true to keep loop going, false to stop timer
                 return true;
             });
         }
@@ -100,8 +102,17 @@ namespace MobileApp.ViewModels
         public async void MQTToDatabase(MQTTMessage data)
         {
             MoistMeter compressedMoistMeter = new MoistMeter();
-            compressedMoistMeter.MoisturePercentage = data.Message;
-            compressedMoistMeter.DateTime = data.Date;
+            compressedMoistMeter.Target = Topic;
+            switch (Topic)
+            {
+                case "wateringSystemFeedback":
+                    compressedMoistMeter.MoisturePercentage = Convert.ToDouble(data.Message);
+                    compressedMoistMeter.DateTime = data.Date;
+                    break;
+                case "test":
+                    break;
+            }
+
             await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
         }
 
@@ -113,7 +124,7 @@ namespace MobileApp.ViewModels
 
             foreach (MoistMeter extractedData in DatabaseData)
             {
-                Entries.Add(new Entry(float.Parse(extractedData.MoisturePercentage))
+                Entries.Add(new Entry(float.Parse(Convert.ToString(extractedData.MoisturePercentage)))
                 {
                     Color = SKColor.Parse("#104ce3"),
                     ValueLabel = $"{extractedData.DateTime}",

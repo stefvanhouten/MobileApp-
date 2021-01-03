@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MobileApp.Models;
 
 namespace MobileApp.Services
 {
@@ -15,29 +16,57 @@ namespace MobileApp.Services
 
         public bool AddMessage(MQTTMessage message)
         {
-            if (!this.CheckIfDuplicate(message))
+
+            if (!IsValidMessage(message))
             {
-                if(message != null)
-                {
-                    this.Messages.Add(message);
-                    return true;
-                }
                 return false;
+            }
+
+            lock (this.Messages)
+            {
+                this.Messages.Add(message);
+                this.Truncate();
+            }
+
+            return true;
+        }
+
+        private bool IsValidMessage(MQTTMessage message)
+        {
+            if (this.IsDuplicate(message) || Messages == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsDuplicate(MQTTMessage message)
+        {
+            lock (this.Messages)
+            {
+                foreach (MQTTMessage storedMessage in this.Messages)
+                {
+                    if (storedMessage != null)
+                    {
+                        if (storedMessage.Compare().Equals(message.Compare()))
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
             return false;
         }
 
-        private bool CheckIfDuplicate(MQTTMessage message)
+        private void Truncate()
         {
-            foreach (MQTTMessage storedMessage in this.Messages.ToList())
+            while (this.Messages.Count >= 15)
             {
-                if (storedMessage.Compare().Equals(message.Compare()))
-                {
-                    return true;
-                }
+                this.Messages.RemoveAt(0);
             }
-            return false;
         }
+
 
         public List<MQTTMessage> GetAllMessagesFromTopic(string topic)
         {

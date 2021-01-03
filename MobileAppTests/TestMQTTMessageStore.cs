@@ -2,6 +2,7 @@
 using MobileApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MobileAppTests
@@ -36,6 +37,7 @@ namespace MobileAppTests
         {
             MQTTMessageStore messageStore = new MQTTMessageStore();
             messageStore.AddMessage(new MQTTMessage("test", "test", DateTime.Now));
+            Thread.Sleep(100);
             messageStore.AddMessage(new MQTTMessage("test", "test", DateTime.Now));
             List<MQTTMessage> result = messageStore.GetAllMessagesFromTopic("test");
             Assert.IsTrue(result.Count == 2);

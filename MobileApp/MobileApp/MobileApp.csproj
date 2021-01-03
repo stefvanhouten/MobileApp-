@@ -13,7 +13,7 @@
     <PackageReference Include="MQTTnet.ClientLib" Version="1.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.1141" />  
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
   </ItemGroup>
 

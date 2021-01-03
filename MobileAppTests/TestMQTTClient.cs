@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MobileApp.Services;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MobileAppTests
@@ -53,6 +54,7 @@ namespace MobileAppTests
             _ = await client.Connect(this.IP, this.PORT);
             client.Subscribe(this.TESTCHANNEL);
             client.Publish(this.TESTCHANNEL, "hello world");
+            Thread.Sleep(100);
             MQTTMessage message = client.MQTTMessageStore.GetLatestMessageFromTopic(this.TESTCHANNEL);
             Assert.AreEqual("hello world", message.Message);
         }
