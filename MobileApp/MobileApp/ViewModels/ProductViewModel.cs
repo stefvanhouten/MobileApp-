@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -13,18 +14,22 @@ namespace MobileApp.ViewModels
 {
     class ProductViewModel : BaseViewModel, INotifyPropertyChanged
     {
+
         private string _CurrentCoffeeStatus = "Coffee";
         private string _CurrentTempStatus = "Plant/Temperature";
         private string _CurrentWaterStatus = "WateringSystem";
-        private int _TheTimePicked;
+        private int CountSeconds;
 
         public bool CoffeeStatusIsOff;
         public bool WaterStatusIsOff;
         public Command<string>GroundMoistButtonClickCommand { get; set; }
         public Command<string>CoffeeSwitchClickCommand { get; set; }
         public Command<string>TempButtonClickCommand { get; set; }
-        public Command<string> WaterSwitchClickCommand { get; set; } 
-
+        public Command<string> WaterSwitchClickCommand { get; set; }
+        public string _CurrentDateTime = DateTime.Now.ToString();
+        public TimeSpan SelectedTime { get; set; }
+        public DateTime SelectedDate { get; set; }
+        
 
         public void GetLatestCoffee()
         {
@@ -80,16 +85,17 @@ namespace MobileApp.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public int TheTimePicked
+        public string CurrentDateTime
         {
-            get { return _TheTimePicked; }
+            get { return _CurrentDateTime; }
             set
             {
-                _TheTimePicked = value;
+                _CurrentDateTime = value;
                 OnPropertyChanged();
             }
         }
+
+
 
         public void OnOfSwitch()
         {
@@ -175,11 +181,12 @@ namespace MobileApp.ViewModels
 
         TimePicker timepicker = new TimePicker
         {
-            Time = new TimeSpan(4, 15, 26)
+            Time = new TimeSpan(4, 20, 69),
             
         };
 
         
+       
 
 
 

@@ -15,8 +15,11 @@
             <Button Margin="30" Text="{Binding CurrentWaterStatus }" Command="{Binding WaterSwitchClickCommand}"  BackgroundColor="Blue"/>
             <DatePicker MinimumDate="{Binding MinimumDate}"
                         MaximumDate="{Binding MaximumDate}"
+                        DateSelected="{Binding SelectedDate}"
                         Date="{Binding Date}"/>
-            <TimePicker Time="{Binding timepicker}"/>
+                        
+            <TimePicker Time="{Binding SelectedTime}"/>
+            <Button Margin="30" Text="{Binding CurrentDateTime }"  BackgroundColor="Blue"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
