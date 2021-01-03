@@ -72,15 +72,14 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-
-    <FlyoutItem Title="ProdcutPage" Icon="ic_action_shield.png">
-        <ShellContent ContentTemplate="{DataTemplate local:ProductPage}"/>
+    <FlyoutItem Title="ConnectPage" Icon="ic_action_shield.png">
+        <ShellContent ContentTemplate="{DataTemplate local:ConnectPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Dashboard" Route="dashboard" Icon="ic_action_dashboard_light.png" IsVisible="{Binding Connected}">
         <ShellContent Title="Dashboard" Icon="ic_action_dashboard.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
     </FlyoutItem>
-    
+
     <FlyoutItem Title="About us" Icon="tab_about.png">
         <ShellContent Title="About us" Icon="tab_about.png" ContentTemplate="{DataTemplate local:AboutUsPage}"/>
     </FlyoutItem>
