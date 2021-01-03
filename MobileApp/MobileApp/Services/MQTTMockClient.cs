@@ -54,6 +54,7 @@ namespace MobileApp.Services
             const string PLANT_TEMPERATURE = "Plant/Temperature";
             const string PLANT_HUMIDITY = "Plant/Humidity";
             const string PLANT_MOISTURE = "Plant/Moisture";
+       
 
 
             Random rng = new Random();
@@ -150,6 +151,8 @@ namespace MobileApp.Services
             this.Subscribe("Plant/Temperature");
             this.Subscribe("Plant/Moisture");
             this.Subscribe("Plant/Humidity");
+
+           
         }
 
         protected override void MqttClient_Disconnected(object sender, MqttClientDisconnectedEventArgs e) => throw new NotImplementedException();

@@ -28,6 +28,7 @@ namespace MobileApp.ViewModels
             ChartName = chartName;
             Topic = topic;
             Title = "Ground Moisture";
+<<<<<<< HEAD
             DatabaseData = new List<MoistMeter>();
             MQTTMessages = new List<MQTTMessage>();
             Entries = new List<Entry>();
@@ -155,6 +156,9 @@ namespace MobileApp.ViewModels
             }
             //GridLayout = GridLayout;
             ChartName.Chart = new LineChart { Entries = Entries };
+=======
+            App.Client.MQTTMessageStore.GetAllMessagesFromTopic(topic);
+>>>>>>> origin/boris
         }
     }
 }

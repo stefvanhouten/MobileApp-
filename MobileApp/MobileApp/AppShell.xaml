@@ -77,6 +77,7 @@
     </FlyoutItem>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     <FlyoutItem Title="Product" Icon="ic_action_dashboard_light.png">
         <ShellContent Title="Product" Icon="ic_action_dashboard.png" ContentTemplate="{DataTemplate local:ProductPage}"/>
     </FlyoutItem>
@@ -85,6 +86,13 @@
 =======
     <FlyoutItem Title="Dashboard" Route="dashboard" Icon="ic_action_dashboard_light.png" IsVisible="{Binding Connected}">
 >>>>>>> origin/dev
+=======
+    <FlyoutItem Title="ProdcutPage" Icon="ic_action_shield.png">
+        <ShellContent ContentTemplate="{DataTemplate local:ProductPage}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Dashboard" Route="dashboard" Icon="ic_action_dashboard_light.png" IsVisible="{Binding Connected}">
+>>>>>>> origin/boris
         <ShellContent Title="Dashboard" Icon="ic_action_dashboard.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
     </FlyoutItem>
     

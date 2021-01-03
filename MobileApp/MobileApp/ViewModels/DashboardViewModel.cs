@@ -82,7 +82,7 @@ namespace MobileApp.ViewModels
             IOTButtons = await App.IOTDatabase.GetItemsAsync();
             CompletedButtons.Clear();
 
-            //instantiate buttion variable for the generated buttons
+            //instantiate button variable for the generated buttons
             Button redirectButton;
 
             //loop through all button properties and read it
