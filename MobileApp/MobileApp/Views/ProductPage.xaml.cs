@@ -23,5 +23,15 @@ namespace MobileApp.Views
         {
 
         }
+
+        private void DatePicker_DateSelected_1(object sender, DateChangedEventArgs e)
+        {
+
+        }
+
+        private void DatePicker_DateSelected_2(object sender, DateChangedEventArgs e)
+        {
+
+        }
     }
 }

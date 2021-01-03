@@ -19,7 +19,8 @@
                         Date="{Binding Date}"/>
                         
             <TimePicker Time="{Binding SelectedTime}"/>
-            <Button Margin="30" Text="{Binding CurrentDateTime }"  BackgroundColor="Blue"/>
+
+            <Button Margin="30" Text="{Binding CurrentDateTime}" Command="{Binding StartTimerCommand}" BackgroundColor="Blue"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -8,27 +8,30 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Xamarin.Forms;
 
 namespace MobileApp.ViewModels
 {
     class ProductViewModel : BaseViewModel, INotifyPropertyChanged
     {
-
+        private System.Timers.Timer MyTimer;
         private string _CurrentCoffeeStatus = "Coffee";
         private string _CurrentTempStatus = "Plant/Temperature";
         private string _CurrentWaterStatus = "WateringSystem";
-        private int CountSeconds;
+        private string _CurrentDateTime = DateTime.Now.ToString();
+        private TimeSpan _SelectedTime;
+        private DateTime _SelectedDate;
+       
 
         public bool CoffeeStatusIsOff;
         public bool WaterStatusIsOff;
         public Command<string>GroundMoistButtonClickCommand { get; set; }
         public Command<string>CoffeeSwitchClickCommand { get; set; }
         public Command<string>TempButtonClickCommand { get; set; }
-        public Command<string> WaterSwitchClickCommand { get; set; }
-        public string _CurrentDateTime = DateTime.Now.ToString();
-        public TimeSpan SelectedTime { get; set; }
-        public DateTime SelectedDate { get; set; }
+        public Command<string>WaterSwitchClickCommand { get; set; }
+        public Command<string>StartTimerCommand { get; set; }
+      
         
 
         public void GetLatestCoffee()
@@ -95,6 +98,26 @@ namespace MobileApp.ViewModels
             }
         }
 
+        public DateTime SelectedDate
+        {
+            get { return _SelectedDate; }
+            set
+            {
+                _SelectedDate = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public TimeSpan SelectedTime
+        {
+            get { return _SelectedTime; }
+            set
+            {
+                _SelectedTime = value;
+                OnPropertyChanged();
+            }
+        }
+
 
 
         public void OnOfSwitch()
@@ -128,6 +151,7 @@ namespace MobileApp.ViewModels
             CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
             TempButtonClickCommand = new Command<string>(TempButtonClick);
             WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
+            StartTimerCommand = new Command<string>(StartTimer);
         }
 
 
@@ -172,11 +196,16 @@ namespace MobileApp.ViewModels
             GetLatestTemp();
         }
 
+        public void GiveCoffeeOnPickedMoment()
+        {
+            
+        }
+
         DatePicker datePicker = new DatePicker
         {
             MinimumDate = new DateTime(2020, 12, 30),
             MaximumDate = new DateTime(2050, 12, 31),
-            Date = new DateTime(2020, 12, 30)
+            Date = DateTime.Today
         };
 
         TimePicker timepicker = new TimePicker
@@ -185,8 +214,18 @@ namespace MobileApp.ViewModels
             
         };
 
-        
-       
+        private void StartTimer(String TimerStart)
+        {
+            MyTimer.Interval = 1000;
+            MyTimer.Elapsed += OnIntervalEvent;
+            MyTimer.Start();
+        }
+
+        private static void OnIntervalEvent(object source, ElapsedEventArgs e)
+        {
+
+        }
+
 
 
 
