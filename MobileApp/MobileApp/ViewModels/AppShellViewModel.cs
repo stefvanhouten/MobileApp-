@@ -7,6 +7,8 @@ namespace MobileApp.ViewModels
     public class AppShellViewModel : BaseViewModel
     {
         private bool _connected;
+        private string _navigationVisible;
+
         public bool Connected {
             get { return this._connected; } 
             set { 
@@ -14,6 +16,17 @@ namespace MobileApp.ViewModels
                 OnPropertyChanged();
             } 
         }
+
+        public string NavigationVisible
+        {
+            get { return this._navigationVisible; }
+            set
+            {
+                this._navigationVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public AppShellViewModel()
         {
             App.Client.ConnectionStatusChanged += UpdateNavigation;
