@@ -134,7 +134,13 @@ namespace MobileApp.ViewModels
             Grid gridLayout = new Grid();
             int rowIndex = 0;
             int columnIndex = 0;
+
+            //TAGS FOR ENTRY
             double valueLabel = 0;
+            string colorHEX = "";
+            //#0fdb16 GREEN HIGH MOISTURE
+            //#e8a425 //ORANGE MIDDLE MOISTURE
+            //#e82525 //RED LOW MOISTURE
 
             foreach (MoistMeter extractedData in DatabaseData)
             {
@@ -151,9 +157,20 @@ namespace MobileApp.ViewModels
                         break;
                 }
 
+                if (valueLabel < 30)
+                {
+                    colorHEX = "#e82525";
+                } else if (valueLabel > 40 && valueLabel < 60)
+                {
+                    colorHEX = "#e8a425";
+                } else 
+                {
+                    colorHEX = "#0fdb16";
+                }
+
                 Entries.Add(new Entry(float.Parse(Convert.ToString(valueLabel)))
                 {
-                    Color = SKColor.Parse("#104ce3"),
+                    Color = SKColor.Parse(colorHEX),
                     ValueLabel = $"{valueLabel}",
                     Label = $"{extractedData.DateTime}",
                 });
@@ -164,7 +181,7 @@ namespace MobileApp.ViewModels
 
                 gridLayout.Children.Add(new Label()
                 {
-                    Text = $"{extractedData.MoisturePercentage}%",
+                    Text = $"{extractedData.MoisturePercentage} %",
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalOptions = LayoutOptions.Center,
                 }, columnIndex, rowIndex);
@@ -185,7 +202,7 @@ namespace MobileApp.ViewModels
             ChartName.Chart = new LineChart 
             { 
                 Entries = Entries,
-                LabelTextSize = 25,
+                LabelTextSize = 35,
 
             };
         }
