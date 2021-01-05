@@ -44,7 +44,6 @@ namespace MobileApp.ViewModels
             //Set the Title property, this is inherited from BaseViewModel
             Title = "Dashboard";
             IsConnected = "Disconnected";
-
             InitializeAsync();
         }
 

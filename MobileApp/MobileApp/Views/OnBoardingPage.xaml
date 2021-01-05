@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobileApp.Views.OnBoardingPage"
+             Shell.NavBarIsVisible="False"
+             >
+    <ContentPage.Content>
+        <StackLayout Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Text="Skip" Grid.Column="1" Command="{Binding SkipCommand}" BackgroundColor="Transparent" TextColor="{StaticResource Primary}"></Button>
+            </Grid>
+            <CarouselView x:Name="myCarouselView" ItemsSource="{Binding BoardingPageList}"
+                      IndicatorView="indicatorView">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Frame 
+                               Margin="50"
+                               WidthRequest="300"
+                               HeightRequest="500"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Start">
+                                <StackLayout VerticalOptions="Start">
+                                    <Label Text="{Binding Name}" 
+                                       FontAttributes="Bold"
+                                       FontSize="Large"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Start" />
+                                    <Image Source="{Binding ImageUrl}" 
+                                       Aspect="AspectFit"
+                                       HeightRequest="{Binding Height}"
+                                       WidthRequest="{Binding Width}"
+                                       HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Description}"
+                                       HorizontalOptions="Center" />
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+
+            <IndicatorView x:Name="indicatorView"
+                       MaximumVisible="6"
+                       Margin="0,0,0,40"
+                       IndicatorColor="LightGray"
+                       SelectedIndicatorColor="DarkGray"
+                       HorizontalOptions="Center" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

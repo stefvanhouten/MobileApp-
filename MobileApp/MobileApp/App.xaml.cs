@@ -2,6 +2,7 @@
 using MobileApp.Data;
 using MobileApp.Services;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 using MobileApp.ViewModels;
 using MobileApp.Views;
 using System;
@@ -24,7 +25,12 @@ namespace MobileApp
             //App.Client = new MQTTClient();
             App.Client = new MQTTMockClient();
             InitializeComponent();
+            //if (VersionTracking.IsFirstLaunchEver)
             MainPage = new AppShell();
+            if (true)
+            {
+                MainPage.Navigation.PushAsync(new OnBoardingPage());
+            }
         }
 
         public static TodoItemDatabase Database
@@ -66,6 +72,7 @@ namespace MobileApp
 
         protected override void OnStart()
         {
+            VersionTracking.Track();
         }
 
         protected override void OnSleep()
