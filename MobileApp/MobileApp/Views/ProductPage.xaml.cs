@@ -24,8 +24,6 @@ namespace MobileApp.Views
         public void DatePicker_DateSelected(object sender, DateChangedEventArgs e)
         {
            DateLabel.Text = e.NewDate.ToString();
-           
-
         }
 
 

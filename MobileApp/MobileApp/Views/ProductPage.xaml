@@ -1,27 +1,87 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}"
              x:Class="MobileApp.Views.ProductPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Product"
-                VerticalOptions="Fill" 
-                HorizontalOptions="CenterAndExpand" 
-                   FontSize="Title"/>
 
-            <Button Margin="30" Text="Ground Moisture: %" Command="{Binding  GroundMoistButtonClickCommand}" CommandParameter="WateringSystemFeedback" BackgroundColor="Aqua"/>
-            <Button Margin="30" Text="{Binding CurrentTempStatus}"  Command="{Binding TempButtonClickCommand}" BackgroundColor="Red"/>
-            <Button Margin="30" Text="{Binding CurrentCoffeStatus}" Command="{Binding CoffeeSwitchClickCommand}" CommandParameter="CoffeeOnOffFeedback" BackgroundColor="Chocolate"/>
-            <Button Margin="30" Text="{Binding CurrentWaterStatus }" Command="{Binding WaterSwitchClickCommand}"  BackgroundColor="Blue"/>
-            <DatePicker x:Name="MainDatePicker"
-                        MinimumDate="{Binding MinimumDate}"
-                        MaximumDate="{Binding MaximumDate}"/>
+            <Button 
+                Margin="5,5,-5,5" 
+                HeightRequest="75" 
+                Text="Ground Moisture: 0%" 
+                ImageSource="moisture.png"
+                Command="{Binding  GroundMoistButtonClickCommand}" 
+                CommandParameter="WateringSystemFeedback" 
+                BackgroundColor="{StaticResource Primary}"/>
+            <Button Margin="5" 
+                    Text="{Binding CurrentTempStatus}"  
+                    Command="{Binding TempButtonClickCommand}" 
+                    ImageSource="temperature.png"
+                    HeightRequest="75" 
+                    BackgroundColor="{StaticResource Primary}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button 
+                    Margin="5" 
+                    Text="{Binding CurrentCoffeStatus}" 
+                    HeightRequest="100"
+                    ImageSource="coffee.png"
+                    Command="{Binding CoffeeSwitchClickCommand}" 
+                    CommandParameter="CoffeeOnOffFeedback" 
+                    BackgroundColor="{StaticResource Primary}" 
+                    Grid.Column="0" 
+                    Grid.Row="0"/>
+                <Button 
+                    Margin="5" 
+                    Text="{Binding CurrentWaterStatus }" 
+                    Command="{Binding WaterSwitchClickCommand}" 
+                    BackgroundColor="{StaticResource Primary}" 
+                    Grid.Column="1" 
+                    ImageSource="water.png"
+                    Grid.Row="0"/>
+                <DatePicker x:Name="MainDatePicker"
+                            MinimumDate="{Binding MinimumDate}"
+                            MaximumDate="{Binding MaximumDate}"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="1"
+                            />
+                <TimePicker 
+                    Time="{Binding SelectedTime}"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="2"
+                    />
+                <Label 
+                    x:Name="DateLabel" 
+                    FontSize="15" 
+                    HorizontalOptions="Center" 
+                    Grid.Column="1"
+                    Grid.Row="2"
+                    Text="test"
+                    TextColor="Orange"/>
 
-            <Label x:Name="DateLabel"  FontSize="15" HorizontalOptions="Center" TextColor="Orange"/>
+                <Button 
+                    Margin="5" 
+                    ImageSource="agenda.png"
+                    Text="{Binding CurrentDateTime}" 
+                    Command="{Binding StartTimerCommand}" 
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="3"
+                    BackgroundColor="{StaticResource Primary}"/>
+            </Grid>
 
-            <TimePicker Time="{Binding SelectedTime}"/>
-
-            <Button Margin="5" Text="{Binding CurrentDateTime}" Command="{Binding StartTimerCommand}" BackgroundColor="Blue"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

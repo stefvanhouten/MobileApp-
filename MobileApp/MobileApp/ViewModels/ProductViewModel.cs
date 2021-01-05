@@ -129,8 +129,6 @@ namespace MobileApp.ViewModels
             }
         }
 
-
-
         public void OnOfSwitch()
         {
             GetLatestCoffee();
@@ -158,6 +156,7 @@ namespace MobileApp.ViewModels
 
         public ProductViewModel()
         {
+            Title = "Product";
             GroundMoistButtonClickCommand = new Command<string>(GroundMoistButtonClick);
             CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
             TempButtonClickCommand = new Command<string>(TempButtonClick);
@@ -168,7 +167,6 @@ namespace MobileApp.ViewModels
 
         public void GroundMoistButtonClick(string WateringSystemFeedback)
         {
-
             Application.Current.MainPage.Navigation.PushAsync(new GroundMostuirePage(WateringSystemFeedback), true);
         }
 
