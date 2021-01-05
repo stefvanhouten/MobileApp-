@@ -15,14 +15,20 @@ namespace MobileApp.ViewModels
         public OnBoardingViewModel()
         {
             SkipCommand = new Command(SkipClicked);
-            BoardingPageList.Add(new BoardingPage() { Name = "Welcome to our app", 
-                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate " +
-                "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 
-                ImageUrl = "placeholder" });
-            BoardingPageList.Add(new BoardingPage() { Name = "TEST", Description = "HELLO WORLD", ImageUrl = "placeholder" });
-            BoardingPageList.Add(new BoardingPage() { Name = "TEST", Description = "HELLO WORLD", ImageUrl = "placeholder" });
-            BoardingPageList.Add(new BoardingPage() { Name = "TEST", Description = "HELLO WORLD", ImageUrl = "placeholder" });
+            BoardingPageList.Add(new BoardingPage() { Name = "Welcome home!", 
+                Description = "Welcome to our home automation assistant. Our goal is to make your life easier and we do just that with this app!", 
+                ImageUrl = "home_automation.png" });
+            BoardingPageList.Add(new BoardingPage() { 
+                Name = "Connecting", 
+                Description = "First of all we need to connect to our communication server. The IP addres should be your IP4 addres of the network you are on. " +
+                "By default the server uses PORT 1883.", 
+                ImageUrl = "connect.png"
+            });
+            BoardingPageList.Add(new BoardingPage() { 
+                Name = "The dashboard", 
+                Description = "On the dashboard you can see your connection status and add custom buttons if you wish to expand your app.", 
+                ImageUrl = "dashboard.png", 
+                Height = 300 });
         }
 
         public void SkipClicked()
