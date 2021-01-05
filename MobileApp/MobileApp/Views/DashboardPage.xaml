@@ -35,7 +35,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Label Text="{Binding TestLabel}"></Label>
+            <!--<Label Text="{Binding TestLabel}"></Label>-->
             <Button
                 Text="+"
                 Command="{Binding ShowNewView}"
