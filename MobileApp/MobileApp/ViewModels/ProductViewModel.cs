@@ -20,10 +20,11 @@ namespace MobileApp.ViewModels
         private string _CurrentTempStatus = "Plant/Temperature";
         private string _CurrentWaterStatus = "WateringSystem";
         private string _CurrentDateTime = DateTime.Now.ToString();
+        private string _TheNewDate;
         private TimeSpan _SelectedTime;
         private DateTime _SelectedDate;
        
-
+        
         public bool CoffeeStatusIsOff;
         public bool WaterStatusIsOff;
         public Command<string>GroundMoistButtonClickCommand { get; set; }
@@ -94,6 +95,16 @@ namespace MobileApp.ViewModels
             set
             {
                 _CurrentDateTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string TheNewDate
+        {
+            get { return _TheNewDate; }
+            set
+            {
+                _TheNewDate = value;
                 OnPropertyChanged();
             }
         }
@@ -195,6 +206,8 @@ namespace MobileApp.ViewModels
         {
             GetLatestTemp();
         }
+
+       
 
         public void GiveCoffeeOnPickedMoment()
         {

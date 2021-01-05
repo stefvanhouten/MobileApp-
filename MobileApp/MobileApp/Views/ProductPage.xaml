@@ -13,14 +13,15 @@
             <Button Margin="30" Text="{Binding CurrentTempStatus}"  Command="{Binding TempButtonClickCommand}" BackgroundColor="Red"/>
             <Button Margin="30" Text="{Binding CurrentCoffeStatus}" Command="{Binding CoffeeSwitchClickCommand}" CommandParameter="CoffeeOnOffFeedback" BackgroundColor="Chocolate"/>
             <Button Margin="30" Text="{Binding CurrentWaterStatus }" Command="{Binding WaterSwitchClickCommand}"  BackgroundColor="Blue"/>
-            <DatePicker MinimumDate="{Binding MinimumDate}"
-                        MaximumDate="{Binding MaximumDate}"
-                        DateSelected="{Binding SelectedDate}"
-                        Date="{Binding Date}"/>
-                        
+            <DatePicker x:Name="MainDatePicker"
+                        MinimumDate="{Binding MinimumDate}"
+                        MaximumDate="{Binding MaximumDate}"/>
+
+            <Label x:Name="DateLabel"  FontSize="15" HorizontalOptions="Center" TextColor="Orange"/>
+
             <TimePicker Time="{Binding SelectedTime}"/>
 
-            <Button Margin="30" Text="{Binding CurrentDateTime}" Command="{Binding StartTimerCommand}" BackgroundColor="Blue"/>
+            <Button Margin="5" Text="{Binding CurrentDateTime}" Command="{Binding StartTimerCommand}" BackgroundColor="Blue"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
