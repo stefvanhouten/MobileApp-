@@ -47,7 +47,11 @@ namespace MobileApp.ViewModels
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     // get latest message send to the broker
-                    GetLatestMessage();
+                    MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic);
+                    if (msg != null)
+                    {
+                        MQTTMessages.Add(msg);
+                    }
 
                     //initialize second cycle to update database and view every half an hour
                     initCycle(true);
@@ -77,6 +81,10 @@ namespace MobileApp.ViewModels
            // await App.MoistMeterDatabase.EmptyDatabase();
             List<MoistMeter> data = await App.MoistMeterDatabase.GetItemByColumnAsync(Topic);
 
+            if (data != null)
+            {
+                DatabaseData = data;
+            }
 
             if (!cycle)
             {
