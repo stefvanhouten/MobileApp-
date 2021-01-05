@@ -6,8 +6,7 @@
              Title="{Binding Title}">
     <ContentPage.Content>
         <StackLayout>
-            <forms:ChartView x:Name="MoistureChart" HeightRequest="300"/>
-            <ContentView Content="{Binding GridLayout}"></ContentView>
+            <forms:ChartView x:Name="MoistureChart" VerticalOptions="FillAndExpand"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

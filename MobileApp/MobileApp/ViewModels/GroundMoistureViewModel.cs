@@ -21,13 +21,20 @@ namespace MobileApp.ViewModels
         public List<MQTTMessage> MQTTMessages { get; set; }
         private List<MoistMeter> DatabaseData { get; set; }
         public List<Entry> Entries { get; set; }
-        public Grid GridLayout { get; set; }
         public ChartView ChartName { get; set; }
+        Dictionary<string, string> DynamicTitles = new Dictionary<string, string>
+        {
+            {"Plant/Moisture", "Ground Moisture" },
+            {"Plant/Temperature", "Temperature"},
+        };
         public GroundMoistureViewModel(string topic, ChartView chartName = null)
         {
             ChartName = chartName;
             Topic = topic;
-            Title = "Ground Moisture";
+            if (DynamicTitles.ContainsKey(topic))
+            {
+                Title = DynamicTitles[topic];
+            }
 
             DatabaseData = new List<MoistMeter>();
             MQTTMessages = new List<MQTTMessage>();
@@ -40,11 +47,7 @@ namespace MobileApp.ViewModels
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     // get latest message send to the broker
-                    MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic);
-                    if (msg != null)
-                    {
-                        MQTTMessages.Add(msg);
-                    }
+                    GetLatestMessage();
 
                     //initialize second cycle to update database and view every half an hour
                     initCycle(true);
@@ -59,14 +62,21 @@ namespace MobileApp.ViewModels
             });
         }
 
+        public void GetLatestMessage()
+        {
+            // get latest message send to the broker
+            MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic);
+            if (msg != null)
+            {
+                MQTTMessages.Add(msg);
+            }
+        }
+
         public async void initCycle(bool cycle = false)
         {
+           // await App.MoistMeterDatabase.EmptyDatabase();
             List<MoistMeter> data = await App.MoistMeterDatabase.GetItemByColumnAsync(Topic);
 
-            if (data != null)
-            {
-                DatabaseData = data;
-            }
 
             if (!cycle)
             {
@@ -80,7 +90,9 @@ namespace MobileApp.ViewModels
 
                 //create view
                 CreateXamlView();
+
             }
+
         }
 
         //compare the retrieved data based on a combination of % and dateTime.
@@ -131,10 +143,6 @@ namespace MobileApp.ViewModels
 
         private async void CreateXamlView()
         {
-            Grid gridLayout = new Grid();
-            int rowIndex = 0;
-            int columnIndex = 0;
-
             //TAGS FOR ENTRY
             double valueLabel = 0;
             string colorHEX = "";
@@ -174,31 +182,7 @@ namespace MobileApp.ViewModels
                     ValueLabel = $"{valueLabel}",
                     Label = $"{extractedData.DateTime}",
                 });
-
-                gridLayout.RowDefinitions.Add(new RowDefinition());
-                gridLayout.ColumnDefinitions.Add(new ColumnDefinition());
-                gridLayout.ColumnDefinitions.Add(new ColumnDefinition());
-
-                gridLayout.Children.Add(new Label()
-                {
-                    Text = $"{extractedData.MoisturePercentage} %",
-                    VerticalOptions = LayoutOptions.Center,
-                    HorizontalOptions = LayoutOptions.Center,
-                }, columnIndex, rowIndex);
-
-                columnIndex++;
-
-                gridLayout.Children.Add(new Label()
-                {
-                    Text = $"{extractedData.DateTime}",
-                    VerticalOptions = LayoutOptions.Center,
-                    HorizontalOptions = LayoutOptions.Center,
-                }, columnIndex, rowIndex);
-
-                columnIndex++;
-                rowIndex++;
-            }
-            //GridLayout = GridLayout;
+            };
             ChartName.Chart = new LineChart 
             { 
                 Entries = Entries,
