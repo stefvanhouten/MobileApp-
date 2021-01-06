@@ -40,6 +40,10 @@ namespace MobileApp.Services
 
         public void Publish(string topic, string message)
         {
+            if(topic == "WateringSystem")
+            {
+                topic = "WateringSystem/Status";
+            }
             MQTTMessage newMessage = new MQTTMessage(topic,
                                                   message,
                                                   DateTime.Now);
@@ -102,7 +106,7 @@ namespace MobileApp.Services
                     System.Threading.Timer timer = new System.Threading.Timer((e) =>
                     {
                         this.WriteLog(new MQTTMessage(PLANT_TEMPERATURE,
-                                                      rng.Next(1, 100).ToString(),
+                                                      rng.Next(18, 25).ToString(),
                                                       DateTime.Now));
                     }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
                 }
@@ -111,7 +115,7 @@ namespace MobileApp.Services
                     System.Threading.Timer timer = new System.Threading.Timer((e) =>
                     {
                         this.WriteLog(new MQTTMessage(PLANT_HUMIDITY,
-                                                      rng.Next(1, 100).ToString(),
+                                                      rng.Next(40, 70).ToString(),
                                                       DateTime.Now));
                     }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
                 }
@@ -120,7 +124,7 @@ namespace MobileApp.Services
                     System.Threading.Timer timer = new System.Threading.Timer((e) =>
                     {
                         this.WriteLog(new MQTTMessage(PLANT_MOISTURE,
-                                                      rng.Next(1, 100).ToString(),
+                                                      rng.Next(40, 70).ToString(),
                                                       DateTime.Now));
                     }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
                 }

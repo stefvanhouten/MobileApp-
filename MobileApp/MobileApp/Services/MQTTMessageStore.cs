@@ -61,7 +61,7 @@ namespace MobileApp.Services
 
         private void Truncate()
         {
-            while (this.Messages.Count >= 15)
+            while (this.Messages.Count >= 50)
             {
                 this.Messages.RemoveAt(0);
             }
