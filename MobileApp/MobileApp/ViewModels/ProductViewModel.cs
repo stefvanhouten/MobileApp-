@@ -32,15 +32,16 @@ namespace MobileApp.ViewModels
         public Command<string>TempButtonClickCommand { get; set; }
         public Command<string>WaterSwitchClickCommand { get; set; }
         public Command<string>StartTimerCommand { get; set; }
+        public Command SelectedDateCommand { get; set; }
 
-        TimePicker timepicker = new TimePicker();
+        //TimePicker timepicker = new TimePicker();
 
-        DatePicker datePicker = new DatePicker
-        {
-            MinimumDate = new DateTime(2020, 12, 30),
-            MaximumDate = new DateTime(2050, 12, 31),
-            Date = DateTime.Today
-        };
+        //DatePicker datePicker = new DatePicker
+        //{
+        //    MinimumDate = new DateTime(2020, 12, 30),
+        //    MaximumDate = new DateTime(2050, 12, 31),
+        //    Date = DateTime.Today
+        //};
 
         public void GetLatestCoffee()
         {
@@ -122,6 +123,7 @@ namespace MobileApp.ViewModels
             set
             {
                 _SelectedDate = value;
+                this.Test();
                 OnPropertyChanged();
             }
         }
@@ -132,6 +134,7 @@ namespace MobileApp.ViewModels
             set
             {
                 _SelectedTime = value;
+                this.Test2();
                 OnPropertyChanged();
             }
         }
@@ -169,6 +172,19 @@ namespace MobileApp.ViewModels
             TempButtonClickCommand = new Command<string>(TempButtonClick);
             WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
             StartTimerCommand = new Command<string>(StartTimer);
+            SelectedDateCommand = new Command(Test);
+            SelectedDate = DateTime.Now;
+            SelectedTime = DateTime.Now.TimeOfDay;
+        }
+        public void Test()
+        {
+            var test = this.SelectedDate;
+
+        }
+
+        public void Test2()
+        {
+            
         }
 
 
@@ -219,17 +235,23 @@ namespace MobileApp.ViewModels
             
         }
 
-        public void DateAndTime()
-        {
-            SelectedTime = timepicker.Time;
-            DateTime result = SelectedDate + SelectedTime;
-        }
+        //public void DateAndTime()
+        //{
+        //    SelectedTime = timepicker.Time;
+        //    DateTime result = SelectedDate + SelectedTime;
+        //}
 
         private void StartTimer(String TimerStart)
         {
-            MyTimer.Interval = 1000;
-            MyTimer.Elapsed += OnIntervalEvent;
-            MyTimer.Start();
+            //MyTimer.Interval = 1000;
+            //MyTimer.Elapsed += OnIntervalEvent;
+            //MyTimer.Start();
+            TimeSpan time = this.SelectedTime;
+            DateTime date = this.SelectedDate;
+            DateTime combined = date + time;
+            TimeSpan span = combined.Subtract(DateTime.Now);
+            int secondsUntillTrigger = (int)span.TotalSeconds;
+
         }
 
         private static void OnIntervalEvent(object source, ElapsedEventArgs e)

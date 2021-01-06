@@ -13,7 +13,6 @@ namespace MobileApp.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ProductPage : ContentPage
     {
-        public int Milliseconds { get; }
 
         public ProductPage()
         {
@@ -21,10 +20,10 @@ namespace MobileApp.Views
             this.BindingContext = new ProductViewModel();
         }
 
-        public void DatePicker_DateSelected(object sender, DateChangedEventArgs e)
-        {
-           DateLabel.Text = e.NewDate.ToString();
-        }
+        //public void DatePicker_DateSelected(object sender, DateChangedEventArgs e)
+        //{
+        //   DateLabel.Text = e.NewDate.ToString();
+        //}
 
 
     }

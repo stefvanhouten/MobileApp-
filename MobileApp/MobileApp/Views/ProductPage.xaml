@@ -52,6 +52,8 @@
                 <DatePicker x:Name="MainDatePicker"
                             MinimumDate="{Binding MinimumDate}"
                             MaximumDate="{Binding MaximumDate}"
+                            Date="{Binding SelectedDate}"
+                            Format="dd/MM/yyyy"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Grid.Row="1"
