@@ -32,8 +32,15 @@ namespace MobileApp.ViewModels
         public Command<string>TempButtonClickCommand { get; set; }
         public Command<string>WaterSwitchClickCommand { get; set; }
         public Command<string>StartTimerCommand { get; set; }
-      
-        
+
+        TimePicker timepicker = new TimePicker();
+
+        DatePicker datePicker = new DatePicker
+        {
+            MinimumDate = new DateTime(2020, 12, 30),
+            MaximumDate = new DateTime(2050, 12, 31),
+            Date = DateTime.Today
+        };
 
         public void GetLatestCoffee()
         {
@@ -212,18 +219,11 @@ namespace MobileApp.ViewModels
             
         }
 
-        DatePicker datePicker = new DatePicker
+        public void DateAndTime()
         {
-            MinimumDate = new DateTime(2020, 12, 30),
-            MaximumDate = new DateTime(2050, 12, 31),
-            Date = DateTime.Today
-        };
-
-        TimePicker timepicker = new TimePicker
-        {
-            Time = new TimeSpan(4, 20, 69),
-            
-        };
+            SelectedTime = timepicker.Time;
+            DateTime result = SelectedDate + SelectedTime;
+        }
 
         private void StartTimer(String TimerStart)
         {
