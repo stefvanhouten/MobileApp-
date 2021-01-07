@@ -11,6 +11,7 @@ namespace MobileApp.ViewModels
         private string _name;
         private string _errorLabelIsVisible = "false";
         private string _topic;
+        private string _payload = "toggle";
 
         public static event Action IOTButtonsDatabaseUpdated;
 
@@ -42,6 +43,20 @@ namespace MobileApp.ViewModels
             set
             {
                 _topic = value;
+                ErrorLabelIsVisible = "false";
+                OnPropertyChanged();
+            }
+        }
+
+        public string Payload
+        {
+            get
+            {
+                return _payload;
+            }
+            set
+            {
+                _payload = value;
                 ErrorLabelIsVisible = "false";
                 OnPropertyChanged();
             }

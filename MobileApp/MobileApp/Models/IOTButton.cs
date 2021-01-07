@@ -9,5 +9,6 @@ namespace MobileApp.Models
         public string Name { get; set; }
         public string Topic { get; set; }
         public string ImageName { get; set; }
+        public string Payload { get; set; }
     }
 }

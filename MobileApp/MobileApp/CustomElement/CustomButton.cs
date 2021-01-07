@@ -12,5 +12,6 @@ namespace MobileApp.CustomElement
     {
         public int CustomID { get; set; }
         public string CustomTopic { get; set; }
+        public string CustomPayload { get; set; }
     }
 }

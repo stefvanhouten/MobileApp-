@@ -14,6 +14,7 @@
         <StackLayout Margin="5">
             <Entry x:Name="name" Text="{Binding Name}" Placeholder="Name"></Entry>
             <Entry x:Name="topic" Text="{Binding Topic}" Placeholder="MQTT topic"></Entry>
+            <Entry x:Name="payload" Text="{Binding Payload}" Placeholder="MQTT payload"></Entry>
             <Picker x:Name="image" SelectedItem="{Binding ImageName}" HorizontalOptions="FillAndExpand" Title="Please select an image for your button!">
                 <Picker.Items>
                     <x:String>Coffee</x:String>

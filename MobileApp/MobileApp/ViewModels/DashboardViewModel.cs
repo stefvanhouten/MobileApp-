@@ -92,6 +92,7 @@ namespace MobileApp.ViewModels
                 {
                     CustomID = buttonProperties.ID,
                     CustomTopic = buttonProperties.Topic,
+                    CustomPayload = buttonProperties.Payload,
                     Text = buttonProperties.Name,
                     Command = PublishCommand,
                     ImageSource = buttonProperties.ImageName,
@@ -137,7 +138,7 @@ namespace MobileApp.ViewModels
 
         private void Publish(CustomButton sender)
         {
-            App.Client.Publish(sender.CustomTopic, "Toggle");
+            App.Client.Publish(sender.CustomTopic, sender.CustomPayload);
         }
     }
 }
