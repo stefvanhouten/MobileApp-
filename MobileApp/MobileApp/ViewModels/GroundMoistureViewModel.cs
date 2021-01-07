@@ -23,7 +23,7 @@ namespace MobileApp.ViewModels
         public List<Entry> Entries { get; set; }
         public ChartView ChartName { get; set; }
 
-        Dictionary<string, string> DynamicTitles = new Dictionary<string, string>
+        readonly Dictionary<string, string> DynamicTitles = new Dictionary<string, string>
         {
             {"Plant/Moisture", "Ground Moisture" },
             {"Plant/Temperature", "Temperature"},
@@ -42,7 +42,7 @@ namespace MobileApp.ViewModels
             MQTTMessages = new List<MQTTMessage>();
             Entries = new List<Entry>();
 
-            initCycle();
+            InitCycle();
 
             Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
@@ -56,7 +56,7 @@ namespace MobileApp.ViewModels
                     }
 
                     //initialize second cycle to update database and view every half an hour
-                    initCycle(true);
+                    InitCycle(true);
 
                     //Clear the List
                     //this prevents the cycle from comparing old data and thus decreases load time
@@ -78,7 +78,7 @@ namespace MobileApp.ViewModels
             }
         }
 
-        public async void initCycle(bool cycle = false)
+        public async void InitCycle(bool cycle = false)
         {
            // await App.MoistMeterDatabase.EmptyDatabase();
             List<MoistMeter> data = await App.MoistMeterDatabase.GetItemByColumnAsync(Topic);
@@ -128,8 +128,10 @@ namespace MobileApp.ViewModels
 
         public async void MQTToDatabase(MQTTMessage data)
         {
-            MoistMeter compressedMoistMeter = new MoistMeter();
-            compressedMoistMeter.Target = Topic;
+            MoistMeter compressedMoistMeter = new MoistMeter
+            {
+                Target = Topic
+            };
             switch (Topic)
             {
                 case "Plant/Moisture":
@@ -155,7 +157,7 @@ namespace MobileApp.ViewModels
         {
             //TAGS FOR ENTRY
             double valueLabel = 0;
-            string colorHEX = "";
+            string colorHEX;
             //#0fdb16 GREEN HIGH MOISTURE
             //#e8a425 //ORANGE MIDDLE MOISTURE
             //#e82525 //RED LOW MOISTURE

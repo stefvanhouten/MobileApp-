@@ -1,12 +1,9 @@
-﻿using MobileApp.Views;
+﻿using MobileApp.Services;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using Xamarin.Forms;
 
 namespace MobileApp.ViewModels
@@ -19,10 +16,10 @@ namespace MobileApp.ViewModels
         private string _connectPageLabelMessage = "Connect";
         private string _connecting = "false";
 
-        public Command ConnectClickCommand { get; set; } 
+        public Command ConnectClickCommand { get; set; }
         public int PortInput { get; set; } = 1883; //Default port
-        
-        public string ErrorLabelIsVisible 
+
+        public string ErrorLabelIsVisible
         {
             get { return _errorLabelIsVisible; }
             private set
@@ -35,7 +32,8 @@ namespace MobileApp.ViewModels
         public string Connecting
         {
             get { return _connecting; }
-            private set { 
+            set
+            {
                 _connecting = value;
                 OnPropertyChanged();
             }
@@ -44,31 +42,32 @@ namespace MobileApp.ViewModels
         public string ConnectPageLabelMessage
         {
             get { return _connectPageLabelMessage; }
-            private set
+            set
             {
                 _connectPageLabelMessage = value;
                 OnPropertyChanged();
             }
         }
+
         public string ErrorLabelMessage
         {
-            get { return _errorLabelMessage;  }
-            private set
+            get { return _errorLabelMessage; }
+            set
             {
                 _errorLabelMessage = value;
                 OnPropertyChanged();
             }
         }
 
-        public string IPInput {
-                    get { return _ipInput; }
-                    set
-                    {
-                        _ipInput = value;
-                         IpInput_TextChanged();
-                    }
-        
-                }
+        public string IPInput
+        {
+            get { return _ipInput; }
+            set
+            {
+                _ipInput = value;
+                IpInput_TextChanged();
+            }
+        }
 
         public ConnectViewModel()
         {
@@ -76,18 +75,17 @@ namespace MobileApp.ViewModels
             ConnectClickCommand = new Command(ConnectClick);
         }
 
-        //Compares Input to Valid IPAdresses
-        private bool IsValidInput()
-        { 
-            IPAddress ip;
-            return IPAddress.TryParse(IPInput, out ip);
-        }
-
         public async void ConnectClick()
         {
-            if (!IsValidInput())
+            if (!this.IsValidIP4(this.IPInput) && App.Client is MQTTClient)
             {
                 this.SetErrorMessageAndShowLabel("The IP you entered was invalid!");
+                return;
+            }
+
+            if (!this.IsValidPort(this.PortInput))
+            {
+                this.SetErrorMessageAndShowLabel("The Port you entered was invalid! Please try a port between 100 and 10000");
                 return;
             }
 
@@ -104,9 +102,36 @@ namespace MobileApp.ViewModels
                 this.CleanupAfterDelay();
                 return;
             }
-          
+
             this.SetErrorMessageAndShowLabel("Could not connect to the server. Please try again!");
-            this.ResetToDefaultXAML();
+            this.ResetToDefaultStatus();
+        }
+
+        private bool IsValidIP4(string ipString)
+        {
+            if (String.IsNullOrWhiteSpace(ipString))
+            {
+                return false;
+            }
+
+            string[] splitValues = ipString.Split('.');
+            if (splitValues.Length != 4)
+            {
+                return false;
+            }
+
+            byte tempForParsing;
+
+            return splitValues.All(r => byte.TryParse(r, out tempForParsing));
+        }
+
+        private bool IsValidPort(int portNumber)
+        {
+            if(portNumber != null && portNumber >= 100 && portNumber <= 10000)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void CleanupAfterDelay()
@@ -115,13 +140,13 @@ namespace MobileApp.ViewModels
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    this.ResetToDefaultXAML();
+                    this.ResetToDefaultStatus();
                 });
                 return false;
             });
         }
 
-        private void ResetToDefaultXAML()
+        private void ResetToDefaultStatus()
         {
             this.Connecting = "false";
             this.ConnectPageLabelMessage = "Connect";
@@ -147,8 +172,7 @@ namespace MobileApp.ViewModels
 
         public void IpInput_TextChanged()
         {
-                ErrorLabelIsVisible = "false";
+            ErrorLabelIsVisible = "false";
         }
-
     }
 }

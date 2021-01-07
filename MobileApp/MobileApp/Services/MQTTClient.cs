@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MobileApp.Services
 {
-    public class MQTTClient : MQTTBase, IMQTT
+    public sealed class MQTTClient : MQTTBase, IMQTT
     {
         public MQTTMessageStore MQTTMessageStore { get; set; }
         public bool IsClientConnected { get; private set; } = false;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MobileApp.Services
 {
-    public class MQTTMockClient : MQTTBase, IMQTT
+    public sealed class MQTTMockClient : MQTTBase, IMQTT
     {
         public MQTTMessageStore MQTTMessageStore { get; set; }
         public bool IsClientConnected { get; private set; } = false;
