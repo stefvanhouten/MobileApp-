@@ -22,11 +22,13 @@ namespace MobileApp.ViewModels
         private List<MoistMeter> DatabaseData { get; set; }
         public List<Entry> Entries { get; set; }
         public ChartView ChartName { get; set; }
+
         Dictionary<string, string> DynamicTitles = new Dictionary<string, string>
         {
             {"Plant/Moisture", "Ground Moisture" },
             {"Plant/Temperature", "Temperature"},
         };
+
         public GroundMoistureViewModel(string topic, ChartView chartName = null)
         {
             ChartName = chartName;

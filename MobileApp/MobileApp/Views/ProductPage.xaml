@@ -12,12 +12,13 @@
                 Text="{Binding CurrentGroundMoisture}" 
                 ImageSource="moisture.png"
                 Command="{Binding  GroundMoistButtonClickCommand}" 
-                CommandParameter="WateringSystemFeedback" 
+                CommandParameter="Plant/Moisture" 
                 BackgroundColor="{StaticResource Primary}"/>
             <Button Margin="5" 
                     Text="{Binding CurrentTempStatus}"  
                     Command="{Binding TempButtonClickCommand}" 
                     ImageSource="temperature.png"
+                    CommandParameter="Plant/Temperature" 
                     HeightRequest="75" 
                     BackgroundColor="{StaticResource Primary}"/>
             <Grid>
