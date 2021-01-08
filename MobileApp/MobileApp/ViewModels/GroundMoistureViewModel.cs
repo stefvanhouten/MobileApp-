@@ -20,19 +20,21 @@ namespace MobileApp.ViewModels
     {
         public string Topic { get; private set; }
         public ChartView ChartName { get; set; }
+        public string Date { get; set; }
 
         public GroundMoistureViewModel(string topic, ChartView chartName = null)
         {
             ChartName = chartName;
             Topic = topic;
-            Title = topic.Split('/')[1];
+            Date = DateTime.Now.ToString("dd/MM/yyyy");
+            Title = topic.Split('/')[1] + " - " + Date;
 
             InitCycle(true);   
         }
 
         public async void InitCycle(bool FirstCall = false)
         {
-            // await App.MoistMeterDatabase.EmptyDatabase();
+            //await App.MoistMeterDatabase.EmptyDatabase();
             MQTTMessage latestMessage = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(this.Topic);
             if (latestMessage != null)
             {
@@ -93,19 +95,33 @@ namespace MobileApp.ViewModels
                     colorHEX = HIGH_DATA_COLOR;
                 }
 
+                string time = string.Format(extractedData.DateTime.ToShortTimeString());
                 Entries.Add(new Entry(float.Parse(Convert.ToString(valueLabel)))
                 {
                     Color = SKColor.Parse(colorHEX),
                     ValueLabel = $"{valueLabel}",
-                    Label = $"{extractedData.DateTime}",
+                    Label = time,
                 });
             };
 
-            ChartName.Chart = new LineChart 
+            ChartName.Chart =  new LineChart 
             { 
                 Entries = Entries,
                 LabelTextSize = 35,
+                LineSize = 8,
+                PointMode = PointMode.Square,
+                PointSize = 18,
             };
+
+            //if the limit has been reached on fetching data, start dumping old data
+            if (data.Count == 5)
+            {
+                //delete the first entry, so the Entries remain in a natural progressive way
+                for (int i = 0; i < 1; i++)
+                {
+                    await App.MoistMeterDatabase.DeleteItemAsync(data[i]);
+                }
+            }
         }
     }
 }

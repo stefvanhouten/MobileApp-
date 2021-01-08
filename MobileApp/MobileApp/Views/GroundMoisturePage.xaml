@@ -6,7 +6,7 @@
              Title="{Binding Title}">
     <ContentPage.Content>
         <StackLayout>
-            <forms:ChartView x:Name="MoistureChart" VerticalOptions="FillAndExpand"/>
+            <forms:ChartView x:Name="MoistureChart" EnableTouchEvents="true" VerticalOptions="FillAndExpand" Chart="{Binding Chart}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

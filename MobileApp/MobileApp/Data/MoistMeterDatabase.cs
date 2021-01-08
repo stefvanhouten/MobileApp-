@@ -73,7 +73,7 @@ namespace MobileApp.Data
 
         public Task<List<MoistMeter>> GetItemByTopicName(string topicName)
         {
-            return Database.QueryAsync<MoistMeter>("SELECT * FROM [MoistMeter] WHERE [Topic] = ?", topicName);
+            return Database.QueryAsync<MoistMeter>("SELECT * FROM [MoistMeter] WHERE [Topic] = ? LIMIT 5", topicName);
         }
     }
 }
