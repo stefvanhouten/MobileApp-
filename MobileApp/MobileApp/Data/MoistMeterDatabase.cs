@@ -71,10 +71,9 @@ namespace MobileApp.Data
             return Database.DeleteAsync(id);
         }
 
-        public Task<List<MoistMeter>> GetItemByColumnAsync(string target)
+        public Task<List<MoistMeter>> GetItemByTopicName(string topicName)
         {
-            // SQL queries are also possible
-            return Database.QueryAsync<MoistMeter>("SELECT * FROM [MoistMeter] WHERE [Target] = ?", target);
+            return Database.QueryAsync<MoistMeter>("SELECT * FROM [MoistMeter] WHERE [Topic] = ?", topicName);
         }
     }
 }

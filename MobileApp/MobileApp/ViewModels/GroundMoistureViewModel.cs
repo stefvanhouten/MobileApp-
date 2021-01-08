@@ -12,180 +12,85 @@ using System.Runtime.CompilerServices;
 using SkiaSharp;
 using Microcharts.Forms;
 using Microcharts;
+using System.Threading.Tasks;
 
 namespace MobileApp.ViewModels
 {
     class GroundMoistureViewModel : BaseViewModel, INotifyPropertyChanged
     {
         public string Topic { get; private set; }
-        public List<MQTTMessage> MQTTMessages { get; set; }
-        private List<MoistMeter> DatabaseData { get; set; }
-        public List<Entry> Entries { get; set; }
         public ChartView ChartName { get; set; }
-
-        readonly Dictionary<string, string> DynamicTitles = new Dictionary<string, string>
-        {
-            {"Plant/Moisture", "Ground Moisture" },
-            {"Plant/Temperature", "Temperature"},
-        };
 
         public GroundMoistureViewModel(string topic, ChartView chartName = null)
         {
             ChartName = chartName;
             Topic = topic;
-            if (DynamicTitles.ContainsKey(topic))
+            Title = topic.Split('/')[1];
+
+            InitCycle(true);   
+        }
+
+        public async void InitCycle(bool FirstCall = false)
+        {
+            // await App.MoistMeterDatabase.EmptyDatabase();
+            MQTTMessage latestMessage = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(this.Topic);
+            if (latestMessage != null)
             {
-                Title = DynamicTitles[topic];
+                 await SaveEntryToDatabase(latestMessage);
             }
+            CreateXamlView();
 
-            DatabaseData = new List<MoistMeter>();
-            MQTTMessages = new List<MQTTMessage>();
-            Entries = new List<Entry>();
-
-            InitCycle();
-
-            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
+            if (FirstCall)
             {
-                Device.BeginInvokeOnMainThread(() =>
+                Device.StartTimer(TimeSpan.FromSeconds(5), () =>
                 {
-                    // get latest message send to the broker
-                    MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic);
-                    if (msg != null)
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        MQTTMessages.Add(msg);
-                    }
+                        InitCycle();
+                    });
 
-                    //initialize second cycle to update database and view every half an hour
-                    InitCycle(true);
-
-                    //Clear the List
-                    //this prevents the cycle from comparing old data and thus decreases load time
-                    MQTTMessages.Clear();
+                    //return true to keep loop going, false to stop timer
+                    return true;
                 });
-
-                //return true to keep loop going, false to stop timer
-                return true;
-            });
-        }
-
-        public void GetLatestMessage()
-        {
-            // get latest message send to the broker
-            MQTTMessage msg = App.Client.MQTTMessageStore.GetLatestMessageFromTopic(Topic);
-            if (msg != null)
-            {
-                MQTTMessages.Add(msg);
             }
         }
 
-        public async void InitCycle(bool cycle = false)
+        public async Task<int> SaveEntryToDatabase(MQTTMessage latestMessage)
         {
-           // await App.MoistMeterDatabase.EmptyDatabase();
-            List<MoistMeter> data = await App.MoistMeterDatabase.GetItemByColumnAsync(Topic);
-
-            if (data != null)
+            if(latestMessage == null)
             {
-                DatabaseData = data;
+                return 0;
             }
 
-            if (!cycle)
-            {
-                //create view
-                CreateXamlView();
-            } else if (cycle)
-            {
-                //compare the retrieved data against the database
-                //this prevents duplicates
-                CompareDatabaseToServer();
-
-                //create view
-                CreateXamlView();
-
-            }
-
-        }
-
-        //compare the retrieved data based on a combination of % and dateTime.
-        //if BOTH are set -> duplicate -> do not insert
-        private void CompareDatabaseToServer()
-        {
-            foreach (MQTTMessage serverData in MQTTMessages.ToList())
-            {
-                int exists = 0;
-                for (int i = 0; i < DatabaseData.Count; i++)
-                {
-                    if (DatabaseData[i].MoisturePercentage == Convert.ToDouble(serverData.Message) && DatabaseData[i].DateTime == serverData.Date)
-                    {
-                        exists += 1;
-                    }
-                }
-                if (exists == 0)
-                {
-                    MQTToDatabase(serverData);
-                }
-            }
-        }
-
-        public async void MQTToDatabase(MQTTMessage data)
-        {
             MoistMeter compressedMoistMeter = new MoistMeter
             {
-                Target = Topic
+                Topic = Topic,
+                Data = Convert.ToDouble(latestMessage.Message)
             };
-            switch (Topic)
-            {
-                case "Plant/Moisture":
-                    compressedMoistMeter.MoisturePercentage = Convert.ToDouble(data.Message);
-                    compressedMoistMeter.DateTime = data.Date;
-                    break;
-                case "Plant/Temperature":
-                    compressedMoistMeter.Temperature = Convert.ToDouble(data.Message);
-                    compressedMoistMeter.DateTime = data.Date;
-                    break;
-                case "Plant/Humidity":
-                    compressedMoistMeter.Humidity = Convert.ToDouble(data.Message);
-                    compressedMoistMeter.DateTime = data.Date;
-                    break;
-            }
-            if (data != null)
-            {
-                await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
-            }
+
+            return await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
         }
 
         private async void CreateXamlView()
         {
-            //TAGS FOR ENTRY
-            double valueLabel = 0;
-            string colorHEX;
-            //#0fdb16 GREEN HIGH MOISTURE
-            //#e8a425 //ORANGE MIDDLE MOISTURE
-            //#e82525 //RED LOW MOISTURE
+            List<MoistMeter> data = await App.MoistMeterDatabase.GetItemByTopicName(Topic);
+            List<Entry> Entries = new List<Entry>();
+            const string HIGH_DATA_COLOR = "0fdb16";
+            const string MIDDLE_DATA_COLOR = "e8a425";
+            const string LOW_DATA_COLOR = "e82525";
+            double valueLabel;
+            string colorHEX = LOW_DATA_COLOR;
 
-            foreach (MoistMeter extractedData in DatabaseData)
+
+            foreach (MoistMeter extractedData in data)
             {
-                switch (Topic)
+                valueLabel = extractedData.Data;
+                if(valueLabel >= 30 && valueLabel <= 60)
                 {
-                    case "Plant/Moisture":
-                        valueLabel = extractedData.MoisturePercentage;
-                        break;
-                    case "Plant/Temperature":
-                        valueLabel = extractedData.Temperature;
-                        break;
-                    case "Plant/Humidity":
-                        valueLabel = extractedData.Humidity;
-                        break;
-                }
-
-                if (valueLabel < 30)
+                    colorHEX = MIDDLE_DATA_COLOR;
+                }else if(valueLabel > 60)
                 {
-                    colorHEX = "#e82525";
-                } else if (valueLabel > 40 && valueLabel < 60)
-                {
-                    colorHEX = "#e8a425";
-                } else 
-                {
-                    colorHEX = "#0fdb16";
+                    colorHEX = HIGH_DATA_COLOR;
                 }
 
                 Entries.Add(new Entry(float.Parse(Convert.ToString(valueLabel)))
@@ -195,11 +100,11 @@ namespace MobileApp.ViewModels
                     Label = $"{extractedData.DateTime}",
                 });
             };
+
             ChartName.Chart = new LineChart 
             { 
                 Entries = Entries,
                 LabelTextSize = 35,
-
             };
         }
     }
