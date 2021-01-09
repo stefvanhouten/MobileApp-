@@ -10,20 +10,26 @@
     
     <ContentPage.Content>
         <StackLayout>
-
             <Button 
-                Margin="5,5,-5,5" 
+                Margin="5,5,5,0" 
                 HeightRequest="75" 
                 Text="{Binding CurrentGroundMoisture}" 
                 ImageSource="moisture.png"
-                Command="{Binding  GroundMoistButtonClickCommand}" 
+                Command="{Binding  NavigateCommand}" 
                 CommandParameter="Plant/Moisture" 
                 BackgroundColor="{StaticResource Primary}"/>
-            <Button Margin="5" 
+            <Button Margin="5,0,5,0" 
                     Text="{Binding CurrentTempStatus}"  
-                    Command="{Binding TempButtonClickCommand}" 
+                    Command="{Binding NavigateCommand}" 
                     ImageSource="temperature.png"
                     CommandParameter="Plant/Temperature" 
+                    HeightRequest="75" 
+                    BackgroundColor="{StaticResource Primary}"/>
+            <Button Margin="5,0,5,-5" 
+                    Text="{Binding CurrentHumidityStatus}"  
+                    Command="{Binding NavigateCommand}" 
+                    ImageSource="humidity.png"
+                    CommandParameter="Plant/Humidity" 
                     HeightRequest="75" 
                     BackgroundColor="{StaticResource Primary}"/>
             <Grid>
@@ -39,7 +45,7 @@
                 </Grid.ColumnDefinitions>
                 <Button 
                     Margin="5" 
-                    Text="{Binding CurrentCoffeStatus}" 
+                    Text="{Binding CurrentCoffeeStatus}" 
                     HeightRequest="100"
                     ImageSource="coffee.png"
                     Command="{Binding CoffeeSwitchClickCommand}" 

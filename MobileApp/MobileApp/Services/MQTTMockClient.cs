@@ -21,7 +21,7 @@ namespace MobileApp.Services
             this.MQTTMessageStore = new MQTTMessageStore();
         }
 
-        public async Task<bool> Connect(string IP, int port)
+        public async Task<bool> Connect(string IP, int port, string password)
         {
             this.MQTTMessageStore = new MQTTMessageStore();
             await Task.Delay(1000);

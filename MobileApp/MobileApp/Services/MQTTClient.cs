@@ -16,25 +16,26 @@ namespace MobileApp.Services
         public event Action ConnectionStatusChanged; //Fired when connectionstatus is changed, DashBoardViewModel listens to these events
         public bool HasBeenConnected { get; set; } = false;
         public bool ForceDisconnect { get; set; } = false;
+        public bool initialConnectSuccess { get; set; } = false;
 
         public MQTTClient()
         {
             this.MQTTMessageStore = new MQTTMessageStore();
         }
 
-        public async Task<bool> Connect(string IP, int port)
+        public async Task<bool> Connect(string IP, int port, string password)
         {
             //This initialises the connection with our MQTT broker. Values are hardcoded atm but this should be changed
             //so that our Connect method at least takes a IP address
             this.MQTTMessageStore = new MQTTMessageStore();
             MqttService.MqttClient.Init("XamarinMobileClient", new MqttClientOptionsBuilder().WithClientId(Guid.NewGuid().ToString())
+                                                                                                                  .WithCredentials("stef", password)
                                                                                                                   .WithCleanSession(true)
                                                                                                                   .WithTcpServer(IP, port)
                                                                                                                   .Build());
             this.AttachEventListeners();
-            _ = await MqttService.MqttClient.Connect();
+            this.initialConnectSuccess = await MqttService.MqttClient.Connect();
             this.HasBeenConnected = true;
-
             return MqttService.MqttClient.IsConnected();
         }
 
@@ -89,7 +90,7 @@ namespace MobileApp.Services
         protected override async void MqttClient_Disconnected(object sender, MQTTnet.Client.Disconnecting.MqttClientDisconnectedEventArgs e)
         {
             this.UpdateConnectionStatus();
-            if (!this.ForceDisconnect)
+            if (!this.ForceDisconnect && this.initialConnectSuccess)
             {
                 _ = await MqttService.MqttClient.Reconnect();
                 this.UpdateConnectionStatus();

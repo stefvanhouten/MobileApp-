@@ -10,6 +10,7 @@ namespace MobileAppTests
     public class TestMQTTClient
     {
         private string IP { get; } = "192.168.1.71";
+        private string PASSWORD { get; } = "1234";
         private int PORT { get; } = 1883;
         private string TESTCHANNEL { get; } = "unittest";
 
@@ -17,7 +18,7 @@ namespace MobileAppTests
         public async Task ConnectToClient()
         {
             MQTTClient client = new MQTTClient();
-            bool isConnected = await client.Connect(this.IP, this.PORT);
+            bool isConnected = await client.Connect(this.IP, this.PORT, this.PASSWORD);
             Assert.IsTrue(isConnected);
         }
 
@@ -25,7 +26,7 @@ namespace MobileAppTests
         public async Task FailedConnectionToClient()
         {
             MQTTClient client = new MQTTClient();
-            bool isConnected = await client.Connect(this.IP, this.PORT);
+            bool isConnected = await client.Connect(this.IP, this.PORT, this.PASSWORD);
             Assert.IsTrue(isConnected);
         }
 
@@ -33,7 +34,7 @@ namespace MobileAppTests
         public async Task DisconnectFromClient()
         {
             MQTTClient client = new MQTTClient();
-            bool isConnected = await client.Connect(this.IP, this.PORT);
+            bool isConnected = await client.Connect(this.IP, this.PORT, this.PASSWORD);
             Assert.IsTrue(isConnected);
             isConnected = await client.Disconnect();
             Assert.IsFalse(isConnected);
@@ -43,7 +44,7 @@ namespace MobileAppTests
         public async Task ConnectoToMockup()
         {
             MQTTMockClient client = new MQTTMockClient();
-            bool isConnected = await client.Connect(this.IP, this.PORT);
+            bool isConnected = await client.Connect(this.IP, this.PORT, this.PASSWORD);
             Assert.IsTrue(isConnected);
         }
 
@@ -51,7 +52,7 @@ namespace MobileAppTests
         public async Task SubscribeAndSendMessage()
         {
             MQTTClient client = new MQTTClient();
-            _ = await client.Connect(this.IP, this.PORT);
+            _ = await client.Connect(this.IP, this.PORT, this.PASSWORD);
             client.Subscribe(this.TESTCHANNEL);
             client.Publish(this.TESTCHANNEL, "hello world");
             Thread.Sleep(100);
@@ -63,7 +64,7 @@ namespace MobileAppTests
         public async Task SubscribeAndSendMessageMockup()
         {
             MQTTMockClient client = new MQTTMockClient();
-            _ = await client.Connect(this.IP, this.PORT);
+            _ = await client.Connect(this.IP, this.PORT, this.PASSWORD);
             client.Subscribe(this.TESTCHANNEL);
             client.Publish(this.TESTCHANNEL, "hello world");
             MQTTMessage message = client.MQTTMessageStore.GetLatestMessageFromTopic(this.TESTCHANNEL);
@@ -74,7 +75,7 @@ namespace MobileAppTests
         public async Task PreventDuplicateMessage()
         {
             MQTTMockClient client = new MQTTMockClient();
-            _ = await client.Connect(this.IP, this.PORT);
+            _ = await client.Connect(this.IP, this.PORT, this.PASSWORD);
             MQTTMessage duplicateMessage = new MQTTMessage(this.TESTCHANNEL, "hello world", DateTime.Now);
             client.MQTTMessageStore.AddMessage(duplicateMessage);
             Assert.IsFalse(client.MQTTMessageStore.AddMessage(duplicateMessage));

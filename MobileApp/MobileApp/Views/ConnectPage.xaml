@@ -10,8 +10,9 @@
                    HorizontalTextAlignment="End"
                    FontSize="Title"/>
             <ActivityIndicator IsRunning="{Binding Connecting}" Color="{StaticResource Primary}"/>
-            <Entry x:Name="IPEntry" Text="{Binding IPInput}" Placeholder="Enter your IP Adress"></Entry>
-            <Entry x:Name="PortEntry" Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
+            <Entry Text="{Binding IPInput}" Placeholder="Enter your IP Adress"></Entry>
+            <Entry Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
+            <Entry Text="{Binding Password}" Placeholder="Enter pin"></Entry>
             <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
             <Frame
                BackgroundColor="#e0123b"
