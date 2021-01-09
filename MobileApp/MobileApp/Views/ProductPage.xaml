@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="{Binding Title}"
              x:Class="MobileApp.Views.ProductPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="Status" Priority="0" Order="Primary" Text="{Binding IsConnected}" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.Content>
         <StackLayout>
 
@@ -65,15 +70,6 @@
                     Grid.ColumnSpan="2"
                     Grid.Row="2"
                     />
-                <Label 
-                    x:Name="DateLabel" 
-                    FontSize="15" 
-                    HorizontalOptions="Center" 
-                    Grid.Column="1"
-                    Grid.Row="2"
-                    Text="test"
-                    TextColor="Orange"/>
-
                 <Button 
                     Margin="5" 
                     ImageSource="agenda.png"

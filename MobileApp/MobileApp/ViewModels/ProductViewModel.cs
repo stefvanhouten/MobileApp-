@@ -10,6 +10,7 @@ namespace MobileApp.ViewModels
     internal class ProductViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private Timer MyTimer;
+        private string _isConnected;
         private string _CurrentCoffeeStatus = "Coffee";
         private string _CurrentTempStatus = "NO DATA AVAILABLE";
         private string _currentGroundMoisture = "NO DATA AVAILABLE";
@@ -44,6 +45,19 @@ namespace MobileApp.ViewModels
             set
             {
                 _CurrentTempStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string IsConnected
+        {
+            get
+            {
+                return _isConnected;
+            }
+            private set
+            {
+                _isConnected = value;
                 OnPropertyChanged();
             }
         }
@@ -106,12 +120,15 @@ namespace MobileApp.ViewModels
             TempButtonClickCommand = new Command<string>(TempButtonClick);
             WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
             StartTimerCommand = new Command<string>(StartTimer);
+            IsConnected = "Connected";
 
             MinimumDate = DateTime.Today;
             MaximumDate = MinimumDate.AddDays(5);
             SelectedDate = DateTime.Today;
             SelectedTime = DateTime.Now.TimeOfDay;
+
             App.Client.MessageReceived += Update;
+            App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
         }
 
         private void Update()
@@ -120,6 +137,18 @@ namespace MobileApp.ViewModels
             this.GetLatestWaterStatus();
             this.GetLatestCoffeeStatus();
             this.GetLatestMoistureStatus();
+        }
+
+        private void UpdateConnectionStatus()
+        {
+            if (App.Client.IsClientConnected)
+            {
+                IsConnected = "Connected";
+            }
+            else
+            {
+                IsConnected = "Disconnected";
+            }
         }
 
         public void GetLatestCoffeeStatus()
