@@ -86,6 +86,7 @@ namespace MobileApp.ViewModels
                 Button.Name = Name;
                 Button.Topic = Topic;
                 Button.ImageName = $"{ImageName.ToLower()}.png";
+                Button.Payload = Payload;
 
                 await App.IOTDatabase.SaveItemAsync(Button);
                 InvokeUpdate();
