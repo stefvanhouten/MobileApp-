@@ -1,5 +1,4 @@
 ﻿using MQTTnet;
-using System;
 
 namespace MobileApp.Services
 {

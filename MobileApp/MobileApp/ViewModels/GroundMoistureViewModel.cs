@@ -1,18 +1,14 @@
-﻿using MobileApp.Models;
+﻿using Microcharts;
+using Microcharts.Forms;
+using MobileApp.Models;
+using MobileApp.Services;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using MobileApp.Services;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Entry = Microcharts.Entry;
-using System.Linq;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using SkiaSharp;
-using Microcharts.Forms;
-using Microcharts;
-using System.Threading.Tasks;
 
 namespace MobileApp.ViewModels
 {

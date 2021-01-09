@@ -1,11 +1,8 @@
-﻿using System;
-using System.Text;
-using Xamarin.Forms;
+﻿using MQTTnet;
 using MQTTnet.Client.Options;
-using System.Collections.ObjectModel;
 using MQTTnet.ClientLib;
-using MQTTnet;
-using MQTTnet.Client.Connecting;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MobileApp.Services

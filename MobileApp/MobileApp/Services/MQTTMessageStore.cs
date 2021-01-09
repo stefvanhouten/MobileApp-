@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using MobileApp.Models;
 
 namespace MobileApp.Services
 {

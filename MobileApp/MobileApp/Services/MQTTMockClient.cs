@@ -2,7 +2,6 @@
 using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
