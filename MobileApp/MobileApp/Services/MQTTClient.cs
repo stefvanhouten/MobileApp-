@@ -29,7 +29,7 @@ namespace MobileApp.Services
             //so that our Connect method at least takes a IP address
             this.MQTTMessageStore = new MQTTMessageStore();
             MqttService.MqttClient.Init("XamarinMobileClient", new MqttClientOptionsBuilder().WithClientId(Guid.NewGuid().ToString())
-                                                                                                                  .WithCredentials("stef", password)
+                                                                                                                  .WithCredentials("MobileClient", password)
                                                                                                                   .WithCleanSession(true)
                                                                                                                   .WithTcpServer(IP, port)
                                                                                                                   .Build());
