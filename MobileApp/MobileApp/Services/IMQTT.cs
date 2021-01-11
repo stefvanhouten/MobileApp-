@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MobileApp.Services
@@ -14,7 +12,7 @@ namespace MobileApp.Services
         event Action ConnectionStatusChanged;
         bool HasBeenConnected { get; set; }
 
-        Task<bool> Connect(string IP, int port);
+        Task<bool> Connect(string IP, int port, string password);
         void Subscribe(string channel);
         Task<bool> Disconnect();
         void Publish(string topic, string message);

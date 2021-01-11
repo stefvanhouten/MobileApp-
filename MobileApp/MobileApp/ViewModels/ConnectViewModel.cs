@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -13,6 +12,7 @@ namespace MobileApp.ViewModels
         private string _errorLabelIsVisible = "false";
         private string _errorLabelMessage;
         private string _ipInput;
+        private string _password;
         private string _connectPageLabelMessage = "Connect";
         private string _connecting = "false";
 
@@ -65,7 +65,19 @@ namespace MobileApp.ViewModels
             set
             {
                 _ipInput = value;
-                IpInput_TextChanged();
+                OnPropertyChanged();
+                InputChanged();
+            }
+        }
+
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                _password = value;
+                InputChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -155,11 +167,11 @@ namespace MobileApp.ViewModels
         private async Task<bool> IsClientConnected()
         {
             const int TIMEOUT_DELAY = 2000;
-            var task = App.Client.Connect(this.IPInput, this.PortInput);
+            var task = App.Client.Connect(this.IPInput, this.PortInput, this.Password);
             if (await Task.WhenAny(task, Task.Delay(TIMEOUT_DELAY)) == task)
             {
                 // task completed within timeout
-                return true;
+                return task.Result;
             }
             return false;
         }
@@ -170,7 +182,7 @@ namespace MobileApp.ViewModels
             this.ErrorLabelIsVisible = "true";
         }
 
-        public void IpInput_TextChanged()
+        public void InputChanged()
         {
             ErrorLabelIsVisible = "false";
         }

@@ -11,6 +11,19 @@ Only use this if you can't setup Mosquitto or if it is to much effort for gradin
 Download Mosquitto https://mosquitto.org/download/
 Install Mosquitto
 
+## Setting up a mosquitto username/password for connection
+Create a file 'p2.txt' file in the Mosquitto install folder, paste the following line into the file:
+MobileClient:$6$Ss9T2qp1Kkxzcwkj$2oqlwDC4IkliBAitlpVX7oklomfLPNu7Iz1or9D9WWZgKQpYpHz1ymCX2NbpHH7j48/XBG/0s9Q8t3g0GcjFvw==
+
+You could also create your own username/password but we will save you the trouble and give you a default user/password.
+However do not change the username as the xamarin app uses this username by default. 
+
+Now edit the file 'mosquitto.conf' and uncomment/add the following lines:
+allow_anonymous false
+password_file C:\ThePath\To\Your\PasswordFile
+For example:
+password_file D:\mosquitto\p2.txt
+
 ## Running and configuring Mosquitto
 For Windows users open CMD and navigate to the Mosquitto install folder.
 To start Mosquitto for the first time use the following command: 
@@ -43,7 +56,7 @@ Make sure to have an Android emulator installed.
 When the app launches you are prompted to fill in an IP addres and a port.
 The IP addres is the IP4 addres on which your Mosquitto server is running. 
 The port is 1883 by default. 
-
+The password is 1234. This is the password that we created in the setup. 
 If you are using the MQTTMockupClient it doesn't matter which IP and Port you use.
 
 ## Failed to connect?

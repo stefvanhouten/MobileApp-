@@ -3,88 +3,116 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="{Binding Title}"
              x:Class="MobileApp.Views.ProductPage">
-    <ContentPage.Content>
-        <StackLayout>
 
-            <Button 
-                Margin="5,5,-5,5" 
-                HeightRequest="75" 
-                Text="{Binding CurrentGroundMoisture}" 
-                ImageSource="moisture.png"
-                Command="{Binding  GroundMoistButtonClickCommand}" 
-                CommandParameter="Plant/Moisture" 
-                BackgroundColor="{StaticResource Primary}"/>
-            <Button Margin="5" 
-                    Text="{Binding CurrentTempStatus}"  
-                    Command="{Binding TempButtonClickCommand}" 
-                    ImageSource="temperature.png"
-                    CommandParameter="Plant/Temperature" 
-                    HeightRequest="75" 
-                    BackgroundColor="{StaticResource Primary}"/>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="Status" Priority="0" Order="Primary" Text="{Binding IsConnected}" />
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Content>
+        <ScrollView>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="65" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="70" />
+                    <RowDefinition Height="70" />
+                    <RowDefinition Height="65" />
+                    <RowDefinition Height="70" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button 
-                    Margin="5" 
-                    Text="{Binding CurrentCoffeStatus}" 
-                    HeightRequest="100"
+                    Margin="5,5,5,0" 
+                    Text="{Binding CurrentGroundMoisture}" 
+                    ImageSource="moisture.png"
+                    Command="{Binding  NavigateCommand}" 
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    CommandParameter="Plant/Moisture" 
+                    BackgroundColor="{StaticResource Primary}"/>
+                <Button 
+                    Margin="5,0,5,0" 
+                    Text="{Binding CurrentTempStatus}"  
+                    Command="{Binding NavigateCommand}" 
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    ImageSource="temperature.png"
+                    CommandParameter="Plant/Temperature" 
+                    BackgroundColor="{StaticResource Primary}"/>
+                <Button 
+                    Margin="5,0,5,0" 
+                    Text="{Binding CurrentHumidityStatus}"  
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Command="{Binding NavigateCommand}" 
+                    ImageSource="humidity.png"
+                    CommandParameter="Plant/Humidity" 
+                    BackgroundColor="{StaticResource Primary}"/>
+                <Button 
+                    Margin="5,0,5,0" 
+                    Text="{Binding CurrentCoffeeStatus}" 
                     ImageSource="coffee.png"
                     Command="{Binding CoffeeSwitchClickCommand}" 
                     CommandParameter="CoffeeOnOffFeedback" 
                     BackgroundColor="{StaticResource Primary}" 
                     Grid.Column="0" 
-                    Grid.Row="0"/>
+                    Grid.Row="3"/>
                 <Button 
-                    Margin="5" 
+                    Margin="5,0,5,0" 
                     Text="{Binding CurrentWaterStatus }" 
                     Command="{Binding WaterSwitchClickCommand}" 
                     BackgroundColor="{StaticResource Primary}" 
                     Grid.Column="1" 
                     ImageSource="water.png"
-                    Grid.Row="0"/>
-                <DatePicker x:Name="MainDatePicker"
-                            MinimumDate="{Binding MinimumDate}"
-                            MaximumDate="{Binding MaximumDate}"
-                            Date="{Binding SelectedDate}"
-                            Format="dd/MM/yyyy"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            Grid.Row="1"
-                            />
+                    Grid.Row="3"/>
+                <DatePicker 
+                    Margin="5,0,5,0" 
+                    MinimumDate="{Binding MinimumDate}"
+                    MaximumDate="{Binding MaximumDate}"
+                    Date="{Binding SelectedDate}"
+                    Format="dd/MM/yyyy"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="4"
+                    />
                 <TimePicker 
+                    Margin="5,0,5,0" 
                     Time="{Binding SelectedTime}"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Grid.Row="2"
+                    Grid.Row="5"
                     />
-                <Label 
-                    x:Name="DateLabel" 
-                    FontSize="15" 
-                    HorizontalOptions="Center" 
-                    Grid.Column="1"
-                    Grid.Row="2"
-                    Text="test"
-                    TextColor="Orange"/>
-
                 <Button 
-                    Margin="5" 
+                    Margin="5,0,5,0" 
+                    Grid.ColumnSpan="2"
+                    Grid.Row="6"
                     ImageSource="agenda.png"
                     Text="{Binding CurrentDateTime}" 
                     Command="{Binding StartTimerCommand}" 
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Grid.Row="3"
                     BackgroundColor="{StaticResource Primary}"/>
+                <Frame
+                    Margin="5,0,5,5" 
+                    Grid.Row="7"
+                    Grid.ColumnSpan="2"
+                    BackgroundColor="#e0123b"
+                    CornerRadius="5"
+                    IsVisible="{Binding ErrorLabelIsVisible}">
+                    <StackLayout>
+                        <Label 
+                        Text="{Binding ErrorLabelMessage}" 
+                        IsVisible="{Binding ErrorLabelIsVisible}"
+                        HorizontalTextAlignment="Center" 
+                        VerticalTextAlignment="Center"
+                        TextColor="White" 
+                        FontSize="Medium" 
+                        />
+                    </StackLayout>
+                </Frame>
             </Grid>
 
-        </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

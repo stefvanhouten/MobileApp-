@@ -1,14 +1,11 @@
-﻿using Xamarin.Forms;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
+﻿using MobileApp.CustomElement;
 using MobileApp.Models;
-using MobileApp.Data;
-using System;
-using MobileApp.Views;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using MobileApp.CustomElement;
 using MobileApp.Services;
+using MobileApp.Views;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Xamarin.Forms;
 
 namespace MobileApp.ViewModels
 {

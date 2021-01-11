@@ -9,41 +9,70 @@ namespace MobileApp.ViewModels
 {
     internal class ProductViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private Timer MyTimer;
-        private string _CurrentCoffeeStatus = "Coffee";
-        private string _CurrentTempStatus = "NO DATA AVAILABLE";
+        private string _isConnected;
+        private string _currentCoffeeStatus = "Coffee";
+        private string _currentTemperatureStatus = "NO DATA AVAILABLE";
+        private string _currentHumidityStatus = "NO DATA AVAILABLE";
         private string _currentGroundMoisture = "NO DATA AVAILABLE";
-        private string _CurrentWaterStatus = "WateringSystem";
-        private string _CurrentDateTime = "SELECT A DATE";
+        private string _currentWateringStatus = "WateringSystem";
+        private string _currentDateAndTime = "SELECT A DATE";
+        private string _errorLabelIsVisible = "false";
+        private string _errorLabelMessage;
         private TimeSpan _SelectedTime;
         private DateTime _SelectedDate;
+
+        private Timer SetCoffeeTimer { get; set; }
+        private Timer ClearErrorMessageTimer { get; set; }
 
         public DateTime MinimumDate { get; private set; }
         public DateTime MaximumDate { get; private set; }
 
-        public Command<string> GroundMoistButtonClickCommand { get; private set; }
+        public Command<string> NavigateCommand { get; private set; }
         public Command<string> CoffeeSwitchClickCommand { get; private set; }
         public Command<string> TempButtonClickCommand { get; private set; }
         public Command<string> WaterSwitchClickCommand { get; private set; }
         public Command<string> StartTimerCommand { get; private set; }
         public Command SelectedDateCommand { get; private set; }
 
-        public string CurrentCoffeStatus
+        public string CurrentCoffeeStatus
         {
-            get { return _CurrentCoffeeStatus; }
+            get { return _currentCoffeeStatus; }
             set
             {
-                _CurrentCoffeeStatus = value;
+                _currentCoffeeStatus = value;
                 OnPropertyChanged();
             }
         }
 
         public string CurrentTempStatus
         {
-            get { return _CurrentTempStatus; }
+            get { return _currentTemperatureStatus; }
             set
             {
-                _CurrentTempStatus = value;
+                _currentTemperatureStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string CurrentHumidityStatus
+        {
+            get { return _currentHumidityStatus; }
+            set
+            {
+                _currentHumidityStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string IsConnected
+        {
+            get
+            {
+                return _isConnected;
+            }
+            private set
+            {
+                _isConnected = value;
                 OnPropertyChanged();
             }
         }
@@ -60,20 +89,20 @@ namespace MobileApp.ViewModels
 
         public string CurrentWaterStatus
         {
-            get { return _CurrentWaterStatus; }
+            get { return _currentWateringStatus; }
             set
             {
-                _CurrentWaterStatus = value;
+                _currentWateringStatus = value;
                 OnPropertyChanged();
             }
         }
 
         public string CurrentDateTime
         {
-            get { return _CurrentDateTime; }
+            get { return _currentDateAndTime; }
             set
             {
-                _CurrentDateTime = value;
+                _currentDateAndTime = value;
                 OnPropertyChanged();
             }
         }
@@ -98,20 +127,44 @@ namespace MobileApp.ViewModels
             }
         }
 
+        public string ErrorLabelMessage
+        {
+            get { return _errorLabelMessage; }
+            set
+            {
+                _errorLabelMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ErrorLabelIsVisible
+        {
+            get { return _errorLabelIsVisible; }
+            private set
+            {
+                _errorLabelIsVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ProductViewModel()
         {
-            Title = "Product";
-            GroundMoistButtonClickCommand = new Command<string>(NavigateToGraph);
-            CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
-            TempButtonClickCommand = new Command<string>(TempButtonClick);
-            WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
-            StartTimerCommand = new Command<string>(StartTimer);
+            this.Title = "Product";
+            this.NavigateCommand = new Command<string>(NavigateToGraph);
+            this.CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
+            this.WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
+            this.StartTimerCommand = new Command<string>(StartTimer);
+            this.IsConnected = "Connected";
 
-            MinimumDate = DateTime.Today;
-            MaximumDate = MinimumDate.AddDays(5);
-            SelectedDate = DateTime.Today;
-            SelectedTime = DateTime.Now.TimeOfDay;
+            this.MinimumDate = DateTime.Today;
+            this.MaximumDate = MinimumDate.AddDays(5);
+            this.SelectedDate = DateTime.Today;
+            this.SelectedTime = DateTime.Now.TimeOfDay;
+
+            this.ClearErrorMessageTimer = new Timer();
+            this.SetCoffeeTimer = new Timer();
             App.Client.MessageReceived += Update;
+            App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
         }
 
         private void Update()
@@ -120,6 +173,19 @@ namespace MobileApp.ViewModels
             this.GetLatestWaterStatus();
             this.GetLatestCoffeeStatus();
             this.GetLatestMoistureStatus();
+            this.GetLatestHumidityStatus();
+        }
+
+        private void UpdateConnectionStatus()
+        {
+            if (App.Client.IsClientConnected)
+            {
+                IsConnected = "Connected";
+            }
+            else
+            {
+                IsConnected = "Disconnected";
+            }
         }
 
         public void GetLatestCoffeeStatus()
@@ -127,7 +193,7 @@ namespace MobileApp.ViewModels
             MQTTMessage latestCoffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee");
             if (latestCoffeeStatus != null)
             {
-                CurrentCoffeStatus = latestCoffeeStatus.Message;
+                CurrentCoffeeStatus = latestCoffeeStatus.Message;
             }
         }
 
@@ -145,7 +211,16 @@ namespace MobileApp.ViewModels
             MQTTMessage latestMoisture = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Plant/Moisture");
             if (latestMoisture != null)
             {
-                CurrentGroundMoisture = $"Ground moisture: {latestMoisture.Message}%";
+                CurrentGroundMoisture = $"Soil moisture: {latestMoisture.Message}%";
+            }
+        }
+
+        public void GetLatestHumidityStatus()
+        {
+            MQTTMessage latesHumidity = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Plant/Humidity");
+            if (latesHumidity != null)
+            {
+                CurrentHumidityStatus = $"Humidity: {latesHumidity.Message}%";
             }
         }
 
@@ -168,6 +243,7 @@ namespace MobileApp.ViewModels
             MQTTMessage coffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee");
             if (coffeeStatus == null)
             {
+                this.SetErrorMessageAndShowLabel("Cannot use button when no information about the current state is available");
                 return;
             }
 
@@ -186,6 +262,7 @@ namespace MobileApp.ViewModels
             MQTTMessage wateringStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("WateringSystem/Status");
             if (wateringStatus == null)
             {
+                this.SetErrorMessageAndShowLabel("Cannot use button when no information about the current state is available");
                 return;
             }
 
@@ -197,12 +274,6 @@ namespace MobileApp.ViewModels
             {
                 App.Client.Publish("WateringSystem", "ON");
             }
-        }
-
-        public void TempButtonClick(string Temp)
-        {
-            GetLatestTempStatus();
-            NavigateToGraph(Temp);
         }
 
         private void StartTimer(String TimerStart)
@@ -219,21 +290,39 @@ namespace MobileApp.ViewModels
             }
 
             ulong millisecondsUntillTrigger = (ulong)timeDifference.TotalMilliseconds;
-            CurrentDateTime = combined.ToString();
-            MyTimer = new Timer
+            this.CurrentDateTime = combined.ToString();
+            this.SetCoffeeTimer.Dispose();
+            this.SetCoffeeTimer = new Timer
             {
                 Interval = millisecondsUntillTrigger
             };
-            MyTimer.Elapsed += OnIntervalEvent;
-            MyTimer.Enabled = true;
-            MyTimer.Start();
+            this.SetCoffeeTimer.Elapsed += this.TurnCoffeeOn;
+            this.SetCoffeeTimer.Enabled = true;
+            this.SetCoffeeTimer.Start();
         }
 
 
-        private void OnIntervalEvent(object source, ElapsedEventArgs e)
+        private void TurnCoffeeOn(object source, ElapsedEventArgs e)
         {
-            MyTimer.Enabled = false;
+            this.SetCoffeeTimer.Dispose();
             App.Client.Publish("coffee/POWER", "ON");
+        }
+
+
+        private void SetErrorMessageAndShowLabel(string message)
+        {
+            this.ClearErrorMessageTimer.Dispose();
+            this.ErrorLabelMessage = message;
+            this.ErrorLabelIsVisible = "true";
+            this.ClearErrorMessageTimer = new Timer(5000);
+            this.ClearErrorMessageTimer.Elapsed += this.HideErrorMessageLabel;
+            this.ClearErrorMessageTimer.Enabled = true;
+
+        }
+        private void HideErrorMessageLabel(object source, ElapsedEventArgs e)
+        {
+            this.ClearErrorMessageTimer.Dispose();
+            this.ErrorLabelIsVisible = "false";
         }
     }
 }
