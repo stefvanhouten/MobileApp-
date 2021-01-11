@@ -73,20 +73,16 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <FlyoutItem Title="Connect" Icon="ic_action_shield.png">
+    <FlyoutItem Title="Connect" Icon="server.png">
         <ShellContent ContentTemplate="{DataTemplate local:ConnectPage}"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Dashboard" Icon="ic_action_dashboard_light.png" IsVisible="{Binding Connected}" FlyoutDisplayOptions="AsSingleItem">
+    <FlyoutItem Title="Dashboard" Icon="home.png" IsVisible="{Binding Connected}" FlyoutDisplayOptions="AsSingleItem">
             <ShellContent Title="Product" Icon="small_plant.png" ContentTemplate="{DataTemplate local:ProductPage}"/>
-        <ShellContent  Route="dashboard"  Title="Dashboard" Icon="ic_action_dashboard.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
+        <ShellContent  Route="dashboard"  Title="Dashboard" Icon="ic_action_dashboard_light.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="About us" Icon="tab_about.png">
-        <ShellContent Title="About us" Icon="tab_about.png" ContentTemplate="{DataTemplate local:AboutUsPage}"/>
-    </FlyoutItem>
-
-    <FlyoutItem Title="Privacy" Icon="ic_action_shield.png">
-        <ShellContent ContentTemplate="{DataTemplate local:PrivacyPage}" />
+    <FlyoutItem Title="About us" Icon="info.png">
+        <ShellContent Title="About us" Icon="info.png" ContentTemplate="{DataTemplate local:AboutUsPage}"/>
     </FlyoutItem>
 </Shell>

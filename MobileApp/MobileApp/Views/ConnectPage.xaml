@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MobileApp.CustomElement"
              x:Class="MobileApp.Views.ConnectPage">
     <ContentPage.Content>
         <StackLayout Margin="5">
@@ -10,9 +11,30 @@
                    HorizontalTextAlignment="End"
                    FontSize="Title"/>
             <ActivityIndicator IsRunning="{Binding Connecting}" Color="{StaticResource Primary}"/>
-            <Entry Text="{Binding IPInput}" Placeholder="Enter your IP Adress"></Entry>
-            <Entry Text="{Binding PortInput}" Placeholder="Enter Port"></Entry>
-            <Entry Text="{Binding Password}" Placeholder="Enter pin"></Entry>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="IP.png"></Image>
+                <Entry Text="{Binding IPInput}" Placeholder="IP Adress" Grid.Column="1"></Entry>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="port.png"></Image>
+                <Entry Text="{Binding PortInput}" Placeholder="Port" Grid.Column="1"></Entry>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="key.png"></Image>
+                <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Password" Grid.Column="1"></Entry>
+            </Grid>
             <Button Text="Connect"  Command="{Binding ConnectClickCommand}"/>
             <Frame
                BackgroundColor="#e0123b"

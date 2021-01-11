@@ -9,7 +9,6 @@ namespace MobileApp.ViewModels
 {
     internal class ProductViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private Timer MyTimer;
         private string _isConnected;
         private string _currentCoffeeStatus = "Coffee";
         private string _currentTemperatureStatus = "NO DATA AVAILABLE";
@@ -17,9 +16,13 @@ namespace MobileApp.ViewModels
         private string _currentGroundMoisture = "NO DATA AVAILABLE";
         private string _currentWateringStatus = "WateringSystem";
         private string _currentDateAndTime = "SELECT A DATE";
-
+        private string _errorLabelIsVisible = "false";
+        private string _errorLabelMessage;
         private TimeSpan _SelectedTime;
         private DateTime _SelectedDate;
+
+        private Timer SetCoffeeTimer { get; set; }
+        private Timer ClearErrorMessageTimer { get; set; }
 
         public DateTime MinimumDate { get; private set; }
         public DateTime MaximumDate { get; private set; }
@@ -124,20 +127,42 @@ namespace MobileApp.ViewModels
             }
         }
 
+        public string ErrorLabelMessage
+        {
+            get { return _errorLabelMessage; }
+            set
+            {
+                _errorLabelMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ErrorLabelIsVisible
+        {
+            get { return _errorLabelIsVisible; }
+            private set
+            {
+                _errorLabelIsVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ProductViewModel()
         {
-            Title = "Product";
-            NavigateCommand = new Command<string>(NavigateToGraph);
-            CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
-            WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
-            StartTimerCommand = new Command<string>(StartTimer);
-            IsConnected = "Connected";
+            this.Title = "Product";
+            this.NavigateCommand = new Command<string>(NavigateToGraph);
+            this.CoffeeSwitchClickCommand = new Command<string>(CoffeeSwitchClick);
+            this.WaterSwitchClickCommand = new Command<string>(WaterSwitchClick);
+            this.StartTimerCommand = new Command<string>(StartTimer);
+            this.IsConnected = "Connected";
 
-            MinimumDate = DateTime.Today;
-            MaximumDate = MinimumDate.AddDays(5);
-            SelectedDate = DateTime.Today;
-            SelectedTime = DateTime.Now.TimeOfDay;
+            this.MinimumDate = DateTime.Today;
+            this.MaximumDate = MinimumDate.AddDays(5);
+            this.SelectedDate = DateTime.Today;
+            this.SelectedTime = DateTime.Now.TimeOfDay;
 
+            this.ClearErrorMessageTimer = new Timer();
+            this.SetCoffeeTimer = new Timer();
             App.Client.MessageReceived += Update;
             App.Client.ConnectionStatusChanged += UpdateConnectionStatus;
         }
@@ -218,6 +243,7 @@ namespace MobileApp.ViewModels
             MQTTMessage coffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee");
             if (coffeeStatus == null)
             {
+                this.SetErrorMessageAndShowLabel("Cannot use button when no information about the current state is available");
                 return;
             }
 
@@ -236,6 +262,7 @@ namespace MobileApp.ViewModels
             MQTTMessage wateringStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("WateringSystem/Status");
             if (wateringStatus == null)
             {
+                this.SetErrorMessageAndShowLabel("Cannot use button when no information about the current state is available");
                 return;
             }
 
@@ -263,21 +290,39 @@ namespace MobileApp.ViewModels
             }
 
             ulong millisecondsUntillTrigger = (ulong)timeDifference.TotalMilliseconds;
-            CurrentDateTime = combined.ToString();
-            MyTimer = new Timer
+            this.CurrentDateTime = combined.ToString();
+            this.SetCoffeeTimer.Dispose();
+            this.SetCoffeeTimer = new Timer
             {
                 Interval = millisecondsUntillTrigger
             };
-            MyTimer.Elapsed += OnIntervalEvent;
-            MyTimer.Enabled = true;
-            MyTimer.Start();
+            this.SetCoffeeTimer.Elapsed += this.TurnCoffeeOn;
+            this.SetCoffeeTimer.Enabled = true;
+            this.SetCoffeeTimer.Start();
         }
 
 
-        private void OnIntervalEvent(object source, ElapsedEventArgs e)
+        private void TurnCoffeeOn(object source, ElapsedEventArgs e)
         {
-            MyTimer.Enabled = false;
+            this.SetCoffeeTimer.Dispose();
             App.Client.Publish("coffee/POWER", "ON");
+        }
+
+
+        private void SetErrorMessageAndShowLabel(string message)
+        {
+            this.ClearErrorMessageTimer.Dispose();
+            this.ErrorLabelMessage = message;
+            this.ErrorLabelIsVisible = "true";
+            this.ClearErrorMessageTimer = new Timer(5000);
+            this.ClearErrorMessageTimer.Elapsed += this.HideErrorMessageLabel;
+            this.ClearErrorMessageTimer.Enabled = true;
+
+        }
+        private void HideErrorMessageLabel(object source, ElapsedEventArgs e)
+        {
+            this.ClearErrorMessageTimer.Dispose();
+            this.ErrorLabelIsVisible = "false";
         }
     }
 }
