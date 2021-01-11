@@ -23,14 +23,13 @@ namespace MobileApp.Services
             this.FormattedString = str;
         }
 
-        public string Compare()
+        /// <summary>
+        /// Concatenate all important properties into one string. 
+        /// </summary>
+        /// <returns>String with all important properties</returns>
+        public string GetFullMessageAsString()
         {
             return $"{this.Topic} {this.Message} {this.Date}";
-        }
-
-        public MQTTMessage DeepCopy()
-        {
-            return new MQTTMessage(this.Topic, this.Message, this.Date);
         }
     }
 }
