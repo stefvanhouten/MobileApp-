@@ -117,7 +117,7 @@ namespace MobileApp.Services
         /// <returns>null or the latest MQTTMessage of the given topic.</returns>
         public MQTTMessage GetLatestMessageFromTopic(string topic)
         {
-            return this.Messages.LastOrDefault(msg => msg.Topic == topic);
+            return this.Messages.LastOrDefault(msg => msg?.Topic == topic);
         }
     }
 }
