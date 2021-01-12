@@ -95,6 +95,12 @@ namespace MobileApp.ViewModels
                 return;
             }
 
+            if(App.Client is MQTTMockClient && this.IPInput == "validation")
+            {
+                this.SetErrorMessageAndShowLabel("Show validation for mock purposes");
+                return;
+            }
+
             if (!this.IsValidPort(this.PortInput))
             {
                 this.SetErrorMessageAndShowLabel("The Port you entered was invalid! Please try a port between 100 and 10000");
