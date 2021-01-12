@@ -2,6 +2,7 @@
 using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,31 +66,17 @@ namespace MobileApp.Services
             {
                 if(channel == COFFEE)
                 {
-                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
-                    {
-                        string payload = "ON";
-                        if (rng.Next(0, 2) == 0)
-                        {
-                            payload = "OFF";
-                        }
-                        this.WriteLog(new MQTTMessage(COFFEE,
-                                                      payload,
-                                                      DateTime.Now));
-                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
+                    string payload = "OFF";
+                    this.WriteLog(new MQTTMessage(COFFEE,
+                                                    payload,
+                                                    DateTime.Now));
                 }
                 if (channel == WATERING_SYSTEM_STATUS)
                 {
-                    System.Threading.Timer timer = new System.Threading.Timer((e) =>
-                    {
-                        string payload = "ON";
-                        if (rng.Next(0, 2) == 0)
-                        {
-                            payload = "OFF";
-                        }
-                        this.WriteLog(new MQTTMessage(WATERING_SYSTEM_STATUS,
-                                                      payload,
-                                                      DateTime.Now));
-                    }, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
+                    string payload = "OFF";
+                    this.WriteLog(new MQTTMessage(WATERING_SYSTEM_STATUS,
+                                                    payload,
+                                                    DateTime.Now));
                 }
                 if (channel == WATERING_SYSTEM_FEEDBACK)
                 {
@@ -141,21 +128,11 @@ namespace MobileApp.Services
         protected override void MqttClient_Connected(object sender, MqttClientConnectedEventArgs e)
         {
             this.UpdateConnectionStatus();
-            //this.Subscribe("switches");
-            //this.Subscribe("coffee");
-            //this.Subscribe("wateringSystemFeedback");
-
-            this.Subscribe("Coffee");
-
-            this.Subscribe("WateringSystem");
-            this.Subscribe("WateringSystem/Status");
-            this.Subscribe("WateringSystem/Feedback");
-
-            this.Subscribe("Plant/Temperature");
-            this.Subscribe("Plant/Moisture");
-            this.Subscribe("Plant/Humidity");
-
-           
+            List<string> topicsToSubscribeTo = new List<string>() { "Coffee", "WateringSystem", "WateringSystem/Status", "WateringSystem/Feedback", "Plant/Temperature", "Plant/Moisture", "Plant/Humidity" };
+            foreach (string topic in topicsToSubscribeTo)
+            {
+                this.Subscribe(topic);
+            }
         }
 
         protected override void MqttClient_Disconnected(object sender, MqttClientDisconnectedEventArgs e) => throw new NotImplementedException();
