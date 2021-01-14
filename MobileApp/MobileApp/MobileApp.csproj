@@ -11,6 +11,7 @@
     <PackageReference Include="Microcharts.Forms" Version="0.7.1" />
     <PackageReference Include="MQTTnet" Version="3.0.13" />
     <PackageReference Include="MQTTnet.ClientLib" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />  

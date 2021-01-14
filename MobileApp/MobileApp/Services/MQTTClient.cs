@@ -96,7 +96,17 @@ namespace MobileApp.Services
         {
             //We defaulty listen to the switches channel. Will want to change this later depending on added buttons and such
             this.UpdateConnectionStatus();
-            List<string> topicsToSubscribeTo = new List<string>() { "Coffee", "WateringSystem", "WateringSystem/Status", "WateringSystem/Feedback", "Plant/Temperature", "Plant/Moisture", "Plant/Humidity" };
+            List<string> topicsToSubscribeTo = new List<string>() { 
+                "Coffee", 
+                "WateringSystem", 
+                "WateringSystem/Status", 
+                "WateringSystem/Feedback", 
+                "Plant/Temperature", 
+                "Plant/Moisture", 
+                "Plant/Humidity",
+                "Coffee/Status"
+
+            };
             foreach (string topic in topicsToSubscribeTo)
             {
                 this.Subscribe(topic);

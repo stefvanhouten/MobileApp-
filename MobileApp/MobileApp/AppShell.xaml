@@ -78,8 +78,8 @@
     </FlyoutItem>
 
     <FlyoutItem Title="Dashboard" Icon="home.png" IsVisible="{Binding Connected}" FlyoutDisplayOptions="AsSingleItem">
-            <ShellContent Title="Product" Icon="small_plant.png" ContentTemplate="{DataTemplate local:ProductPage}"/>
-        <ShellContent  Route="dashboard"  Title="Dashboard" Icon="ic_action_dashboard_light.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
+        <ShellContent Route="dashboard" Title="Product" Icon="small_plant.png" ContentTemplate="{DataTemplate local:ProductPage}"/>
+        <ShellContent Title="Dashboard" Icon="ic_action_dashboard_light.png" ContentTemplate="{DataTemplate local:DashboardPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="About us" Icon="info.png">

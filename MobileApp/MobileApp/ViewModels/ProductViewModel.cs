@@ -1,5 +1,6 @@
 ﻿using MobileApp.Services;
 using MobileApp.Views;
+using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
 using System.Timers;
@@ -26,6 +27,7 @@ namespace MobileApp.ViewModels
 
         public DateTime MinimumDate { get; private set; }
         public DateTime MaximumDate { get; private set; }
+        private DateTime LastTimeWatered { get; set; }
 
         public Command<string> NavigateCommand { get; private set; }
         public Command<string> CoffeeSwitchClickCommand { get; private set; }
@@ -160,6 +162,7 @@ namespace MobileApp.ViewModels
             this.MaximumDate = MinimumDate.AddDays(5);
             this.SelectedDate = DateTime.Today;
             this.SelectedTime = DateTime.Now.TimeOfDay;
+            this.LastTimeWatered = DateTime.Today;
 
             this.ClearErrorMessageTimer = new Timer();
             this.SetCoffeeTimer = new Timer();
@@ -190,10 +193,11 @@ namespace MobileApp.ViewModels
 
         public void GetLatestCoffeeStatus()
         {
-            MQTTMessage latestCoffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee");
+            MQTTMessage latestCoffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee/Status");
             if (latestCoffeeStatus != null)
             {
-                CurrentCoffeeStatus = latestCoffeeStatus.Message;
+                JObject json = JObject.Parse(latestCoffeeStatus.Message);
+                CurrentCoffeeStatus = json["POWER"].Value<string>();
             }
         }
 
@@ -240,26 +244,35 @@ namespace MobileApp.ViewModels
 
         public void CoffeeSwitchClick(string CoffeeOnOffFeedback)
         {
-            MQTTMessage coffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee");
+            MQTTMessage coffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee/Status");
             if (coffeeStatus == null)
             {
                 this.SetErrorMessageAndShowLabel("Cannot use button when no information about the current state is available");
                 return;
             }
-
-            if (coffeeStatus.Message == "ON")
+            JObject json = JObject.Parse(coffeeStatus.Message);
+            string status = json["POWER"].Value<string>();
+            if (status == "ON")
             {
-                App.Client.Publish("Coffee", "OFF");
+                App.Client.Publish("cmnd/coffee/POWER", "OFF");
             }
             else
             {
-                App.Client.Publish("Coffee", "ON");
+                App.Client.Publish("cmnd/coffee/POWER", "ON");
             }
         }
 
         public void WaterSwitchClick(string WaterSystemOnOffFeedback)
         {
             MQTTMessage wateringStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("WateringSystem/Status");
+            if(LastTimeWatered != null)
+            {
+                if ((DateTime.Now - LastTimeWatered).TotalSeconds <= 5)
+                {
+                    this.SetErrorMessageAndShowLabel("Watering the plant has a 5 second cooldown to prevent accidents!");
+                    return;
+                }
+            }
             if (wateringStatus == null)
             {
                 this.SetErrorMessageAndShowLabel("Cannot use button when no information about the current state is available");
@@ -274,6 +287,7 @@ namespace MobileApp.ViewModels
             {
                 App.Client.Publish("WateringSystem", "ON");
             }
+            LastTimeWatered = DateTime.Now;
         }
 
         private void StartTimer(String TimerStart)

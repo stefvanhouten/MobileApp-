@@ -44,6 +44,10 @@ namespace MobileApp.Services
             {
                 topic = "WateringSystem/Status";
             }
+            if(topic == "cmnd/coffee/POWER")
+            {
+                topic = "Coffee/Status";
+            }
             MQTTMessage newMessage = new MQTTMessage(topic,
                                                   message,
                                                   DateTime.Now);
@@ -52,7 +56,7 @@ namespace MobileApp.Services
 
         public void Subscribe(string channel)
         {
-            const string COFFEE = "Coffee";
+            const string COFFEE = "Coffee/Status";
             const string WATERING_SYSTEM_STATUS = "WateringSystem/Status";
             const string WATERING_SYSTEM_FEEDBACK = "WateringSystem/Feedback";
             const string PLANT_TEMPERATURE = "Plant/Temperature";
