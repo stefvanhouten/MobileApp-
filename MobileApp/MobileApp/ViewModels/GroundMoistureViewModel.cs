@@ -63,7 +63,8 @@ namespace MobileApp.ViewModels
             MoistMeter compressedMoistMeter = new MoistMeter
             {
                 Topic = Topic,
-                Data = Convert.ToDouble(latestMessage.Message)
+                Data = Convert.ToDouble(latestMessage.Message),
+                DateTime = DateTime.Now
             };
 
             return await App.MoistMeterDatabase.SaveItemAsync(compressedMoistMeter);
@@ -72,6 +73,7 @@ namespace MobileApp.ViewModels
         private async void CreateXamlView()
         {
             List<MoistMeter> data = await App.MoistMeterDatabase.GetItemByTopicName(Topic);
+            data.Reverse();
             List<Entry> Entries = new List<Entry>();
             const string HIGH_DATA_COLOR = "0fdb16";
             const string MIDDLE_DATA_COLOR = "e8a425";
