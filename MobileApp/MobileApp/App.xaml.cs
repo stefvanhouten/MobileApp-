@@ -23,8 +23,8 @@ namespace MobileApp
             App.Client = new MQTTClient();
             //App.Client = new MQTTMockClient();
             InitializeComponent();
-            //if (VersionTracking.IsFirstLaunchEver)
             MainPage = new AppShell();
+            //if (VersionTracking.IsFirstLaunchEver)
             if (true)
             {
                 MainPage.Navigation.PushAsync(new OnBoardingPage());

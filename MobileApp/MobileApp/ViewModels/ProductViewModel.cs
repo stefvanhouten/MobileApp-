@@ -196,8 +196,7 @@ namespace MobileApp.ViewModels
             MQTTMessage latestCoffeeStatus = App.Client.MQTTMessageStore.GetLatestMessageFromTopic("Coffee/Status");
             if (latestCoffeeStatus != null)
             {
-                JObject json = JObject.Parse(latestCoffeeStatus.Message);
-                CurrentCoffeeStatus = json["POWER"].Value<string>();
+                CurrentCoffeeStatus = latestCoffeeStatus.Message;
             }
         }
 
@@ -250,9 +249,7 @@ namespace MobileApp.ViewModels
                 this.SetErrorMessageAndShowLabel("Cannot use button when no information about the current state is available");
                 return;
             }
-            JObject json = JObject.Parse(coffeeStatus.Message);
-            string status = json["POWER"].Value<string>();
-            if (status == "ON")
+            if (coffeeStatus.Message == "ON")
             {
                 App.Client.Publish("cmnd/coffee/POWER", "OFF");
             }
@@ -319,7 +316,7 @@ namespace MobileApp.ViewModels
         private void TurnCoffeeOn(object source, ElapsedEventArgs e)
         {
             this.SetCoffeeTimer.Dispose();
-            App.Client.Publish("coffee/POWER", "ON");
+            App.Client.Publish("cmnd/coffee/POWER", "ON");
         }
 
 

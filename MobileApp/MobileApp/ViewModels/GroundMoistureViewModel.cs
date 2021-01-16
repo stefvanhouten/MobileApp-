@@ -108,16 +108,6 @@ namespace MobileApp.ViewModels
                 PointMode = PointMode.Square,
                 PointSize = 18,
             };
-
-            //if the limit has been reached on fetching data, start dumping old data
-            if (data.Count == 5)
-            {
-                //delete the first entry, so the Entries remain in a natural progressive way
-                for (int i = 0; i < 1; i++)
-                {
-                    await App.MoistMeterDatabase.DeleteItemAsync(data[i]);
-                }
-            }
         }
     }
 }
