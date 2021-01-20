@@ -64,3 +64,17 @@ If you are sure Mosquitto is propperly setup but you can't reach the server with
 try and enable TCP on port 1883(If you are using another port make the rule for that specific port) 
 in your firewall. If this still doesn't work make the rule for TCP && UDP, if its still broken
 make use of the MQTTMockupClient. 
+
+
+#Demo
+
+![Start/Splash screen](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/Start.PNG?raw=true)
+![Onboarding screen](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/OnboardingPage.PNG?raw=true)
+![Onboarding screen last slide](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/OnboardinPage_3.PNG?raw=true)
+![Connect page](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/Connect.PNG?raw=true)
+![Connect validation error](hhttps://github.com/stefvanhouten/MobileApp-/blob/master/Demo/ConnectError.PNG?raw=true)
+![Product page](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/ProductPage.PNG?raw=true)
+![Graph](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/Graph.PNG?raw=true)
+![Dashboard](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/CustomButtons.PNG)
+![Create custom button](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/CreateCustomButton.PNG?raw=true)
+![Control custom button](https://github.com/stefvanhouten/MobileApp-/blob/master/Demo/CustomButtonControl.PNG?raw=true)
