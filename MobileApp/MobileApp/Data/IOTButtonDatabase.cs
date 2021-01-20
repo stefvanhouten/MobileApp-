@@ -34,21 +34,39 @@ namespace MobileApp.Data
             }
         }
 
+        /// <summary>
+        /// Returns all IOTButton items from the database
+        /// </summary>
+        /// <returns></returns>
         public Task<List<IOTButton>> GetItemsAsync()
         {
             return Database.Table<IOTButton>().ToListAsync();
         }
 
+        /// <summary>
+        /// Clear the database
+        /// </summary>
+        /// <returns></returns>
         public Task<int> EmptyDatabase()
         {
             return Database.DeleteAllAsync<IOTButton>();
         }
 
+        /// <summary>
+        /// Retreives a single IOTButton item by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>IOTButton object</returns>
         public Task<IOTButton> GetItemAsync(int id)
         {
             return Database.Table<IOTButton>().Where(i => i.ID == id).FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Save IOTButton object to the database
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public Task<int> SaveItemAsync(IOTButton item)
         {
             if (item.ID != 0)
@@ -61,11 +79,21 @@ namespace MobileApp.Data
             }
         }
 
+        /// <summary>
+        /// Delete IOTButton item from database
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>Boolean based on success</returns>
         public Task<int> DeleteItemAsync(IOTButton item)
         {
             return Database.DeleteAsync(item);
         }
 
+        /// <summary>
+        /// Delete IOTButton object by ID from database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Boolean based on success</returns>
         public Task<int> DeleteButtonByID(int id)
         {
             return Database.DeleteAsync(id);
