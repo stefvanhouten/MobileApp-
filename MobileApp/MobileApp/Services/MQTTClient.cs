@@ -186,11 +186,5 @@ namespace MobileApp.Services
                     Payload = Encoding.UTF8.GetBytes(message)
                 }); ;
         }
-
-
-        //private async void UnsubscribeButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await MQTTnet.ClientLib.MqttService.MqttClient.Unsubscribe(TopicEntry.Text);
-        //}
     }
 }

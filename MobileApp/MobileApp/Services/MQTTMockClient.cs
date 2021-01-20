@@ -62,8 +62,6 @@ namespace MobileApp.Services
             const string PLANT_TEMPERATURE = "Plant/Temperature";
             const string PLANT_HUMIDITY = "Plant/Humidity";
             const string PLANT_MOISTURE = "Plant/Moisture";
-       
-
 
             Random rng = new Random();
             if (!HasBeenConnected)
@@ -132,7 +130,7 @@ namespace MobileApp.Services
         protected override void MqttClient_Connected(object sender, MqttClientConnectedEventArgs e)
         {
             this.UpdateConnectionStatus();
-            List<string> topicsToSubscribeTo = new List<string>() { "Coffee", "WateringSystem", "WateringSystem/Status", "WateringSystem/Feedback", "Plant/Temperature", "Plant/Moisture", "Plant/Humidity" };
+            List<string> topicsToSubscribeTo = new List<string>() { "Coffee/Status", "WateringSystem", "WateringSystem/Status", "WateringSystem/Feedback", "Plant/Temperature", "Plant/Moisture", "Plant/Humidity" };
             foreach (string topic in topicsToSubscribeTo)
             {
                 this.Subscribe(topic);

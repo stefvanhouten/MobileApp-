@@ -20,8 +20,8 @@ namespace MobileApp
 
         public App()
         {
-            App.Client = new MQTTClient();
-            //App.Client = new MQTTMockClient();
+            //App.Client = new MQTTClient();
+            App.Client = new MQTTMockClient();
             InitializeComponent();
             MainPage = new AppShell();
             //if (VersionTracking.IsFirstLaunchEver)
